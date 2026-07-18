@@ -161,16 +161,7 @@ font:inherit;font-size:14px;background:var(--paper);color:var(--ink)}
 .capprev{width:100%;max-height:190px;object-fit:contain;border-radius:12px;
 border:1px solid var(--line2);background:var(--paper);margin-bottom:4px}
 
-.undobar{position:fixed;left:50%;transform:translateX(-50%) translateY(140px);bottom:calc(118px + env(safe-area-inset-bottom));
-background:var(--walnut);color:#e7dcc2;border:1px solid var(--golddim);border-radius:26px;
-display:flex;align-items:center;gap:14px;padding:11px 10px 11px 20px;z-index:45;font-size:13px;
-transition:transform .3s ease;box-shadow:var(--shadow);max-width:92%}
-.undobar.on{transform:translateX(-50%) translateY(0)}
-.undobar .cnt{color:var(--gold);font-weight:700;font-family:Georgia,serif}
-.undobar button{background:var(--gold);border:none;color:var(--walnut);font-weight:700;
-border-radius:18px;padding:8px 18px;font-size:13px;font-family:inherit}
-
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(184px + env(safe-area-inset-bottom));
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));
 background:var(--walnut);color:#e7dcc2;font-size:13px;padding:11px 20px;border-radius:24px;z-index:50;
 opacity:0;transition:opacity .25s;pointer-events:none;max-width:88%;text-align:center;
 border:1px solid var(--golddim)}
@@ -187,7 +178,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
   <div class="hrow">
     <div>
       <div class="greet serif" id="greet">Good evening, Sir</div>
-      <div class="dline" id="dline">the bridge · wayne estate</div>
+      <div class="dline" id="dline">the bridge · wayne estate · b4</div>
     </div>
     <div style="display:flex">
       <button class="hbtn" id="btnRefresh" aria-label="refresh">↻</button>
@@ -282,6 +273,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <button class="b2 send" id="btnSaveSet">Lay the wire</button>
     <button class="b2 ghost" id="btnTestSet">Test the wire</button>
     <button class="b2 ghost" id="btnCloseSet">Close</button>
+    <p class="note" style="text-align:center;margin:12px 0 0">build 4 · 18 Jul 2026</p>
   </div>
 </div>
 
@@ -311,12 +303,6 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <button class="b2 send" id="btnCapGo">Send</button>
     <button class="b2 ghost" id="btnCapNo">Cancel</button>
   </div>
-</div>
-
-<div class="undobar" id="undobar">
-  <span id="undoLab">Dispatching…</span>
-  <span class="cnt" id="undoCnt">5</span>
-  <button id="btnUndo">Undo</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -369,7 +355,7 @@ function greet(){
  else g='A quiet night, Sir';
  $('greet').textContent=g;
  $('dline').textContent=new Date().toLocaleDateString('en-GB',
-  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate';}
+  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b4';}
 
 function gauge(pct,size){
  var r=(size-8)/2,c=2*Math.PI*r,f=Math.max(.04,Math.min(1,pct||0));
@@ -477,37 +463,17 @@ function attachSwipe(el,it){
   else el.style.transform='';
   setTimeout(function(){el._moved=false;},250);});}
 
-/* ---- decide + undo ---- */
-var undo={timer:null,tick:null,text:null,el:null,item:null};
+/* ---- decide (immediate) ---- */
 function decide(it,el,cmdText,label){
- flushUndo();
  vib(12);
- undo.text=cmdText;undo.el=el;undo.item=it;
  if(el)el.classList.add('done');
- if(it)decided[it.id]=1;persistDecided();renderBadge();
- $('undoLab').textContent=live()?label:label+' (specimen)';
- var n=5;$('undoCnt').textContent=n;
- $('undobar').classList.add('on');
- undo.tick=setInterval(function(){n--;$('undoCnt').textContent=n>0?n:'';},1000);
- undo.timer=setTimeout(function(){commitUndo();},5000);}
-function commitUndo(){
- clearInterval(undo.tick);clearTimeout(undo.timer);
- $('undobar').classList.remove('on');
- if(undo.text){
-  if(live())rawSend(undo.text,true);
-  else{sentLocal.push({t:Date.now(),text:undo.text+'  (specimen — not sent)'});
-   localStorage.setItem('br_sent',JSON.stringify(sentLocal));
-   toast('Specimen, Sir — nothing left the house.');}}
- undo={timer:null,tick:null,text:null,el:null,item:null};render();}
-function flushUndo(){if(undo.timer)commitUndo();}
-$('btnUndo').onclick=function(){
- clearInterval(undo.tick);clearTimeout(undo.timer);
- $('undobar').classList.remove('on');
- if(undo.el)undo.el.classList.remove('done');
- if(undo.item)delete decided[undo.item.id];
+ if(it)decided[it.id]=1;
  persistDecided();
- undo={timer:null,tick:null,text:null,el:null,item:null};
- toast('Recalled, Sir — nothing was sent.');render();};
+ if(live()){rawSend(cmdText,true);toast('✓ '+label+' — the house has it.');}
+ else{sentLocal.push({t:Date.now(),text:cmdText+'  (specimen — not sent)'});
+  localStorage.setItem('br_sent',JSON.stringify(sentLocal));
+  toast('Specimen, Sir — nothing left the house.');}
+ setTimeout(render,400);}
 function persistDecided(){try{sessionStorage.setItem('br_decided',JSON.stringify(decided));}catch(e){}}
 function renderBadge(){
  var s=stateNow();
