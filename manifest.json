@@ -1,0 +1,15 @@
+{
+  "name": "The Bridge — Wayne Estate",
+  "short_name": "The Bridge",
+  "description": "Command the estate, not your inbox.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4eee1",
+  "theme_color": "#1a140d",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
