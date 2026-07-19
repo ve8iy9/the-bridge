@@ -74,6 +74,9 @@ font-size:13.5px;font-weight:600;font-family:inherit;letter-spacing:.2px}
 .b.ap{background:var(--green);color:#f2f7f0}
 .b.df{background:var(--paper2);color:var(--mut);border:1px solid var(--line)}
 .b.vt{background:none;color:var(--red);border:1px solid var(--red)}
+.bw{width:100%;margin-top:8px;background:none;border:1px dashed var(--line2);color:var(--mut);
+border-radius:11px;padding:10px 0;font-size:12.5px;font-family:inherit;font-style:italic}
+.bw:active{background:var(--paper2)}
 
 .signall{position:relative;overflow:hidden;width:100%;background:var(--walnut2);color:#e7dcc2;
 border:1px solid var(--golddim);border-radius:14px;padding:16px 0;font-size:14.5px;font-weight:600;
@@ -178,7 +181,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
   <div class="hrow">
     <div>
       <div class="greet serif" id="greet">Good evening, Sir</div>
-      <div class="dline" id="dline">the bridge · wayne estate · b4</div>
+      <div class="dline" id="dline">the bridge · wayne estate · b5</div>
     </div>
     <div style="display:flex">
       <button class="hbtn" id="btnRefresh" aria-label="refresh">↻</button>
@@ -273,7 +276,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <button class="b2 send" id="btnSaveSet">Lay the wire</button>
     <button class="b2 ghost" id="btnTestSet">Test the wire</button>
     <button class="b2 ghost" id="btnCloseSet">Close</button>
-    <p class="note" style="text-align:center;margin:12px 0 0">build 4 · 18 Jul 2026</p>
+    <p class="note" style="text-align:center;margin:12px 0 0">build 5 · 18 Jul 2026</p>
   </div>
 </div>
 
@@ -291,6 +294,16 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <input id="vetoWhy" placeholder="the reason">
     <button class="b2" id="btnVetoGo" style="background:var(--red);color:#fff">Veto it</button>
     <button class="b2 ghost" id="btnVetoNo">Keep it</button>
+  </div>
+</div>
+
+<div class="modal" id="mWord">
+  <div class="sheet">
+    <h3 class="serif" id="wordTitle">A word on m1</h3>
+    <p class="note" style="margin-top:-6px">Neither approves nor vetoes — your remark rides to the house, and the matter is restaged to your instruction.</p>
+    <textarea id="wordText" placeholder="e.g. approve, but only after the 25th…"></textarea>
+    <button class="b2 send" id="btnWordGo" style="width:100%;margin-top:14px">Send the word</button>
+    <button class="b2 ghost" id="btnWordNo" style="width:100%;margin-top:8px">Never mind</button>
   </div>
 </div>
 
@@ -355,7 +368,7 @@ function greet(){
  else g='A quiet night, Sir';
  $('greet').textContent=g;
  $('dline').textContent=new Date().toLocaleDateString('en-GB',
-  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b4';}
+  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b5';}
 
 function gauge(pct,size){
  var r=(size-8)/2,c=2*Math.PI*r,f=Math.max(.04,Math.min(1,pct||0));
@@ -394,11 +407,13 @@ function render(){
    '<div class="line">'+esc(it.line||'')+
    (it.paper?' <a href="'+esc(it.paper)+'" target="_blank" rel="noopener">paper ↗</a>':'')+'</div>'+
    '<div class="btns"><button class="b ap">Approve</button><button class="b df">Hold</button>'+
-   '<button class="b vt">Veto</button></div>';
+   '<button class="b vt">Veto</button></div>'+
+   '<button class="bw">✎&nbsp; a word — your own instruction</button>';
   attachSwipe(d,it);
   d.querySelector('.ap').onclick=function(){if(d._moved)return;decide(it,d,'approve '+it.id,'Approving '+it.id);};
   d.querySelector('.df').onclick=function(){if(d._moved)return;decide(it,d,'defer '+it.id,'Holding '+it.id);};
   d.querySelector('.vt').onclick=function(){if(d._moved)return;openVeto(it,d);};
+  d.querySelector('.bw').onclick=function(){if(d._moved)return;openWord(it);};
   wrap.appendChild(d);ml.appendChild(wrap);});
 
  var ot=$('officeTiles');ot.innerHTML='';
@@ -538,6 +553,20 @@ function sendPic(file,caption){
    else toast('Refused — '+(j.err||'unknown'));})
   .catch(function(){toast('The wire is down — send it on Telegram, Sir.');});};
  rd.readAsDataURL(file);}
+
+/* ---- word sheet ---- */
+var pendingWord=null;
+function openWord(it){
+ pendingWord=it;
+ $('wordTitle').textContent='A word on '+it.id;
+ $('wordText').value='';$('mWord').classList.add('on');
+ setTimeout(function(){$('wordText').focus();},250);}
+$('btnWordNo').onclick=function(){$('mWord').classList.remove('on');pendingWord=null;};
+$('btnWordGo').onclick=function(){
+ var t=$('wordText').value.trim();
+ $('mWord').classList.remove('on');
+ if(pendingWord&&t)sendCmd('on '+pendingWord.id+' — '+t);
+ pendingWord=null;};
 
 /* ---- veto sheet ---- */
 function openVeto(it,el){
