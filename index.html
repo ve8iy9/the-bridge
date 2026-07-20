@@ -181,7 +181,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
   <div class="hrow">
     <div>
       <div class="greet serif" id="greet">Good evening, Sir</div>
-      <div class="dline" id="dline">the bridge · wayne estate · b5</div>
+      <div class="dline" id="dline">the bridge · wayne estate · b6</div>
     </div>
     <div style="display:flex">
       <button class="hbtn" id="btnRefresh" aria-label="refresh">↻</button>
@@ -276,7 +276,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <button class="b2 send" id="btnSaveSet">Lay the wire</button>
     <button class="b2 ghost" id="btnTestSet">Test the wire</button>
     <button class="b2 ghost" id="btnCloseSet">Close</button>
-    <p class="note" style="text-align:center;margin:12px 0 0">build 5 · 18 Jul 2026</p>
+    <p class="note" style="text-align:center;margin:12px 0 0">build 6 · 20 Jul 2026 — answered matters stay answered · papers shelf</p>
   </div>
 </div>
 
@@ -318,6 +318,22 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
   </div>
 </div>
 
+<div class="modal" id="mPapers">
+  <div class="sheet">
+    <h3 class="serif" id="ppTitle">Papers of the house</h3>
+    <p class="note" style="margin-top:-6px">Filed these last three days — tap one to open it in Drive.</p>
+    <div id="ppList" style="max-height:52vh;overflow-y:auto;margin-top:6px"></div>
+    <button class="b2 ghost" id="btnPpNo" style="width:100%;margin-top:10px">Close</button>
+  </div>
+</div>
+<style>
+.ppr{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--line);
+ padding:11px 2px;font:inherit;color:inherit;font-size:13.5px;line-height:1.45;cursor:pointer}
+.ppr:last-child{border-bottom:none}
+.ppr .pt{display:inline-block;min-width:52px;font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;
+ color:var(--gold2);font-weight:700;margin-right:6px}
+.pph{font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;opacity:.55;margin:12px 0 2px;font-weight:700}
+</style>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -326,7 +342,13 @@ var cache=null;try{cache=JSON.parse(localStorage.getItem('br_cache')||'null');}c
 var sentLocal=[];try{sentLocal=JSON.parse(localStorage.getItem('br_sent')||'[]');}catch(e){}
 var lang=localStorage.getItem('br_lang')||'en-IN';
 var pendingVeto=null,pendingPic=null,wFilter='all',decided={};
-try{decided=JSON.parse(sessionStorage.getItem('br_decided')||'{}');}catch(e){}
+try{decided=JSON.parse(localStorage.getItem('br_decided2')||'{}');}catch(e){}
+(function(){var now=Date.now(),ch=0;for(var k in decided){
+ if(!decided[k]||typeof decided[k]!=='number'||now-decided[k]>30*864e5){delete decided[k];ch=1;}}
+ if(ch)try{localStorage.setItem('br_decided2',JSON.stringify(decided));}catch(e){}})();
+function isDecided(it){if(!it||!it.id)return false;var ts=decided[it.id];if(!ts)return false;
+ var sa=(cache&&cache.stateAt)?new Date(cache.stateAt).getTime():0;
+ return !sa||ts>=sa;}
 
 var DEMO={glyph:'clean',safe:'₹18,400',next:"Amma's birthday · T-21",
 muster:[
@@ -368,7 +390,7 @@ function greet(){
  else g='A quiet night, Sir';
  $('greet').textContent=g;
  $('dline').textContent=new Date().toLocaleDateString('en-GB',
-  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b5';}
+  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b6';}
 
 function gauge(pct,size){
  var r=(size-8)/2,c=2*Math.PI*r,f=Math.max(.04,Math.min(1,pct||0));
@@ -388,7 +410,7 @@ function render(){
   'Safe to spend '+esc((s&&s.safe)||'—')+when;
  $('occWrap').innerHTML=(s&&s.next)?'<span class="occ">🎂 '+esc(s.next)+'</span>':'';
 
- var items=((s&&s.muster)||[]).filter(function(it){return !decided[it.id];});
+ var items=((s&&s.muster)||[]).filter(function(it){return !isDecided(it);});
  $('nBadge').style.display=items.length?'block':'none';
  $('nBadge').textContent=items.length;
  $('signSub').textContent=items.length?
@@ -421,9 +443,7 @@ function render(){
   var d=document.createElement('div');d.className='tile';
   d.innerHTML='<div class="n"><span class="dot '+(o.ok?'ok':'warn')+'"></span>'+esc(o.name)+'</div>'+
    '<div class="s">'+esc(o.status||'')+'</div><div class="m">'+esc(o.meta||'')+'</div>';
-  d.onclick=function(){
-   if(o.paper)window.open(o.paper,'_blank');
-   else toast(o.name+' has filed no paper today, Sir.');};
+  d.onclick=function(){openPapers(o);};
   ot.appendChild(d);});
  if(!ot.innerHTML)ot.innerHTML='<div class="empty" style="grid-column:1/-1">The offices have not yet published today.</div>';
 
@@ -482,17 +502,17 @@ function attachSwipe(el,it){
 function decide(it,el,cmdText,label){
  vib(12);
  if(el)el.classList.add('done');
- if(it)decided[it.id]=1;
+ if(it)decided[it.id]=Date.now();
  persistDecided();
  if(live()){rawSend(cmdText,true);toast('✓ '+label+' — the house has it.');}
  else{sentLocal.push({t:Date.now(),text:cmdText+'  (specimen — not sent)'});
   localStorage.setItem('br_sent',JSON.stringify(sentLocal));
   toast('Specimen, Sir — nothing left the house.');}
  setTimeout(render,400);}
-function persistDecided(){try{sessionStorage.setItem('br_decided',JSON.stringify(decided));}catch(e){}}
+function persistDecided(){try{localStorage.setItem('br_decided2',JSON.stringify(decided));}catch(e){}}
 function renderBadge(){
  var s=stateNow();
- var n=((s&&s.muster)||[]).filter(function(it){return !decided[it.id];}).length;
+ var n=((s&&s.muster)||[]).filter(function(it){return !isDecided(it);}).length;
  $('nBadge').style.display=n?'block':'none';$('nBadge').textContent=n;}
 
 /* ---- transport ---- */
@@ -524,8 +544,7 @@ function fetchState(){
  .then(function(r){return r.json();})
  .then(function(j){
   if(!j.ok){toast(j.err==='key'?'The key was refused — check ⚙, Sir.':'The wire faltered — '+(j.err||''));render();return;}
-  cache=j;localStorage.setItem('br_cache',JSON.stringify(j));
-  decided={};persistDecided();render();})
+  cache=j;localStorage.setItem('br_cache',JSON.stringify(j));render();})
  .catch(function(){toast('No connection — the last known state stands.');render();});}
 
 /* ---- pictures ---- */
@@ -553,6 +572,42 @@ function sendPic(file,caption){
    else toast('Refused — '+(j.err||'unknown'));})
   .catch(function(){toast('The wire is down — send it on Telegram, Sir.');});};
  rd.readAsDataURL(file);}
+
+/* ---- papers shelf (b6) ---- */
+function dayLab(t){if(!t)return '';var d=new Date(t).toDateString();
+ if(d===new Date().toDateString())return 'today';
+ if(d===new Date(Date.now()-864e5).toDateString())return 'yest.';
+ return new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short'});}
+function officeKws(name){var n=String(name||'').toLowerCase();
+ if(/treasur|bursar/.test(n))return['treasur','bursar','money','ledger','statement','card','account','itr','tax','bill'];
+ if(/claim/.test(n))return['claim','niva','bupa','insurance','ombudsman','hospital','jupiter','settle','voucher'];
+ if(/travel/.test(n))return['travel','itiner','fare','visa','uzbek','samark','hotel','flight','anniversar'];
+ if(/family/.test(n))return['family','electoral','archana','amma','lakshmi','gethu','sunday'];
+ if(/steward|chief/.test(n))return['dispatch','synthesis','week','steward','state of the estate','minutes','board paper'];
+ if(/footman/.test(n))return['errand','work','instamart','hands hour','form'];
+ if(/career/.test(n))return['career','job','application','publicis','resume','scout','role'];
+ if(/venture|tdn|nomad/.test(n))return['venture','tdn','nomad','amazon','seller','proposal','digest'];
+ if(/physician|health/.test(n))return['physician','health','weight','nutrition','momentum','care'];
+ if(/sentinel/.test(n))return['sentinel','watch','gap','silent'];
+ if(/bridge|telegram/.test(n))return['bridge','telegram','feedback','picture'];
+ return n.split(/[^a-z]+/).filter(function(x){return x.length>3;});}
+function openPapers(o){
+ var ps=(cache&&cache.papers)||[];
+ var kws=officeKws(o&&o.name),mine=[],rest=[];
+ ps.forEach(function(p){var n=String(p.n||'').toLowerCase();
+  (kws.length&&kws.some(function(k){return n.indexOf(k)>-1;})?mine:rest).push(p);});
+ $('ppTitle').textContent=(o&&o.name?o.name+' — ':'')+'papers of the house';
+ var el=$('ppList');el.innerHTML='';
+ function hd(t){var h=document.createElement('div');h.className='pph';h.textContent=t;el.appendChild(h);}
+ function row(p,lab){var b=document.createElement('button');b.className='ppr';
+  b.innerHTML='<span class="pt">'+esc(lab||dayLab(p.t))+'</span>'+esc(p.n||'');
+  b.onclick=function(){if(p.u)window.open(p.u,'_blank');};el.appendChild(b);}
+ if(o&&o.paper)row({n:(o.name||'the desk')+" — today's paper ↗",u:o.paper},'today');
+ if(mine.length){hd('from this desk');mine.forEach(function(p){row(p);});}
+ if(rest.length){hd(mine.length?'the rest of the house':'filed these last days');rest.forEach(function(p){row(p);});}
+ if(!el.childNodes.length)el.innerHTML='<div class="empty">Nothing on the shelf yet, Sir — papers appear here once the house runs actuator v2.5.</div>';
+ $('mPapers').classList.add('on');vib(6);}
+$('btnPpNo').onclick=function(){$('mPapers').classList.remove('on');};
 
 /* ---- word sheet ---- */
 var pendingWord=null;
@@ -589,12 +644,12 @@ $('btnVetoGo').onclick=function(){
  function stop(){clearInterval(t);t=null;p=0;fill.style.width='0';}
  function start(e){e.preventDefault();
   var s=stateNow();
-  var n=((s&&s.muster)||[]).filter(function(it){return !decided[it.id];}).length;
+  var n=((s&&s.muster)||[]).filter(function(it){return !isDecided(it);}).length;
   if(!n){toast('The docket is already clear, Sir.');return;}
   p=0;t=setInterval(function(){p+=2.2;fill.style.width=Math.min(100,p)+'%';
    if(p>=100){stop();vib([16,60,16]);
     var s2=stateNow();
-    ((s2&&s2.muster)||[]).forEach(function(it){decided[it.id]=1;});
+    ((s2&&s2.muster)||[]).forEach(function(it){decided[it.id]=Date.now();});
     persistDecided();
     decide(null,null,'SIGNED — approve all pending','Signing all pending');
     render();}},24);}
