@@ -181,9 +181,10 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
   <div class="hrow">
     <div>
       <div class="greet serif" id="greet">Good evening, Sir</div>
-      <div class="dline" id="dline">the bridge · wayne estate · b6</div>
+      <div class="dline" id="dline">the bridge · wayne estate · b7</div>
     </div>
     <div style="display:flex">
+      <button class="hbtn" id="btnPaper" aria-label="today's paper">📰</button>
       <button class="hbtn" id="btnRefresh" aria-label="refresh">↻</button>
       <button class="hbtn" id="btnGear" aria-label="settings">⚙</button>
     </div>
@@ -245,6 +246,24 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
   <p class="note">Orders ride the same wire as Telegram — logged, mirrored, acted on by the next round. Photographs go to the Picture Desk: caption = order, none = context.</p>
 </section>
 
+<section class="view" id="v-study">
+  <h2 class="serif">The study</h2>
+  <p class="note">The estate's second brain — every thought kept, every answer one look away.</p>
+  <div class="rule"></div>
+  <input class="stuIn" id="stuQ" placeholder="recall… e.g. samarkand · visa · BLO · ombudsman">
+  <div class="commrow" style="margin-top:9px">
+    <button class="b2 send" id="btnStuGo" style="flex:1">🔎&nbsp; Recall from the Study</button>
+  </div>
+  <div id="stuList" style="margin-top:10px"></div>
+  <div class="rule" style="margin:18px 0 12px"></div>
+  <h2 class="serif" style="font-size:15px">Leave a thought</h2>
+  <textarea id="stuNote" placeholder="an idea, a fact, a stray thought worth keeping — it is shelved tonight, never lost"></textarea>
+  <div class="commrow">
+    <button class="b2 send" id="btnStuNote" style="flex:1">🧠&nbsp; File to the Study</button>
+  </div>
+  <p class="note">Thoughts ride the wire as notes; the night Valet shelves each into its dossier. Ask, and the house answers with sources.</p>
+</section>
+
 <section class="view" id="v-wire">
   <h2 class="serif">The wire</h2>
   <p class="note">The house's correspondence — what was heard, filed, sent and done.</p>
@@ -262,6 +281,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
 <nav>
   <button data-v="v-muster" class="on"><span class="ic">✒</span>Muster<span class="badge" id="nBadge" style="display:none"></span></button>
   <button data-v="v-offices"><span class="ic">🏛</span>Offices</button>
+  <button data-v="v-study"><span class="ic">🧠</span>Study</button>
   <button data-v="v-comm"><span class="ic">🎙</span>Commission</button>
   <button data-v="v-wire"><span class="ic">📜</span>Wire</button>
 </nav>
@@ -276,7 +296,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <button class="b2 send" id="btnSaveSet">Lay the wire</button>
     <button class="b2 ghost" id="btnTestSet">Test the wire</button>
     <button class="b2 ghost" id="btnCloseSet">Close</button>
-    <p class="note" style="text-align:center;margin:12px 0 0">build 6 · 20 Jul 2026 — answered matters stay answered · papers shelf</p>
+    <p class="note" style="text-align:center;margin:12px 0 0">build 7 · 24 Jul 2026 — the study (second brain) · today's-paper door</p>
   </div>
 </div>
 
@@ -333,6 +353,9 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
 .ppr .pt{display:inline-block;min-width:52px;font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;
  color:var(--gold2);font-weight:700;margin-right:6px}
 .pph{font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;opacity:.55;margin:12px 0 2px;font-weight:700}
+.stuIn{width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--paper);
+ padding:12px 13px;font:inherit;font-size:15px;color:var(--ink)}
+.stuIn:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 3px rgba(201,169,106,.18)}
 </style>
 <div class="toast" id="toast"></div>
 
@@ -390,7 +413,7 @@ function greet(){
  else g='A quiet night, Sir';
  $('greet').textContent=g;
  $('dline').textContent=new Date().toLocaleDateString('en-GB',
-  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b6';}
+  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b7';}
 
 function gauge(pct,size){
  var r=(size-8)/2,c=2*Math.PI*r,f=Math.max(.04,Math.min(1,pct||0));
@@ -724,6 +747,29 @@ $('btnMic').onclick=function(){
  recOn=true;$('btnMic').classList.add('live');vib(10);
  $('micHint').textContent='listening…';
  try{rec.start();}catch(e){recOn=false;$('btnMic').classList.remove('live');}};
+
+/* ---- the study (b7) ---- */
+function stuRow(p){var b=document.createElement('button');b.className='ppr';
+ b.innerHTML='<span class="pt">'+esc(p.f||dayLab(p.t)||'')+'</span>'+esc(p.n||'');
+ b.onclick=function(){if(p.u)window.open(p.u,'_blank');};return b;}
+$('btnStuGo').onclick=function(){
+ var q=$('stuQ').value.trim();if(!q)return;
+ if(!live()){toast('Specimen, Sir — lay the wire in ⚙ to consult the shelves.');return;}
+ var el=$('stuList');el.innerHTML='<div class="empty">Consulting the shelves…</div>';vib(8);
+ fetch(cfg.url+'?key='+encodeURIComponent(cfg.key)+'&op=recall&q='+encodeURIComponent(q))
+ .then(function(r){return r.json();})
+ .then(function(j){el.innerHTML='';
+  if(!j.ok){el.innerHTML='<div class="empty">The wire faltered — '+esc(j.err||'unknown')+'</div>';return;}
+  if(!j.hits||!j.hits.length){el.innerHTML='<div class="empty">Nothing on the shelves for “'+esc(q)+'”, Sir — a first note would start the dossier.</div>';return;}
+  j.hits.forEach(function(p){el.appendChild(stuRow(p));});})
+ .catch(function(){el.innerHTML='<div class="empty">No connection, Sir — the shelves wait.</div>';});};
+$('stuQ').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('btnStuGo').click();}});
+$('btnStuNote').onclick=function(){
+ var t=$('stuNote').value.trim();if(!t){toast('A thought first, Sir.');return;}
+ sendCmd('note: '+t);$('stuNote').value='';};
+$('btnPaper').onclick=function(){
+ if(!live()){toast('Lay the wire in ⚙ first, Sir — the paper door needs it.');return;}
+ vib(8);window.open(cfg.url+'?key='+encodeURIComponent(cfg.key)+'&op=paper','_blank');};
 
 /* ---- lifecycle ---- */
 document.addEventListener('visibilitychange',function(){
