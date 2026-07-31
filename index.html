@@ -181,7 +181,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
   <div class="hrow">
     <div>
       <div class="greet serif" id="greet">Good evening, Sir</div>
-      <div class="dline" id="dline">the bridge · wayne estate · b7</div>
+      <div class="dline" id="dline">the bridge · wayne estate · b8</div>
     </div>
     <div style="display:flex">
       <button class="hbtn" id="btnPaper" aria-label="today's paper">📰</button>
@@ -296,7 +296,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <button class="b2 send" id="btnSaveSet">Lay the wire</button>
     <button class="b2 ghost" id="btnTestSet">Test the wire</button>
     <button class="b2 ghost" id="btnCloseSet">Close</button>
-    <p class="note" style="text-align:center;margin:12px 0 0">build 7 · 24 Jul 2026 — the study (second brain) · today's-paper door</p>
+    <p class="note" style="text-align:center;margin:12px 0 0">build 8 · 31 Jul 2026 — network-first · stale-state stamp · malformed-not-blank</p>
   </div>
 </div>
 
@@ -365,6 +365,7 @@ var cache=null;try{cache=JSON.parse(localStorage.getItem('br_cache')||'null');}c
 var sentLocal=[];try{sentLocal=JSON.parse(localStorage.getItem('br_sent')||'[]');}catch(e){}
 var lang=localStorage.getItem('br_lang')||'en-IN';
 var pendingVeto=null,pendingPic=null,wFilter='all',decided={};
+var stale=false; /* b8: true when the screen is drawn from cache, not from a live answer */
 try{decided=JSON.parse(localStorage.getItem('br_decided2')||'{}');}catch(e){}
 (function(){var now=Date.now(),ch=0;for(var k in decided){
  if(!decided[k]||typeof decided[k]!=='number'||now-decided[k]>30*864e5){delete decided[k];ch=1;}}
@@ -413,7 +414,7 @@ function greet(){
  else g='A quiet night, Sir';
  $('greet').textContent=g;
  $('dline').textContent=new Date().toLocaleDateString('en-GB',
-  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b7';}
+  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b8';}
 
 function gauge(pct,size){
  var r=(size-8)/2,c=2*Math.PI*r,f=Math.max(.04,Math.min(1,pct||0));
@@ -428,12 +429,21 @@ function render(){
  $('demoBanner').style.display=live()?'none':'block';
  var s=stateNow();
  var warn=s&&s.glyph==='warn';
- var when=cache&&cache.at?' · wire '+esc(String(cache.at)).slice(11,16):(live()?'':' · specimen');
+ /* b8: the header always says WHICH state is on screen, and admits when it is cached. */
+ var stamp=(cache&&(cache.stateAt||cache.at))?String(cache.stateAt||cache.at):'';
+ var hhmm=stamp?esc(stamp).slice(11,16):'';
+ var when = !live() ? ' · specimen'
+   : (stale&&hhmm) ? ' · showing '+hhmm+' · offline'
+   : hhmm ? ' · wire '+hhmm
+   : ' · awaiting the first answer';
  $('topStat').innerHTML='<b>'+(warn?'⚠ A matter wants your eye.':'✅ The house is in order.')+'</b> '+
   'Safe to spend '+esc((s&&s.safe)||'—')+when;
  $('occWrap').innerHTML=(s&&s.next)?'<span class="occ">🎂 '+esc(s.next)+'</span>':'';
 
- var items=((s&&s.muster)||[]).filter(function(it){return !isDecided(it);});
+ /* b8: a bare-string muster entry is a REPORTABLE DEFECT — render it, never swallow it. */
+ var items=((s&&s.muster)||[]).map(function(it){
+   return (it&&typeof it==='object')?it:{id:String(it||'?'),desk:'',line:''};
+  }).filter(function(it){return !isDecided(it);});
  $('nBadge').style.display=items.length?'block':'none';
  $('nBadge').textContent=items.length;
  $('signSub').textContent=items.length?
@@ -449,7 +459,7 @@ function render(){
   d.innerHTML='<div class="chead"><div class="mono">'+esc((it.desk||'H')[0].toUpperCase())+'</div>'+
    '<div><div class="id">'+esc(it.id||'')+' · '+esc(it.desk||'the house')+'</div></div>'+
    (it.urgent?'<div class="urg">today</div>':'')+'</div>'+
-   '<div class="line">'+esc(it.line||'')+
+   '<div class="line">'+(it.line?esc(it.line):'<i>malformed entry — '+esc(it.id||'no id')+'</i>')+
    (it.paper?' <a href="'+esc(it.paper)+'" target="_blank" rel="noopener">paper ↗</a>':'')+'</div>'+
    '<div class="btns"><button class="b ap">Approve</button><button class="b df">Hold</button>'+
    '<button class="b vt">Veto</button></div>'+
@@ -563,12 +573,14 @@ function sendCmd(text){
 function fetchState(){
  if(!live()){render();return;}
  $('topStat').innerHTML='Ringing the house…';
- fetch(cfg.url+'?key='+encodeURIComponent(cfg.key))
+ /* b8 NETWORK-FIRST (ERRATUM 4): cache-buster + no-store, so neither a proxy nor the
+    service worker can hand back yesterday's state while the network lives. */
+ fetch(cfg.url+'?key='+encodeURIComponent(cfg.key)+'&t='+Date.now(),{cache:'no-store'})
  .then(function(r){return r.json();})
  .then(function(j){
-  if(!j.ok){toast(j.err==='key'?'The key was refused — check ⚙, Sir.':'The wire faltered — '+(j.err||''));render();return;}
-  cache=j;localStorage.setItem('br_cache',JSON.stringify(j));render();})
- .catch(function(){toast('No connection — the last known state stands.');render();});}
+  if(!j.ok){stale=true;toast(j.err==='key'?'The key was refused — check \u2699, Sir.':'The wire faltered — '+(j.err||''));render();return;}
+  stale=false;cache=j;localStorage.setItem('br_cache',JSON.stringify(j));render();})
+ .catch(function(){stale=true;toast('No connection — the last known state stands.');render();});}
 
 /* ---- pictures ---- */
 function sendPic(file,caption){
