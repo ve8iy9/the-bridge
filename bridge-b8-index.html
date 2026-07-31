@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a140d">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+<title>The Bridge — Wayne Estate</title>
+<style>
+:root{
+--bg:#f4eee1;--paper:#fdfaf2;--paper2:#f7f2e6;--ink:#2a241c;--mut:#8b8171;--line:#e0d6c2;--line2:#cfc2a8;
+--walnut:#1a140d;--walnut2:#2b2115;--gold:#c9a96a;--gold2:#a98a4e;--golddim:#6e5b35;
+--green:#1f5c42;--greenbg:#e2eee6;--greenink:#123726;
+--red:#8c2f2f;--redbg:#f5e3e0;--redink:#5c1d1d;
+--amber:#8a5a12;--amberbg:#f3e8d0;
+--vio:#3d3566;--viobg:#e8e5f3;
+--shadow:0 1px 2px rgba(50,38,18,.05),0 4px 14px rgba(50,38,18,.07)}
+@media (prefers-color-scheme: dark){:root{
+--bg:#15110b;--paper:#201a11;--paper2:#191409;--ink:#eae0c8;--mut:#93876f;--line:#332b1d;--line2:#4a3f2a;
+--walnut:#0e0b06;--walnut2:#241c10;--gold:#d3b478;--gold2:#c9a96a;--golddim:#8d7443;
+--green:#7fbf9e;--greenbg:#1c2f25;--greenink:#bfe3d0;
+--red:#d98f85;--redbg:#33201c;--redink:#efc0b8;
+--amber:#d8a955;--amberbg:#2e2412;
+--vio:#a89ddb;--viobg:#241f38;
+--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.35)}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);
+font-size:15px;padding-bottom:86px;min-height:100vh}
+.serif{font-family:Georgia,'Times New Roman',serif}
+
+header{background:var(--walnut);color:#e7dcc2;padding:16px 16px 14px;position:sticky;top:0;z-index:20;
+border-bottom:3px double var(--golddim)}
+.hrow{display:flex;align-items:flex-start;justify-content:space-between}
+.greet{font-family:Georgia,serif;font-size:21px;font-weight:600;letter-spacing:.3px;color:#efe4c8}
+.dline{font-size:11px;letter-spacing:2.2px;color:var(--gold);text-transform:uppercase;margin-top:3px}
+.hbtn{background:none;border:1px solid #453824;color:#c9b891;border-radius:10px;
+padding:8px 12px;font-size:15px;margin-left:6px}
+.hbtn:active{background:var(--walnut2)}
+.statusln{font-size:12.5px;color:#b3a586;margin-top:10px;line-height:1.5}
+.statusln b{color:#e7dcc2;font-weight:600}
+.occ{display:inline-block;background:rgba(201,169,106,.14);border:1px solid var(--golddim);
+color:var(--gold);font-size:11.5px;letter-spacing:.4px;border-radius:16px;padding:3px 11px;margin-top:9px}
+
+main{max-width:560px;margin:0 auto;padding:16px 13px}
+.view{display:none}
+.view.on{display:block;animation:rise .3s ease}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h2{font-family:Georgia,serif;font-size:17px;font-weight:600;margin:2px 2px 3px}
+.note{font-size:12.5px;color:var(--mut);margin:0 2px 13px;font-style:italic}
+.rule{height:1px;background:linear-gradient(90deg,var(--line2),transparent);margin:2px 0 12px}
+
+.swipe{position:relative;margin-bottom:11px}
+.under{position:absolute;inset:0;border-radius:15px;display:flex;align-items:center;
+justify-content:space-between;padding:0 20px;font-size:12px;font-weight:700;letter-spacing:2px}
+.under .ua{color:var(--green)}.under .uv{color:var(--red)}
+.card{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:15px;
+padding:13px 14px;box-shadow:var(--shadow);touch-action:pan-y}
+.card.urgent{border-left:4px solid var(--gold2);border-radius:0 15px 15px 0}
+.card.done{opacity:.35;pointer-events:none;transition:opacity .3s}
+.chead{display:flex;align-items:center;gap:9px}
+.mono{width:34px;height:34px;border-radius:50%;background:var(--paper2);border:1px solid var(--line2);
+color:var(--gold2);font-family:Georgia,serif;font-size:15px;font-weight:700;
+display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chead .id{font-size:11px;letter-spacing:1.2px;color:var(--mut);text-transform:uppercase}
+.chead .urg{margin-left:auto;font-size:10.5px;color:var(--gold2);letter-spacing:1px;text-transform:uppercase}
+.card .line{font-size:14.5px;line-height:1.5;margin:9px 2px 12px}
+.card .line a{color:var(--vio);text-decoration:none;font-weight:600}
+.btns{display:flex;gap:8px}
+.b{flex:1;text-align:center;border:none;border-radius:11px;padding:12px 0;
+font-size:13.5px;font-weight:600;font-family:inherit;letter-spacing:.2px}
+.b:active{transform:scale(.96)}
+.b.ap{background:var(--green);color:#f2f7f0}
+.b.df{background:var(--paper2);color:var(--mut);border:1px solid var(--line)}
+.b.vt{background:none;color:var(--red);border:1px solid var(--red)}
+.bw{width:100%;margin-top:8px;background:none;border:1px dashed var(--line2);color:var(--mut);
+border-radius:11px;padding:10px 0;font-size:12.5px;font-family:inherit;font-style:italic}
+.bw:active{background:var(--paper2)}
+
+.signall{position:relative;overflow:hidden;width:100%;background:var(--walnut2);color:#e7dcc2;
+border:1px solid var(--golddim);border-radius:14px;padding:16px 0;font-size:14.5px;font-weight:600;
+font-family:Georgia,serif;letter-spacing:1.2px;margin:6px 0 18px}
+.signall .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(201,169,106,.28)}
+.signall .lab{position:relative}
+.signall small{display:block;font-family:'Segoe UI',sans-serif;font-size:10.5px;letter-spacing:1.6px;
+color:var(--gold);margin-top:3px;text-transform:uppercase}
+
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.tile{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:11px 12px;
+box-shadow:var(--shadow)}
+.tile:active{background:var(--paper2)}
+.tile .n{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.tile .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.tile .dot.ok{background:var(--green)}.tile .dot.warn{background:var(--amber)}
+.tile .s{font-size:12.5px;margin-top:4px;color:var(--ink)}
+.tile .m{font-size:11.5px;color:var(--mut);margin-top:2px}
+.dials{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dial{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:10px;
+display:flex;align-items:center;gap:10px;box-shadow:var(--shadow)}
+.dial svg{flex-shrink:0}
+.dial .k{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut)}
+.dial .v{font-family:Georgia,serif;font-size:17px;font-weight:700;margin-top:1px}
+.dial .su{font-size:10.5px;color:var(--mut);margin-top:1px}
+
+.micwrap{text-align:center;margin:22px 0 6px}
+.mic{width:92px;height:92px;border-radius:50%;border:2px solid var(--golddim);background:var(--walnut2);
+color:var(--gold);font-size:36px;box-shadow:var(--shadow)}
+.mic:active{transform:scale(.95)}
+.mic.live{background:var(--red);border-color:var(--red);color:#fff;animation:pulse 1.1s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+.micwrap p{font-size:12px;color:var(--mut);margin-top:9px;font-style:italic}
+.langrow{display:flex;justify-content:center;gap:8px;margin:10px 0 14px}
+.lang{border:1px solid var(--line2);background:var(--paper);color:var(--mut);border-radius:16px;
+padding:5px 16px;font-size:12px;font-family:inherit}
+.lang.on{background:var(--walnut2);border-color:var(--golddim);color:var(--gold);font-weight:600}
+textarea{width:100%;border:1px solid var(--line2);border-radius:13px;background:var(--paper);
+padding:12px 13px;font:inherit;font-size:15px;resize:none;min-height:70px;color:var(--ink)}
+textarea:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 3px rgba(201,169,106,.18)}
+.commrow{display:flex;gap:9px;margin-top:10px}
+.b2{border:none;border-radius:12px;padding:13px 0;font-size:14px;font-weight:600;font-family:inherit}
+.b2:active{transform:scale(.97)}
+.send{flex:1;background:var(--green);color:#f2f7f0;letter-spacing:.3px}
+.attach{background:var(--paper);border:1px solid var(--line2);color:var(--ink);padding:13px 16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0 4px}
+.chip{border:1px solid var(--line2);background:var(--paper);border-radius:20px;
+padding:8px 14px;font-size:12.5px;color:var(--ink);font-family:inherit}
+.chip:active{background:var(--paper2)}
+
+.wfilter{display:flex;gap:8px;margin:0 0 10px}
+.wf{border:1px solid var(--line2);background:none;color:var(--mut);border-radius:16px;
+padding:5px 14px;font-size:12px;font-family:inherit}
+.wf.on{background:var(--walnut2);color:var(--gold);border-color:var(--golddim)}
+.wday{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);
+margin:14px 2px 5px;font-weight:700}
+.wireln{display:flex;gap:10px;padding:9px 3px;border-bottom:1px dotted var(--line);font-size:13px;line-height:1.45}
+.wireln .t{color:var(--mut);font-size:11px;white-space:nowrap;padding-top:2px;min-width:40px}
+.wireln .tx{word-break:break-word}
+.wireln.me .tx{color:var(--green);font-weight:600}
+.wireln.me .t::before{content:'✒ '}
+
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--walnut);display:flex;
+justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom));z-index:30;
+border-top:1px solid var(--golddim)}
+nav button{background:none;border:none;color:#8d7c62;font-size:10.5px;letter-spacing:.5px;font-family:inherit;
+display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 12px;position:relative}
+nav button .ic{font-size:20px}
+nav button.on{color:var(--gold)}
+nav .badge{position:absolute;top:-3px;right:2px;background:var(--gold2);color:var(--walnut);
+font-size:10px;font-weight:700;border-radius:9px;min-width:17px;padding:1px 4px}
+
+.modal{position:fixed;inset:0;background:rgba(18,13,6,.6);display:none;
+align-items:flex-end;justify-content:center;z-index:40}
+.modal.on{display:flex}
+.sheet{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:560px;
+padding:20px 17px calc(24px + env(safe-area-inset-bottom));animation:rise .25s ease;
+border-top:3px double var(--golddim)}
+.sheet h3{font-family:Georgia,serif;font-size:17px;margin-bottom:12px}
+.sheet label{font-size:12px;color:var(--mut);display:block;margin:12px 0 5px}
+.sheet input{width:100%;border:1px solid var(--line2);border-radius:11px;padding:12px 13px;
+font:inherit;font-size:14px;background:var(--paper);color:var(--ink)}
+.sheet .b2{width:100%;margin-top:14px}
+.ghost{background:var(--paper);border:1px solid var(--line2)!important;color:var(--mut)}
+.capprev{width:100%;max-height:190px;object-fit:contain;border-radius:12px;
+border:1px solid var(--line2);background:var(--paper);margin-bottom:4px}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));
+background:var(--walnut);color:#e7dcc2;font-size:13px;padding:11px 20px;border-radius:24px;z-index:50;
+opacity:0;transition:opacity .25s;pointer-events:none;max-width:88%;text-align:center;
+border:1px solid var(--golddim)}
+.toast.on{opacity:1}
+.banner{background:var(--amberbg);color:var(--amber);border:1px solid var(--line2);border-radius:12px;
+padding:10px 13px;font-size:12.5px;margin-bottom:13px}
+.empty{text-align:center;color:var(--mut);font-style:italic;font-size:13.5px;padding:30px 12px}
+.empty .big{font-size:30px;color:var(--gold2);margin-bottom:8px;font-family:Georgia,serif}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hrow">
+    <div>
+      <div class="greet serif" id="greet">Good evening, Sir</div>
+      <div class="dline" id="dline">the bridge · wayne estate · b8</div>
+    </div>
+    <div style="display:flex">
+      <button class="hbtn" id="btnPaper" aria-label="today's paper">📰</button>
+      <button class="hbtn" id="btnRefresh" aria-label="refresh">↻</button>
+      <button class="hbtn" id="btnGear" aria-label="settings">⚙</button>
+    </div>
+  </div>
+  <div class="statusln" id="topStat">The wire waits to be laid.</div>
+  <div id="occWrap"></div>
+</header>
+
+<main>
+
+<section class="view on" id="v-muster">
+  <div id="demoBanner" class="banner" style="display:none">A specimen is shown, Sir — open ⚙ and lay the wire to see the living estate.</div>
+  <h2 class="serif">The muster</h2>
+  <p class="note">Swipe right to approve, left to veto — or use the buttons. Your word is law.</p>
+  <div class="rule"></div>
+  <div id="musterList"></div>
+  <button class="signall" id="btnSignAll">
+    <span class="fill" id="signFill"></span>
+    <span class="lab">✒&nbsp; Hold to sign all<small id="signSub">press and hold — the pen needs a moment</small></span>
+  </button>
+</section>
+
+<section class="view" id="v-offices">
+  <h2 class="serif">The offices</h2>
+  <p class="note">Each desk's last word. Tap a tile for its latest paper.</p>
+  <div class="rule"></div>
+  <div class="tiles" id="officeTiles"></div>
+  <h2 class="serif">The dials</h2>
+  <p class="note">Facts, never verdicts.</p>
+  <div class="rule"></div>
+  <div class="dials" id="dialGrid"></div>
+</section>
+
+<section class="view" id="v-comm">
+  <h2 class="serif">Your orders, Sir</h2>
+  <div class="micwrap">
+    <button class="mic" id="btnMic" aria-label="speak">🎙</button>
+    <p id="micHint">tap once, speak — it types itself for your approval</p>
+  </div>
+  <div class="langrow">
+    <button class="lang on" id="langEn">English</button>
+    <button class="lang" id="langHi">हिंदी</button>
+  </div>
+  <textarea id="cmdText" placeholder="…or write the order here"></textarea>
+  <div class="commrow">
+    <button class="b2 attach" id="btnAttach">📷</button>
+    <button class="b2 send" id="btnSend">Dispatch to the house</button>
+  </div>
+  <input type="file" id="fileIn" accept="image/*" style="display:none">
+  <div class="chips" id="chipRow">
+    <button class="chip">research —</button>
+    <button class="chip">draft —</button>
+    <button class="chip">remind me —</button>
+    <button class="chip">note: watch —</button>
+    <button class="chip">stage a cart —</button>
+    <button class="chip">status</button>
+    <button class="chip">brief</button>
+  </div>
+  <p class="note">Orders ride the same wire as Telegram — logged, mirrored, acted on by the next round. Photographs go to the Picture Desk: caption = order, none = context.</p>
+</section>
+
+<section class="view" id="v-study">
+  <h2 class="serif">The study</h2>
+  <p class="note">The estate's second brain — every thought kept, every answer one look away.</p>
+  <div class="rule"></div>
+  <input class="stuIn" id="stuQ" placeholder="recall… e.g. samarkand · visa · BLO · ombudsman">
+  <div class="commrow" style="margin-top:9px">
+    <button class="b2 send" id="btnStuGo" style="flex:1">🔎&nbsp; Recall from the Study</button>
+  </div>
+  <div id="stuList" style="margin-top:10px"></div>
+  <div class="rule" style="margin:18px 0 12px"></div>
+  <h2 class="serif" style="font-size:15px">Leave a thought</h2>
+  <textarea id="stuNote" placeholder="an idea, a fact, a stray thought worth keeping — it is shelved tonight, never lost"></textarea>
+  <div class="commrow">
+    <button class="b2 send" id="btnStuNote" style="flex:1">🧠&nbsp; File to the Study</button>
+  </div>
+  <p class="note">Thoughts ride the wire as notes; the night Valet shelves each into its dossier. Ask, and the house answers with sources.</p>
+</section>
+
+<section class="view" id="v-wire">
+  <h2 class="serif">The wire</h2>
+  <p class="note">The house's correspondence — what was heard, filed, sent and done.</p>
+  <div class="rule"></div>
+  <div class="wfilter">
+    <button class="wf on" data-f="all">all</button>
+    <button class="wf" data-f="me">your hand</button>
+    <button class="wf" data-f="house">the house</button>
+  </div>
+  <div id="wireList"></div>
+</section>
+
+</main>
+
+<nav>
+  <button data-v="v-muster" class="on"><span class="ic">✒</span>Muster<span class="badge" id="nBadge" style="display:none"></span></button>
+  <button data-v="v-offices"><span class="ic">🏛</span>Offices</button>
+  <button data-v="v-study"><span class="ic">🧠</span>Study</button>
+  <button data-v="v-comm"><span class="ic">🎙</span>Commission</button>
+  <button data-v="v-wire"><span class="ic">📜</span>Wire</button>
+</nav>
+
+<div class="modal" id="mSettings">
+  <div class="sheet">
+    <h3 class="serif">The wire — one-time</h3>
+    <label>Web-app /exec URL (Apps Script → Deploy)</label>
+    <input id="setUrl" placeholder="https://script.google.com/macros/s/…/exec">
+    <label>Key (your BRIDGE_KEY passphrase)</label>
+    <input id="setKey" placeholder="your passphrase">
+    <button class="b2 send" id="btnSaveSet">Lay the wire</button>
+    <button class="b2 ghost" id="btnTestSet">Test the wire</button>
+    <button class="b2 ghost" id="btnCloseSet">Close</button>
+    <p class="note" style="text-align:center;margin:12px 0 0">build 8 · 31 Jul 2026 — network-first · stale-state stamp · malformed-not-blank</p>
+  </div>
+</div>
+
+<div class="modal" id="mVeto">
+  <div class="sheet">
+    <h3 class="serif" id="vetoTitle">Veto — a word on why</h3>
+    <p class="note" style="margin-top:-6px">Your reason becomes standing law in the Preferences ledger.</p>
+    <div class="chips" style="margin-top:4px">
+      <button class="chip vreason">too costly</button>
+      <button class="chip vreason">not now</button>
+      <button class="chip vreason">wrong approach</button>
+      <button class="chip vreason">never again</button>
+    </div>
+    <label>or in your own words</label>
+    <input id="vetoWhy" placeholder="the reason">
+    <button class="b2" id="btnVetoGo" style="background:var(--red);color:#fff">Veto it</button>
+    <button class="b2 ghost" id="btnVetoNo">Keep it</button>
+  </div>
+</div>
+
+<div class="modal" id="mWord">
+  <div class="sheet">
+    <h3 class="serif" id="wordTitle">A word on m1</h3>
+    <p class="note" style="margin-top:-6px">Neither approves nor vetoes — your remark rides to the house, and the matter is restaged to your instruction.</p>
+    <textarea id="wordText" placeholder="e.g. approve, but only after the 25th…"></textarea>
+    <button class="b2 send" id="btnWordGo" style="width:100%;margin-top:14px">Send the word</button>
+    <button class="b2 ghost" id="btnWordNo" style="width:100%;margin-top:8px">Never mind</button>
+  </div>
+</div>
+
+<div class="modal" id="mCaption">
+  <div class="sheet">
+    <h3 class="serif">To the Picture Desk</h3>
+    <img class="capprev" id="capPrev" alt="the photograph">
+    <label>The order (leave empty for context only)</label>
+    <input id="capText" placeholder="e.g. file this for Amma's claim">
+    <button class="b2 send" id="btnCapGo">Send</button>
+    <button class="b2 ghost" id="btnCapNo">Cancel</button>
+  </div>
+</div>
+
+<div class="modal" id="mPapers">
+  <div class="sheet">
+    <h3 class="serif" id="ppTitle">Papers of the house</h3>
+    <p class="note" style="margin-top:-6px">Filed these last three days — tap one to open it in Drive.</p>
+    <div id="ppList" style="max-height:52vh;overflow-y:auto;margin-top:6px"></div>
+    <button class="b2 ghost" id="btnPpNo" style="width:100%;margin-top:10px">Close</button>
+  </div>
+</div>
+<style>
+.ppr{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--line);
+ padding:11px 2px;font:inherit;color:inherit;font-size:13.5px;line-height:1.45;cursor:pointer}
+.ppr:last-child{border-bottom:none}
+.ppr .pt{display:inline-block;min-width:52px;font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;
+ color:var(--gold2);font-weight:700;margin-right:6px}
+.pph{font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;opacity:.55;margin:12px 0 2px;font-weight:700}
+.stuIn{width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--paper);
+ padding:12px 13px;font:inherit;font-size:15px;color:var(--ink)}
+.stuIn:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 3px rgba(201,169,106,.18)}
+</style>
+<div class="toast" id="toast"></div>
+
+<script>
+var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
+var cache=null;try{cache=JSON.parse(localStorage.getItem('br_cache')||'null');}catch(e){}
+var sentLocal=[];try{sentLocal=JSON.parse(localStorage.getItem('br_sent')||'[]');}catch(e){}
+var lang=localStorage.getItem('br_lang')||'en-IN';
+var pendingVeto=null,pendingPic=null,wFilter='all',decided={};
+var stale=false; /* b8: true when the screen is drawn from cache, not from a live answer */
+try{decided=JSON.parse(localStorage.getItem('br_decided2')||'{}');}catch(e){}
+(function(){var now=Date.now(),ch=0;for(var k in decided){
+ if(!decided[k]||typeof decided[k]!=='number'||now-decided[k]>30*864e5){delete decided[k];ch=1;}}
+ if(ch)try{localStorage.setItem('br_decided2',JSON.stringify(decided));}catch(e){}})();
+function isDecided(it){if(!it||!it.id)return false;var ts=decided[it.id];if(!ts)return false;
+ var sa=(cache&&cache.stateAt)?new Date(cache.stateAt).getTime():0;
+ return !sa||ts>=sa;}
+
+var DEMO={glyph:'clean',safe:'₹18,400',next:"Amma's birthday · T-21",
+muster:[
+ {id:'m1',desk:'treasurer',line:'Dispute draft ready — ₹648 double charge, Swiggy 12 Jul. One tap stages the send.',urgent:1},
+ {id:'m2',desk:'bursar',line:'Kill Hotstar ₹299/mo — unused 117 days. The cancel path is staged.'},
+ {id:'m3',desk:'family desk',line:'Sunday letter to Archana drafted, warm and short — forward when it pleases you.'}],
+offices:[
+ {name:'Treasurer',status:'roll-call 6/8 ✓',ok:1,meta:'sitting 12 Aug'},
+ {name:'Ventures',status:'1 proposal in TDN docket',ok:0,meta:'digest 15 Jul'},
+ {name:'Travel',status:'BOM–TAS down ₹2,100',ok:1,meta:'fare watch live'},
+ {name:'Career',status:'1 reply owed',ok:0,meta:'3 applied this week'},
+ {name:'Concierge',status:'gift cart staged',ok:1,meta:'occasion T-10'},
+ {name:'Steward',status:'2 dispatched, verified',ok:1,meta:'ran 10:32'}],
+dials:[{k:'freedom',v:'36.2 mo',su:'runway at current burn',pct:.62},
+ {k:'evenings',v:'4 in a row',su:'this week',pct:.57},
+ {k:'bills due',v:'2 · ₹9,120',su:'next 7 days',pct:.29},
+ {k:'weight',v:'▼ 0.4 kg',su:'vs last Saturday',pct:.8}],
+wire:[{t:Date.now()-35e5,line:'script: swept 2026-07-18 HDFC statement.pdf'},
+ {t:Date.now()-7e6,line:'telegram: 📷 picture — dinner (context logged)'},
+ {t:Date.now()-2e7,line:'run: T1 morning brief filed — all clean'},
+ {t:Date.now()-9e7,line:'script: SENT reply → nivabupa.com (claim papers)'}]};
+
+function $(id){return document.getElementById(id);}
+function vib(ms){try{if(navigator.vibrate)navigator.vibrate(ms);}catch(e){}}
+function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('on');
+ clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('on');},2800);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function ago(ts){var m=Math.round((Date.now()-ts)/6e4);
+ if(m<1)return 'now';if(m<60)return m+'m';var h=Math.floor(m/60);
+ if(h<24)return h+'h';return Math.floor(h/24)+'d';}
+function live(){return !!(cfg.url&&cfg.key);}
+function stateNow(){if(cache&&cache.state)return cache.state;
+ if(live())return (cache&&cache.state)||null;return DEMO;}
+
+function greet(){
+ var h=new Date().getHours(),g;
+ if(h<5)g='The small hours, Sir';else if(h<12)g='Good morning, Sir';
+ else if(h<16)g='Good afternoon, Sir';else if(h<21)g='Good evening, Sir';
+ else g='A quiet night, Sir';
+ $('greet').textContent=g;
+ $('dline').textContent=new Date().toLocaleDateString('en-GB',
+  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b8';}
+
+function gauge(pct,size){
+ var r=(size-8)/2,c=2*Math.PI*r,f=Math.max(.04,Math.min(1,pct||0));
+ return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'">'+
+ '<circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="var(--line)" stroke-width="5"/>'+
+ '<circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="var(--gold2)" stroke-width="5" '+
+ 'stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" '+
+ 'transform="rotate(-90 '+size/2+' '+size/2+')"/></svg>';}
+
+function render(){
+ greet();
+ $('demoBanner').style.display=live()?'none':'block';
+ var s=stateNow();
+ var warn=s&&s.glyph==='warn';
+ /* b8: the header always says WHICH state is on screen, and admits when it is cached. */
+ var stamp=(cache&&(cache.stateAt||cache.at))?String(cache.stateAt||cache.at):'';
+ var hhmm=stamp?esc(stamp).slice(11,16):'';
+ var when = !live() ? ' · specimen'
+   : (stale&&hhmm) ? ' · showing '+hhmm+' · offline'
+   : hhmm ? ' · wire '+hhmm
+   : ' · awaiting the first answer';
+ $('topStat').innerHTML='<b>'+(warn?'⚠ A matter wants your eye.':'✅ The house is in order.')+'</b> '+
+  'Safe to spend '+esc((s&&s.safe)||'—')+when;
+ $('occWrap').innerHTML=(s&&s.next)?'<span class="occ">🎂 '+esc(s.next)+'</span>':'';
+
+ /* b8: a bare-string muster entry is a REPORTABLE DEFECT — render it, never swallow it. */
+ var items=((s&&s.muster)||[]).map(function(it){
+   return (it&&typeof it==='object')?it:{id:String(it||'?'),desk:'',line:''};
+  }).filter(function(it){return !isDecided(it);});
+ $('nBadge').style.display=items.length?'block':'none';
+ $('nBadge').textContent=items.length;
+ $('signSub').textContent=items.length?
+  ('press and hold — '+items.length+' pending'):'the docket is clear';
+ var ml=$('musterList');ml.innerHTML='';
+ if(!items.length)ml.innerHTML='<div class="empty"><div class="big">✒</div>'+
+  'The docket is clear, Sir —<br>the house holds nothing against your hand.</div>';
+ items.forEach(function(it){
+  var wrap=document.createElement('div');wrap.className='swipe';
+  wrap.innerHTML='<div class="under"><span class="ua">APPROVE ›</span><span class="uv">‹ VETO</span></div>';
+  var d=document.createElement('div');
+  d.className='card'+(it.urgent?' urgent':'');
+  d.innerHTML='<div class="chead"><div class="mono">'+esc((it.desk||'H')[0].toUpperCase())+'</div>'+
+   '<div><div class="id">'+esc(it.id||'')+' · '+esc(it.desk||'the house')+'</div></div>'+
+   (it.urgent?'<div class="urg">today</div>':'')+'</div>'+
+   '<div class="line">'+(it.line?esc(it.line):'<i>malformed entry — '+esc(it.id||'no id')+'</i>')+
+   (it.paper?' <a href="'+esc(it.paper)+'" target="_blank" rel="noopener">paper ↗</a>':'')+'</div>'+
+   '<div class="btns"><button class="b ap">Approve</button><button class="b df">Hold</button>'+
+   '<button class="b vt">Veto</button></div>'+
+   '<button class="bw">✎&nbsp; a word — your own instruction</button>';
+  attachSwipe(d,it);
+  d.querySelector('.ap').onclick=function(){if(d._moved)return;decide(it,d,'approve '+it.id,'Approving '+it.id);};
+  d.querySelector('.df').onclick=function(){if(d._moved)return;decide(it,d,'defer '+it.id,'Holding '+it.id);};
+  d.querySelector('.vt').onclick=function(){if(d._moved)return;openVeto(it,d);};
+  d.querySelector('.bw').onclick=function(){if(d._moved)return;openWord(it);};
+  wrap.appendChild(d);ml.appendChild(wrap);});
+
+ var ot=$('officeTiles');ot.innerHTML='';
+ ((s&&s.offices)||[]).forEach(function(o){
+  var d=document.createElement('div');d.className='tile';
+  d.innerHTML='<div class="n"><span class="dot '+(o.ok?'ok':'warn')+'"></span>'+esc(o.name)+'</div>'+
+   '<div class="s">'+esc(o.status||'')+'</div><div class="m">'+esc(o.meta||'')+'</div>';
+  d.onclick=function(){openPapers(o);};
+  ot.appendChild(d);});
+ if(!ot.innerHTML)ot.innerHTML='<div class="empty" style="grid-column:1/-1">The offices have not yet published today.</div>';
+
+ var dg=$('dialGrid');dg.innerHTML='';
+ ((s&&s.dials)||[]).forEach(function(x){
+  var d=document.createElement('div');d.className='dial';
+  d.innerHTML=gauge(x.pct,56)+'<div><div class="k">'+esc(x.k)+'</div>'+
+   '<div class="v serif">'+esc(x.v)+'</div>'+
+   (x.su?'<div class="su">'+esc(x.su)+'</div>':'')+'</div>';
+  dg.appendChild(d);});
+ renderWire();}
+
+function renderWire(){
+ var s=stateNow(),wl=$('wireList');wl.innerHTML='';
+ var wire=[];
+ sentLocal.slice(-12).forEach(function(x){wire.push({t:x.t,line:x.text,me:1});});
+ (((cache&&cache.wire)||(s&&s.wire))||[]).forEach(function(x){wire.push({t:x.t,line:x.line});});
+ wire=wire.filter(function(x){
+  if(wFilter==='me')return x.me;if(wFilter==='house')return !x.me;return true;});
+ wire.sort(function(a,b){return (b.t||0)-(a.t||0);});
+ if(!wire.length){wl.innerHTML='<div class="empty">Nothing on this wire yet.</div>';return;}
+ var lastDay='';
+ wire.slice(0,50).forEach(function(x){
+  var day=x.t?new Date(x.t).toDateString():'';
+  var today=new Date().toDateString();
+  var yest=new Date(Date.now()-864e5).toDateString();
+  var label=day===today?'Today':day===yest?'Yesterday':
+   (x.t?new Date(x.t).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'');
+  if(label&&label!==lastDay){lastDay=label;
+   var h=document.createElement('div');h.className='wday';h.textContent=label;wl.appendChild(h);}
+  var d=document.createElement('div');d.className='wireln'+(x.me?' me':'');
+  d.innerHTML='<span class="t">'+(x.t?ago(x.t):'')+'</span><span class="tx">'+esc(x.line)+'</span>';
+  wl.appendChild(d);});}
+
+/* ---- swipe ---- */
+function attachSwipe(el,it){
+ var x0=0,y0=0,dx=0,horiz=null;
+ el.addEventListener('touchstart',function(e){
+  x0=e.touches[0].clientX;y0=e.touches[0].clientY;dx=0;horiz=null;
+  el.style.transition='none';el._moved=false;},{passive:true});
+ el.addEventListener('touchmove',function(e){
+  var mx=e.touches[0].clientX-x0,my=e.touches[0].clientY-y0;
+  if(horiz===null&&(Math.abs(mx)>8||Math.abs(my)>8))horiz=Math.abs(mx)>Math.abs(my)*1.3;
+  if(!horiz)return;
+  dx=Math.max(-130,Math.min(130,mx));el._moved=Math.abs(dx)>6;
+  el.style.transform='translateX('+dx+'px)';},{passive:true});
+ el.addEventListener('touchend',function(){
+  el.style.transition='transform .25s ease';
+  if(dx>92){el.style.transform='translateX(410px)';vib(14);
+   setTimeout(function(){decide(it,el,'approve '+it.id,'Approving '+it.id);},140);}
+  else if(dx<-92){el.style.transform='';openVeto(it,el);}
+  else el.style.transform='';
+  setTimeout(function(){el._moved=false;},250);});}
+
+/* ---- decide (immediate) ---- */
+function decide(it,el,cmdText,label){
+ vib(12);
+ if(el)el.classList.add('done');
+ if(it)decided[it.id]=Date.now();
+ persistDecided();
+ if(live()){rawSend(cmdText,true);toast('✓ '+label+' — the house has it.');}
+ else{sentLocal.push({t:Date.now(),text:cmdText+'  (specimen — not sent)'});
+  localStorage.setItem('br_sent',JSON.stringify(sentLocal));
+  toast('Specimen, Sir — nothing left the house.');}
+ setTimeout(render,400);}
+function persistDecided(){try{localStorage.setItem('br_decided2',JSON.stringify(decided));}catch(e){}}
+function renderBadge(){
+ var s=stateNow();
+ var n=((s&&s.muster)||[]).filter(function(it){return !isDecided(it);}).length;
+ $('nBadge').style.display=n?'block':'none';$('nBadge').textContent=n;}
+
+/* ---- transport ---- */
+function rawSend(text,silent){
+ fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain'},
+  body:JSON.stringify({key:cfg.key,op:'command',text:text})})
+ .then(function(r){return r.json();})
+ .then(function(j){
+  if(j.ok){if(!silent)toast('✓ Heard — the house will act on it.');
+   sentLocal.push({t:Date.now(),text:text});
+   if(sentLocal.length>25)sentLocal=sentLocal.slice(-25);
+   localStorage.setItem('br_sent',JSON.stringify(sentLocal));renderWire();}
+  else toast('Refused — '+(j.err==='key'?'the key was not honoured':j.err||'unknown'));})
+ .catch(function(){toast('The wire is down, Sir — Telegram still hears you.');});}
+function sendCmd(text){
+ text=String(text||'').trim();if(!text)return;
+ vib(10);
+ if(!live()){
+  sentLocal.push({t:Date.now(),text:text+'  (specimen — not sent)'});
+  localStorage.setItem('br_sent',JSON.stringify(sentLocal));
+  $('cmdText').value='';renderWire();
+  toast('Specimen, Sir — lay the wire in ⚙ to reach the house.');return;}
+ toast('Dispatching…');rawSend(text);$('cmdText').value='';}
+
+function fetchState(){
+ if(!live()){render();return;}
+ $('topStat').innerHTML='Ringing the house…';
+ /* b8 NETWORK-FIRST (ERRATUM 4): cache-buster + no-store, so neither a proxy nor the
+    service worker can hand back yesterday's state while the network lives. */
+ fetch(cfg.url+'?key='+encodeURIComponent(cfg.key)+'&t='+Date.now(),{cache:'no-store'})
+ .then(function(r){return r.json();})
+ .then(function(j){
+  if(!j.ok){stale=true;toast(j.err==='key'?'The key was refused — check \u2699, Sir.':'The wire faltered — '+(j.err||''));render();return;}
+  stale=false;cache=j;localStorage.setItem('br_cache',JSON.stringify(j));render();})
+ .catch(function(){stale=true;toast('No connection — the last known state stands.');render();});}
+
+/* ---- pictures ---- */
+function sendPic(file,caption){
+ if(!live()){
+  sentLocal.push({t:Date.now(),text:'📷 '+(caption||'photograph — context')+'  (specimen — not sent)'});
+  localStorage.setItem('br_sent',JSON.stringify(sentLocal));renderWire();
+  toast('Specimen, Sir — lay the wire in ⚙ to reach the Picture Desk.');return;}
+ var img=new Image(),rd=new FileReader();
+ rd.onload=function(){img.src=rd.result;};
+ img.onload=function(){
+  var mx=1280,w=img.width,h=img.height;
+  if(w>mx||h>mx){var k=mx/Math.max(w,h);w=Math.round(w*k);h=Math.round(h*k);}
+  var c=document.createElement('canvas');c.width=w;c.height=h;
+  c.getContext('2d').drawImage(img,0,0,w,h);
+  var b64=c.toDataURL('image/jpeg',0.85).split(',')[1];
+  toast('To the Picture Desk…');
+  fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain'},
+   body:JSON.stringify({key:cfg.key,op:'picture',b64:b64,ext:'jpg',caption:caption||''})})
+  .then(function(r){return r.json();})
+  .then(function(j){
+   if(j.ok){vib(12);toast('✓ Filed, Sir — read on the next round.');
+    sentLocal.push({t:Date.now(),text:'📷 '+(caption||'photograph — context')});
+    localStorage.setItem('br_sent',JSON.stringify(sentLocal));renderWire();}
+   else toast('Refused — '+(j.err||'unknown'));})
+  .catch(function(){toast('The wire is down — send it on Telegram, Sir.');});};
+ rd.readAsDataURL(file);}
+
+/* ---- papers shelf (b6) ---- */
+function dayLab(t){if(!t)return '';var d=new Date(t).toDateString();
+ if(d===new Date().toDateString())return 'today';
+ if(d===new Date(Date.now()-864e5).toDateString())return 'yest.';
+ return new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short'});}
+function officeKws(name){var n=String(name||'').toLowerCase();
+ if(/treasur|bursar/.test(n))return['treasur','bursar','money','ledger','statement','card','account','itr','tax','bill'];
+ if(/claim/.test(n))return['claim','niva','bupa','insurance','ombudsman','hospital','jupiter','settle','voucher'];
+ if(/travel/.test(n))return['travel','itiner','fare','visa','uzbek','samark','hotel','flight','anniversar'];
+ if(/family/.test(n))return['family','electoral','archana','amma','lakshmi','gethu','sunday'];
+ if(/steward|chief/.test(n))return['dispatch','synthesis','week','steward','state of the estate','minutes','board paper'];
+ if(/footman/.test(n))return['errand','work','instamart','hands hour','form'];
+ if(/career/.test(n))return['career','job','application','publicis','resume','scout','role'];
+ if(/venture|tdn|nomad/.test(n))return['venture','tdn','nomad','amazon','seller','proposal','digest'];
+ if(/physician|health/.test(n))return['physician','health','weight','nutrition','momentum','care'];
+ if(/sentinel/.test(n))return['sentinel','watch','gap','silent'];
+ if(/bridge|telegram/.test(n))return['bridge','telegram','feedback','picture'];
+ return n.split(/[^a-z]+/).filter(function(x){return x.length>3;});}
+function openPapers(o){
+ var ps=(cache&&cache.papers)||[];
+ var kws=officeKws(o&&o.name),mine=[],rest=[];
+ ps.forEach(function(p){var n=String(p.n||'').toLowerCase();
+  (kws.length&&kws.some(function(k){return n.indexOf(k)>-1;})?mine:rest).push(p);});
+ $('ppTitle').textContent=(o&&o.name?o.name+' — ':'')+'papers of the house';
+ var el=$('ppList');el.innerHTML='';
+ function hd(t){var h=document.createElement('div');h.className='pph';h.textContent=t;el.appendChild(h);}
+ function row(p,lab){var b=document.createElement('button');b.className='ppr';
+  b.innerHTML='<span class="pt">'+esc(lab||dayLab(p.t))+'</span>'+esc(p.n||'');
+  b.onclick=function(){if(p.u)window.open(p.u,'_blank');};el.appendChild(b);}
+ if(o&&o.paper)row({n:(o.name||'the desk')+" — today's paper ↗",u:o.paper},'today');
+ if(mine.length){hd('from this desk');mine.forEach(function(p){row(p);});}
+ if(rest.length){hd(mine.length?'the rest of the house':'filed these last days');rest.forEach(function(p){row(p);});}
+ if(!el.childNodes.length)el.innerHTML='<div class="empty">Nothing on the shelf yet, Sir — papers appear here once the house runs actuator v2.5.</div>';
+ $('mPapers').classList.add('on');vib(6);}
+$('btnPpNo').onclick=function(){$('mPapers').classList.remove('on');};
+
+/* ---- word sheet ---- */
+var pendingWord=null;
+function openWord(it){
+ pendingWord=it;
+ $('wordTitle').textContent='A word on '+it.id;
+ $('wordText').value='';$('mWord').classList.add('on');
+ setTimeout(function(){$('wordText').focus();},250);}
+$('btnWordNo').onclick=function(){$('mWord').classList.remove('on');pendingWord=null;};
+$('btnWordGo').onclick=function(){
+ var t=$('wordText').value.trim();
+ $('mWord').classList.remove('on');
+ if(pendingWord&&t)sendCmd('on '+pendingWord.id+' — '+t);
+ pendingWord=null;};
+
+/* ---- veto sheet ---- */
+function openVeto(it,el){
+ pendingVeto={it:it,el:el};
+ $('vetoTitle').textContent='Veto '+it.id+' — a word on why';
+ $('vetoWhy').value='';$('mVeto').classList.add('on');}
+$('btnVetoNo').onclick=function(){$('mVeto').classList.remove('on');pendingVeto=null;};
+document.querySelectorAll('.vreason').forEach(function(c){
+ c.onclick=function(){$('vetoWhy').value=c.textContent;};});
+$('btnVetoGo').onclick=function(){
+ var why=$('vetoWhy').value.trim()||'no reason given';
+ $('mVeto').classList.remove('on');
+ if(pendingVeto)decide(pendingVeto.it,pendingVeto.el,
+  'veto '+pendingVeto.it.id+' — '+why,'Vetoing '+pendingVeto.it.id);
+ pendingVeto=null;};
+
+/* ---- hold to sign ---- */
+(function(){
+ var t=null,p=0,btn=$('btnSignAll'),fill=$('signFill');
+ function stop(){clearInterval(t);t=null;p=0;fill.style.width='0';}
+ function start(e){e.preventDefault();
+  var s=stateNow();
+  var n=((s&&s.muster)||[]).filter(function(it){return !isDecided(it);}).length;
+  if(!n){toast('The docket is already clear, Sir.');return;}
+  p=0;t=setInterval(function(){p+=2.2;fill.style.width=Math.min(100,p)+'%';
+   if(p>=100){stop();vib([16,60,16]);
+    var s2=stateNow();
+    ((s2&&s2.muster)||[]).forEach(function(it){decided[it.id]=Date.now();});
+    persistDecided();
+    decide(null,null,'SIGNED — approve all pending','Signing all pending');
+    render();}},24);}
+ btn.addEventListener('pointerdown',start);
+ btn.addEventListener('pointerup',stop);
+ btn.addEventListener('pointerleave',stop);
+ btn.addEventListener('pointercancel',stop);})();
+
+/* ---- nav + sheets + chips ---- */
+document.querySelectorAll('nav button').forEach(function(b){
+ b.onclick=function(){
+  document.querySelectorAll('nav button').forEach(function(x){x.classList.remove('on');});
+  document.querySelectorAll('.view').forEach(function(x){x.classList.remove('on');});
+  b.classList.add('on');$(b.dataset.v).classList.add('on');window.scrollTo(0,0);vib(6);};});
+$('btnGear').onclick=function(){$('setUrl').value=cfg.url;$('setKey').value=cfg.key;
+ $('mSettings').classList.add('on');};
+$('btnCloseSet').onclick=function(){$('mSettings').classList.remove('on');};
+$('btnSaveSet').onclick=function(){
+ cfg.url=$('setUrl').value.trim();cfg.key=$('setKey').value.trim();
+ localStorage.setItem('br_url',cfg.url);localStorage.setItem('br_key',cfg.key);
+ $('mSettings').classList.remove('on');toast('The wire is laid, Sir.');fetchState();};
+$('btnTestSet').onclick=function(){
+ var u=$('setUrl').value.trim(),k=$('setKey').value.trim();
+ if(!u||!k){toast('Both lines first, Sir.');return;}
+ toast('Ringing…');
+ fetch(u+'?key='+encodeURIComponent(k)).then(function(r){return r.json();})
+ .then(function(j){toast(j.ok?'✓ The house answers, Sir.':'The house refused the key.');})
+ .catch(function(){toast('No answer — check the URL.');});};
+$('btnRefresh').onclick=function(){vib(8);fetchState();};
+$('btnSend').onclick=function(){sendCmd($('cmdText').value);};
+document.querySelectorAll('#chipRow .chip').forEach(function(c){
+ c.onclick=function(){var t=c.textContent;
+  if(t==='status'||t==='brief'){sendCmd(t);return;}
+  var ta=$('cmdText');ta.value=t.replace('—','').trim()+' ';ta.focus();};});
+document.querySelectorAll('.wf').forEach(function(b){
+ b.onclick=function(){document.querySelectorAll('.wf').forEach(function(x){x.classList.remove('on');});
+  b.classList.add('on');wFilter=b.dataset.f;renderWire();};});
+$('btnAttach').onclick=function(){$('fileIn').click();};
+$('fileIn').onchange=function(){
+ if(!this.files||!this.files[0])return;
+ pendingPic=this.files[0];this.value='';
+ try{$('capPrev').src=URL.createObjectURL(pendingPic);}catch(e){}
+ $('capText').value='';$('mCaption').classList.add('on');};
+$('btnCapNo').onclick=function(){$('mCaption').classList.remove('on');pendingPic=null;};
+$('btnCapGo').onclick=function(){
+ $('mCaption').classList.remove('on');
+ if(pendingPic)sendPic(pendingPic,$('capText').value.trim());
+ pendingPic=null;};
+
+/* ---- speech ---- */
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,recOn=false;
+function mkRec(){if(!SR)return null;var r=new SR();r.lang=lang;
+ r.interimResults=true;r.continuous=false;
+ r.onresult=function(ev){var s='';
+  for(var i=0;i<ev.results.length;i++)s+=ev.results[i][0].transcript;
+  $('cmdText').value=s;};
+ r.onend=function(){recOn=false;$('btnMic').classList.remove('live');
+  $('micHint').textContent='tap Dispatch if the words are right, Sir';};
+ r.onerror=function(){recOn=false;$('btnMic').classList.remove('live');
+  toast('The ear failed — type it, or use Telegram voice.');};
+ return r;}
+rec=mkRec();
+function setLang(l){lang=l;localStorage.setItem('br_lang',l);rec=mkRec();
+ $('langEn').classList.toggle('on',l==='en-IN');
+ $('langHi').classList.toggle('on',l==='hi-IN');}
+$('langEn').onclick=function(){setLang('en-IN');};
+$('langHi').onclick=function(){setLang('hi-IN');};
+setLang(lang);
+$('btnMic').onclick=function(){
+ if(!rec){toast('This browser has no ear, Sir — type, or use Telegram voice.');return;}
+ if(recOn){rec.stop();return;}
+ recOn=true;$('btnMic').classList.add('live');vib(10);
+ $('micHint').textContent='listening…';
+ try{rec.start();}catch(e){recOn=false;$('btnMic').classList.remove('live');}};
+
+/* ---- the study (b7) ---- */
+function stuRow(p){var b=document.createElement('button');b.className='ppr';
+ b.innerHTML='<span class="pt">'+esc(p.f||dayLab(p.t)||'')+'</span>'+esc(p.n||'');
+ b.onclick=function(){if(p.u)window.open(p.u,'_blank');};return b;}
+$('btnStuGo').onclick=function(){
+ var q=$('stuQ').value.trim();if(!q)return;
+ if(!live()){toast('Specimen, Sir — lay the wire in ⚙ to consult the shelves.');return;}
+ var el=$('stuList');el.innerHTML='<div class="empty">Consulting the shelves…</div>';vib(8);
+ fetch(cfg.url+'?key='+encodeURIComponent(cfg.key)+'&op=recall&q='+encodeURIComponent(q))
+ .then(function(r){return r.json();})
+ .then(function(j){el.innerHTML='';
+  if(!j.ok){el.innerHTML='<div class="empty">The wire faltered — '+esc(j.err||'unknown')+'</div>';return;}
+  if(!j.hits||!j.hits.length){el.innerHTML='<div class="empty">Nothing on the shelves for “'+esc(q)+'”, Sir — a first note would start the dossier.</div>';return;}
+  j.hits.forEach(function(p){el.appendChild(stuRow(p));});})
+ .catch(function(){el.innerHTML='<div class="empty">No connection, Sir — the shelves wait.</div>';});};
+$('stuQ').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('btnStuGo').click();}});
+$('btnStuNote').onclick=function(){
+ var t=$('stuNote').value.trim();if(!t){toast('A thought first, Sir.');return;}
+ sendCmd('note: '+t);$('stuNote').value='';};
+$('btnPaper').onclick=function(){
+ if(!live()){toast('Lay the wire in ⚙ first, Sir — the paper door needs it.');return;}
+ vib(8);window.open(cfg.url+'?key='+encodeURIComponent(cfg.key)+'&op=paper','_blank');};
+
+/* ---- lifecycle ---- */
+document.addEventListener('visibilitychange',function(){
+ if(!document.hidden&&live())fetchState();});
+setInterval(function(){if(!document.hidden&&live())fetchState();},300000);
+if('serviceWorker' in navigator){
+ try{navigator.serviceWorker.register('sw.js');}catch(e){}}
+render();if(live())fetchState();
+</script>
+</body>
+</html>
