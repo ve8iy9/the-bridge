@@ -197,7 +197,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
   <div class="hrow">
     <div>
       <div class="greet serif" id="greet">Good evening, Sir</div>
-      <div class="dline" id="dline">the bridge · wayne estate · b9.1</div>
+      <div class="dline" id="dline">the bridge · wayne estate · b9.2</div>
     </div>
     <div style="display:flex">
       <button class="hbtn" id="btnPaper" aria-label="today's paper">📰</button>
@@ -315,7 +315,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <button class="b2 ghost" id="btnTestSet">Test the wire</button>
     <button class="b2 ghost" id="btnCloseSet">Close</button>
     <div class="diag" id="diag">no wire test yet</div>
-    <p class="note" style="text-align:center;margin:12px 0 0">build 9.1 · 4 Sep 2026 — the size law: one-line chip · clamped cards with "more" · honest wire kept from b9</p>
+    <p class="note" style="text-align:center;margin:12px 0 0">build 9.2 · 4 Sep 2026 — size law (b9.1) + every Drive/Docs link opens through the dressing room (dr2)</p>
   </div>
 </div>
 
@@ -438,12 +438,17 @@ function vib(ms){try{if(navigator.vibrate)navigator.vibrate(ms);}catch(e){}}
 function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('on');
  clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('on');},2800);}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+/* b9.2 THE DOOR: any Drive / Docs link is re-routed through the Actuator's dressing room (op=doc),
+   so every paper opens as an estate page, never raw text. No wire = the plain link. */
+function door(u){u=String(u||'');if(!live())return u;
+ var m=u.match(/(?:docs\.google\.com\/(?:document|spreadsheets|presentation)\/d\/|drive\.google\.com\/file\/d\/|drive\.google\.com\/(?:open|uc)\?(?:[^\s]*&)?id=)([-\w]{20,})/);
+ return m?cfg.url+'?key='+encodeURIComponent(cfg.key)+'&op=doc&id='+m[1]:u;}
 /* b9 FORMATTING: the desks write **bold**, *italic*, `code`, [text](url) and bare links.
    Escape first (safety), then dress the marks. Never raw HTML from the wire. */
 function md(s){
  var t=esc(s);
- t=t.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
- t=t.replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g,function(m,p,u){return p+'<a href="'+u+'" target="_blank" rel="noopener">'+u.replace(/^https?:\/\/(www\.)?/,'').slice(0,42)+(u.length>50?'…':'')+'</a>';});
+ t=t.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(m,a,u){return '<a href="'+door(u)+'" target="_blank" rel="noopener">'+a+'</a>';});
+ t=t.replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g,function(m,p,u){var d=door(u);return p+'<a href="'+d+'" target="_blank" rel="noopener">'+(d!==u?'open the paper ↗':u.replace(/^https?:\/\/(www\.)?/,'').slice(0,42)+(u.length>50?'…':''))+'</a>';});
  t=t.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
  t=t.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g,'$1<i>$2</i>');
  t=t.replace(/`([^`]+)`/g,'<code>$1</code>');
@@ -464,7 +469,7 @@ function greet(){
  else g='A quiet night, Sir';
  $('greet').textContent=g;
  $('dline').textContent=new Date().toLocaleDateString('en-GB',
-  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b9.1';}
+  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b9.2';}
 
 function gauge(pct,size){
  var r=(size-8)/2,c=2*Math.PI*r,f=Math.max(.04,Math.min(1,pct||0));
@@ -532,7 +537,7 @@ function render(){
   var full=it.line?String(it.line):'';
   var shown=clamp(full,LIM.line);
   var cut=shown.length<full.replace(/\s+/g,' ').trim().length;
-  var paperA=it.paper?' <a href="'+esc(it.paper)+'" target="_blank" rel="noopener">paper ↗</a>':'';
+  var paperA=it.paper?' <a href="'+esc(door(it.paper))+'" target="_blank" rel="noopener">paper ↗</a>':'';
   d.innerHTML='<div class="chead"><div class="mono">'+esc((it.desk||'H')[0].toUpperCase())+'</div>'+
    '<div><div class="id">'+esc(it.id||'')+' · '+esc(it.desk||'the house')+'</div></div>'+
    (it.urgent?'<div class="urg">today</div>':'')+'</div>'+
@@ -753,7 +758,7 @@ function openPapers(o){
  function row(p,lab){var b=document.createElement('button');b.className='ppr';
   b.innerHTML='<span class="pt">'+esc(lab||dayLab(p.t))+'</span>'+esc(clamp(p.n||'',90))+
    (p.s?'<div style="font-size:12px;color:var(--mut);margin-top:2px">'+esc(clamp(p.s,140))+'</div>':'');
-  b.onclick=function(){if(p.u)window.open(p.u,'_blank');};el.appendChild(b);}
+  b.onclick=function(){if(p.u)window.open(door(p.u),'_blank');};el.appendChild(b);}
  if(o&&o.paper)row({n:(o.name||'the desk')+" — today's paper ↗",u:o.paper},'today');
  if(mine.length){hd('from this desk');mine.forEach(function(p){row(p);});}
  if(rest.length){hd(mine.length?'the rest of the house':'filed these last days');rest.forEach(function(p){row(p);});}
@@ -882,7 +887,7 @@ $('btnMic').onclick=function(){
 /* ---- the study ---- */
 function stuRow(p){var b=document.createElement('button');b.className='ppr';
  b.innerHTML='<span class="pt">'+esc(p.f||dayLab(p.t)||'')+'</span>'+esc(clamp(p.n||'',90));
- b.onclick=function(){if(p.u)window.open(p.u,'_blank');};return b;}
+ b.onclick=function(){if(p.u)window.open(door(p.u),'_blank');};return b;}
 $('btnStuGo').onclick=function(){
  var q=$('stuQ').value.trim();if(!q)return;
  if(!live()){toast('Specimen, Sir — lay the wire in ⚙ to consult the shelves.');return;}
