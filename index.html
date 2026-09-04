@@ -41,8 +41,11 @@ padding:8px 12px;font-size:15px;margin-left:6px}
 .statusln{font-size:12.5px;color:#b3a586;margin-top:10px;line-height:1.5}
 .statusln b{color:#e7dcc2;font-weight:600}
 .statusln .old{color:#d98f85}
-.occ{display:inline-block;background:rgba(201,169,106,.14);border:1px solid var(--golddim);
-color:var(--gold);font-size:11.5px;letter-spacing:.4px;border-radius:16px;padding:3px 11px;margin-top:9px}
+/* b9.1 SIZE LAW: the occasion chip is ONE line, never a narrative. Overflow is cut, and the chip is a door. */
+.occ{display:inline-block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+background:rgba(201,169,106,.14);border:1px solid var(--golddim);
+color:var(--gold);font-size:11.5px;letter-spacing:.4px;border-radius:16px;padding:3px 11px;margin-top:9px;cursor:pointer}
+.occ:active{background:rgba(201,169,106,.28)}
 .wirebar{height:2px;background:var(--golddim);width:0;transition:width .4s linear;margin-top:8px;border-radius:2px}
 .wirebar.on{width:100%;transition:width 25s linear}
 
@@ -68,9 +71,10 @@ color:var(--gold2);font-family:Georgia,serif;font-size:15px;font-weight:700;
 display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chead .id{font-size:11px;letter-spacing:1.2px;color:var(--mut);text-transform:uppercase}
 .chead .urg{margin-left:auto;font-size:10.5px;color:var(--gold2);letter-spacing:1px;text-transform:uppercase}
-.card .line{font-size:14.5px;line-height:1.5;margin:9px 2px 12px;white-space:pre-line}
+.card .line{font-size:14.5px;line-height:1.5;margin:9px 2px 12px;white-space:pre-line;word-break:break-word}
 .card .line a{color:var(--vio);text-decoration:none;font-weight:600}
 .card .line code{font-family:Consolas,monospace;font-size:13px;background:var(--paper2);padding:0 4px;border-radius:4px}
+.card .line .more{color:var(--gold2);font-size:12.5px;font-weight:700;white-space:nowrap}
 .btns{display:flex;gap:8px}
 .b{flex:1;text-align:center;border:none;border-radius:11px;padding:12px 0;
 font-size:13.5px;font-weight:600;font-family:inherit;letter-spacing:.2px}
@@ -92,20 +96,21 @@ color:var(--gold);margin-top:3px;text-transform:uppercase}
 
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
 .tile{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:11px 12px;
-box-shadow:var(--shadow)}
+box-shadow:var(--shadow);min-width:0;overflow:hidden}
 .tile:active{background:var(--paper2)}
 .tile .n{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
 .tile .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .tile .dot.ok{background:var(--green)}.tile .dot.warn{background:var(--amber)}
-.tile .s{font-size:12.5px;margin-top:4px;color:var(--ink)}
-.tile .m{font-size:11.5px;color:var(--mut);margin-top:2px}
+.tile .s{font-size:12.5px;margin-top:4px;color:var(--ink);word-break:break-word}
+.tile .m{font-size:11.5px;color:var(--mut);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dials{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .dial{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:10px;
-display:flex;align-items:center;gap:10px;box-shadow:var(--shadow)}
+display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);min-width:0}
 .dial svg{flex-shrink:0}
-.dial .k{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut)}
-.dial .v{font-family:Georgia,serif;font-size:17px;font-weight:700;margin-top:1px}
-.dial .su{font-size:10.5px;color:var(--mut);margin-top:1px}
+.dial>div{min-width:0}
+.dial .k{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dial .v{font-family:Georgia,serif;font-size:17px;font-weight:700;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dial .su{font-size:10.5px;color:var(--mut);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 .micwrap{text-align:center;margin:22px 0 6px}
 .mic{width:92px;height:92px;border-radius:50%;border:2px solid var(--golddim);background:var(--walnut2);
@@ -170,6 +175,9 @@ font:inherit;font-size:14px;background:var(--paper);color:var(--ink)}
 border:1px solid var(--line2);background:var(--paper);margin-bottom:4px}
 .diag{font-family:Consolas,monospace;font-size:11.5px;color:var(--mut);background:var(--paper);
 border:1px solid var(--line);border-radius:10px;padding:9px 11px;margin-top:10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+.occfull{font-size:13.5px;line-height:1.55;white-space:pre-line;word-break:break-word;max-height:52vh;overflow-y:auto;
+background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin-top:4px}
+.occfull a{color:var(--vio);text-decoration:none;font-weight:600}
 
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));
 background:var(--walnut);color:#e7dcc2;font-size:13px;padding:11px 20px;border-radius:24px;z-index:50;
@@ -189,7 +197,7 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
   <div class="hrow">
     <div>
       <div class="greet serif" id="greet">Good evening, Sir</div>
-      <div class="dline" id="dline">the bridge · wayne estate · b9</div>
+      <div class="dline" id="dline">the bridge · wayne estate · b9.1</div>
     </div>
     <div style="display:flex">
       <button class="hbtn" id="btnPaper" aria-label="today's paper">📰</button>
@@ -307,7 +315,16 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <button class="b2 ghost" id="btnTestSet">Test the wire</button>
     <button class="b2 ghost" id="btnCloseSet">Close</button>
     <div class="diag" id="diag">no wire test yet</div>
-    <p class="note" style="text-align:center;margin:12px 0 0">build 9 · 3 Sep 2026 — honest wire (timeout, reason, age) · formatted cards · auto-retry</p>
+    <p class="note" style="text-align:center;margin:12px 0 0">build 9.1 · 4 Sep 2026 — the size law: one-line chip · clamped cards with "more" · honest wire kept from b9</p>
+  </div>
+</div>
+
+<div class="modal" id="mOcc">
+  <div class="sheet">
+    <h3 class="serif">The occasion, in full</h3>
+    <p class="note" style="margin-top:-6px">What the house wrote — the chip shows only its first line.</p>
+    <div class="occfull" id="occFull"></div>
+    <button class="b2 ghost" id="btnOccNo" style="width:100%;margin-top:10px">Close</button>
   </div>
 </div>
 
@@ -386,6 +403,15 @@ function isDecided(it){if(!it||!it.id)return false;var ts=decided[it.id];if(!ts)
  var sa=(cache&&cache.stateAt)?new Date(cache.stateAt).getTime():0;
  return !sa||ts>=sa;}
 
+/* b9.1 THE SIZE LAW (mirror of DESK INSTRUCTIONS — bridge-state-keeper v2). The keeper is told to
+   write short; the Bridge no longer TRUSTS it to. Every field has a ceiling here; nothing is lost —
+   the full text is one tap away (chip → sheet; card → "more"; office → papers). */
+var LIM={next:72,safe:14,line:320,status:160,meta:40,wire:220,muster:20,dials:4,offices:12};
+function clamp(s,n){s=String(s==null?'':s).replace(/\s+/g,' ').trim();
+ if(s.length<=n)return s;var c=s.slice(0,n-1);var sp=c.lastIndexOf(' ');
+ if(sp>n*0.6)c=c.slice(0,sp);return c+'…';}
+function firstLine(s){return String(s==null?'':s).split(/\r?\n/)[0];}
+
 var DEMO={glyph:'clean',safe:'₹18,400',next:"Amma's birthday · T-21",
 muster:[
  {id:'m1',desk:'treasurer',line:'Dispute draft ready — ₹648 double charge, Swiggy 12 Jul. One tap stages the send.',urgent:1},
@@ -438,7 +464,7 @@ function greet(){
  else g='A quiet night, Sir';
  $('greet').textContent=g;
  $('dline').textContent=new Date().toLocaleDateString('en-GB',
-  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b9';}
+  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b9.1';}
 
 function gauge(pct,size){
  var r=(size-8)/2,c=2*Math.PI*r,f=Math.max(.04,Math.min(1,pct||0));
@@ -447,6 +473,10 @@ function gauge(pct,size){
  '<circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="var(--gold2)" stroke-width="5" '+
  'stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" '+
  'transform="rotate(-90 '+size/2+' '+size/2+')"/></svg>';}
+
+var occText='';
+function openOcc(){if(!occText)return;$('occFull').innerHTML=md(occText);$('mOcc').classList.add('on');vib(6);}
+$('btnOccNo').onclick=function(){$('mOcc').classList.remove('on');};
 
 function render(){
  greet();
@@ -463,9 +493,17 @@ function render(){
    : stale&&hhmm ? ' · <span class="'+(old?'old':'')+'">showing '+hhmm+' ('+ageTxt+' old) · wire down</span>'
    : hhmm ? ' · state '+hhmm+(old?' <span class="old">('+ageTxt+' old — the house has not published since)</span>':' ('+ageTxt+')')
    : ' · awaiting the first answer';
+ /* b9.1: "safe" is a FIGURE or a dash — never "true", never prose. */
+ var safeRaw=(s&&s.safe!=null)?String(s.safe):'';
+ var safeTxt=/\d/.test(safeRaw)?clamp(safeRaw,LIM.safe):'—';
  $('topStat').innerHTML='<b>'+(warn?'⚠ A matter wants your eye.':'✅ The house is in order.')+'</b> '+
-  'Safe to spend '+esc((s&&s.safe)||'—')+when;
- $('occWrap').innerHTML=(s&&s.next)?'<span class="occ">🎂 '+esc(s.next)+'</span>':'';
+  'Safe to spend '+esc(safeTxt)+when;
+ /* b9.1: the occasion chip is the FIRST LINE, ≤72 chars; tap for the whole text. */
+ occText=(s&&s.next)?String(s.next):'';
+ var occShort=occText?clamp(firstLine(occText),LIM.next):'';
+ var occCut=occText&&(occShort.length<occText.replace(/\s+/g,' ').trim().length);
+ $('occWrap').innerHTML=occShort?'<span class="occ" id="occChip" title="tap for the full text">🎂 '+esc(occShort)+(occCut?' ›':'')+'</span>':'';
+ var oc=$('occChip');if(oc)oc.onclick=openOcc;
  var wb=$('wireBanner');
  if(live()&&stale&&wire.lastErr){wb.style.display='block';
   wb.innerHTML='The wire did not answer — <b>'+esc(wire.lastErr)+'</b>'+(wire.lastMs?' after '+(wire.lastMs/1000).toFixed(1)+'s':'')+
@@ -474,13 +512,14 @@ function render(){
  else wb.style.display='none';
 
  /* a bare-string muster entry is a REPORTABLE DEFECT — render it, never swallow it. */
- var items=((s&&s.muster)||[]).map(function(it){
+ var allItems=((s&&s.muster)||[]).map(function(it){
    return (it&&typeof it==='object')?it:{id:String(it||'?'),desk:'',line:''};
   }).filter(function(it){return !isDecided(it);});
- $('nBadge').style.display=items.length?'block':'none';
- $('nBadge').textContent=items.length;
- $('signSub').textContent=items.length?
-  ('press and hold — '+items.length+' pending'):'the docket is clear';
+ var items=allItems.slice(0,LIM.muster),overflow=allItems.length-items.length;
+ $('nBadge').style.display=allItems.length?'block':'none';
+ $('nBadge').textContent=allItems.length;
+ $('signSub').textContent=allItems.length?
+  ('press and hold — '+allItems.length+' pending'):'the docket is clear';
  var ml=$('musterList');ml.innerHTML='';
  if(!items.length)ml.innerHTML='<div class="empty"><div class="big">✒</div>'+
   'The docket is clear, Sir —<br>the house holds nothing against your hand.</div>';
@@ -489,36 +528,46 @@ function render(){
   wrap.innerHTML='<div class="under"><span class="ua">APPROVE ›</span><span class="uv">‹ VETO</span></div>';
   var d=document.createElement('div');
   d.className='card'+(it.urgent?' urgent':'');
+  /* b9.1: the line is clamped; "more" unfolds it in place (or opens the paper if one is named). */
+  var full=it.line?String(it.line):'';
+  var shown=clamp(full,LIM.line);
+  var cut=shown.length<full.replace(/\s+/g,' ').trim().length;
+  var paperA=it.paper?' <a href="'+esc(it.paper)+'" target="_blank" rel="noopener">paper ↗</a>':'';
   d.innerHTML='<div class="chead"><div class="mono">'+esc((it.desk||'H')[0].toUpperCase())+'</div>'+
    '<div><div class="id">'+esc(it.id||'')+' · '+esc(it.desk||'the house')+'</div></div>'+
    (it.urgent?'<div class="urg">today</div>':'')+'</div>'+
-   '<div class="line">'+(it.line?md(it.line):'<i>malformed entry — '+esc(it.id||'no id')+'</i>')+
-   (it.paper?' <a href="'+esc(it.paper)+'" target="_blank" rel="noopener">paper ↗</a>':'')+'</div>'+
+   '<div class="line">'+(full?md(shown):'<i>malformed entry — '+esc(it.id||'no id')+'</i>')+
+   (cut?' <a href="#" class="more">more ›</a>':'')+paperA+'</div>'+
    '<div class="btns"><button class="b ap">Approve</button><button class="b df">Hold</button>'+
    '<button class="b vt">Veto</button></div>'+
    '<button class="bw">✎&nbsp; a word — your own instruction</button>';
   attachSwipe(d,it);
+  var mo=d.querySelector('.more');
+  if(mo)mo.onclick=function(e){e.preventDefault();e.stopPropagation();
+   d.querySelector('.line').innerHTML=md(full)+paperA;vib(5);};
   d.querySelector('.ap').onclick=function(){if(d._moved)return;decide(it,d,'approve '+it.id,'Approving '+it.id);};
   d.querySelector('.df').onclick=function(){if(d._moved)return;decide(it,d,'defer '+it.id,'Holding '+it.id);};
   d.querySelector('.vt').onclick=function(){if(d._moved)return;openVeto(it,d);};
   d.querySelector('.bw').onclick=function(){if(d._moved)return;openWord(it);};
   wrap.appendChild(d);ml.appendChild(wrap);});
+ if(overflow>0){var ov=document.createElement('div');ov.className='empty';
+  ov.innerHTML='+'+overflow+' more on the docket, Sir — sign these, and the rest come forward.';ml.appendChild(ov);}
 
  var ot=$('officeTiles');ot.innerHTML='';
- ((s&&s.offices)||[]).forEach(function(o){
+ ((s&&s.offices)||[]).slice(0,LIM.offices).forEach(function(o){
   var d=document.createElement('div');d.className='tile';
-  d.innerHTML='<div class="n"><span class="dot '+(o.ok?'ok':'warn')+'"></span>'+esc(o.name)+'</div>'+
-   '<div class="s">'+md(o.status||'')+'</div><div class="m">'+esc(o.meta||'')+'</div>';
+  d.innerHTML='<div class="n"><span class="dot '+(o.ok?'ok':'warn')+'"></span>'+esc(clamp(o.name,24))+'</div>'+
+   '<div class="s">'+md(clamp(o.status||'',LIM.status))+'</div><div class="m">'+esc(clamp(o.meta||'',LIM.meta))+'</div>';
   d.onclick=function(){openPapers(o);};
   ot.appendChild(d);});
  if(!ot.innerHTML)ot.innerHTML='<div class="empty" style="grid-column:1/-1">The offices have not yet published today.</div>';
 
  var dg=$('dialGrid');dg.innerHTML='';
- ((s&&s.dials)||[]).forEach(function(x){
+ ((s&&s.dials)||[]).slice(0,LIM.dials).forEach(function(x){
   var d=document.createElement('div');d.className='dial';
-  d.innerHTML=gauge(x.pct,56)+'<div><div class="k">'+esc(x.k)+'</div>'+
-   '<div class="v serif">'+esc(x.v)+'</div>'+
-   (x.su?'<div class="su">'+esc(x.su)+'</div>':'')+'</div>';
+  d.innerHTML=gauge(x.pct,56)+'<div><div class="k">'+esc(clamp(x.k,16))+'</div>'+
+   '<div class="v serif">'+esc(clamp(x.v,14))+'</div>'+
+   (x.su?'<div class="su">'+esc(clamp(x.su,28))+'</div>':'')+'</div>';
   dg.appendChild(d);});
  renderWire();}
 
@@ -541,7 +590,7 @@ function renderWire(){
   if(label&&label!==lastDay){lastDay=label;
    var h=document.createElement('div');h.className='wday';h.textContent=label;wl.appendChild(h);}
   var d=document.createElement('div');d.className='wireln'+(x.me?' me':'');
-  d.innerHTML='<span class="t">'+(x.t?ago(x.t):'')+'</span><span class="tx">'+md(x.line)+'</span>';
+  d.innerHTML='<span class="t">'+(x.t?ago(x.t):'')+'</span><span class="tx">'+md(clamp(x.line,LIM.wire))+'</span>';
   wl.appendChild(d);});}
 
 /* ---- swipe ---- */
@@ -702,7 +751,8 @@ function openPapers(o){
  var el=$('ppList');el.innerHTML='';
  function hd(t){var h=document.createElement('div');h.className='pph';h.textContent=t;el.appendChild(h);}
  function row(p,lab){var b=document.createElement('button');b.className='ppr';
-  b.innerHTML='<span class="pt">'+esc(lab||dayLab(p.t))+'</span>'+esc(p.n||'');
+  b.innerHTML='<span class="pt">'+esc(lab||dayLab(p.t))+'</span>'+esc(clamp(p.n||'',90))+
+   (p.s?'<div style="font-size:12px;color:var(--mut);margin-top:2px">'+esc(clamp(p.s,140))+'</div>':'');
   b.onclick=function(){if(p.u)window.open(p.u,'_blank');};el.appendChild(b);}
  if(o&&o.paper)row({n:(o.name||'the desk')+" — today's paper ↗",u:o.paper},'today');
  if(mine.length){hd('from this desk');mine.forEach(function(p){row(p);});}
@@ -831,7 +881,7 @@ $('btnMic').onclick=function(){
 
 /* ---- the study ---- */
 function stuRow(p){var b=document.createElement('button');b.className='ppr';
- b.innerHTML='<span class="pt">'+esc(p.f||dayLab(p.t)||'')+'</span>'+esc(p.n||'');
+ b.innerHTML='<span class="pt">'+esc(p.f||dayLab(p.t)||'')+'</span>'+esc(clamp(p.n||'',90));
  b.onclick=function(){if(p.u)window.open(p.u,'_blank');};return b;}
 $('btnStuGo').onclick=function(){
  var q=$('stuQ').value.trim();if(!q)return;
