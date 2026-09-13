@@ -30,7 +30,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 font-size:15px;padding-bottom:86px;min-height:100vh}
 .serif{font-family:Georgia,'Times New Roman',serif}
 
-header{background:var(--walnut);color:#e7dcc2;padding:16px 16px 14px;position:sticky;top:0;z-index:20;
+header{background:var(--walnut);color:#e7dcc2;padding:14px 16px 12px;position:sticky;top:0;z-index:20;
 border-bottom:3px double var(--golddim)}
 .hrow{display:flex;align-items:flex-start;justify-content:space-between}
 .greet{font-family:Georgia,serif;font-size:21px;font-weight:600;letter-spacing:.3px;color:#efe4c8}
@@ -38,10 +38,18 @@ border-bottom:3px double var(--golddim)}
 .hbtn{background:none;border:1px solid #453824;color:#c9b891;border-radius:10px;
 padding:8px 12px;font-size:15px;margin-left:6px}
 .hbtn:active{background:var(--walnut2)}
-.statusln{font-size:12.5px;color:#b3a586;margin-top:10px;line-height:1.5}
+.statusln{font-size:12.5px;color:#b3a586;margin-top:9px;line-height:1.5}
 .statusln b{color:#e7dcc2;font-weight:600}
 .statusln .old{color:#d98f85}
-/* b9.1 SIZE LAW: the occasion chip is ONE line, never a narrative. Overflow is cut, and the chip is a door. */
+/* b10 THE HOUSEHOLD: level, XP and the house score live in the masthead */
+.lvlrow{display:flex;align-items:center;gap:10px;margin-top:9px}
+.lvlrow .ring{flex-shrink:0}
+.lvlrow .lv{flex:1;min-width:0}
+.lvlrow .lt{font-family:Georgia,serif;font-size:13.5px;color:#efe4c8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lvlrow .lt small{font-family:'Segoe UI',sans-serif;font-size:10.5px;letter-spacing:1.4px;color:var(--gold);text-transform:uppercase;margin-right:6px}
+.xpbar{height:5px;background:#3a2e1c;border-radius:3px;margin-top:5px;overflow:hidden}
+.xpbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));width:0;transition:width .6s ease}
+.lvlrow .xt{font-size:10.5px;color:#b3a586;margin-top:3px}
 .occ{display:inline-block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 background:rgba(201,169,106,.14);border:1px solid var(--golddim);
 color:var(--gold);font-size:11.5px;letter-spacing:.4px;border-radius:16px;padding:3px 11px;margin-top:9px;cursor:pointer}
@@ -53,7 +61,8 @@ main{max-width:560px;margin:0 auto;padding:16px 13px}
 .view{display:none}
 .view.on{display:block;animation:rise .3s ease}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-h2{font-family:Georgia,serif;font-size:17px;font-weight:600;margin:2px 2px 3px}
+h2{font-family:Georgia,serif;font-size:17px;font-weight:600;margin:2px 2px 3px;display:flex;align-items:baseline;justify-content:space-between}
+h2 .xpav{font-family:'Segoe UI',sans-serif;font-size:11px;letter-spacing:1.2px;color:var(--gold2);text-transform:uppercase;font-weight:700}
 .note{font-size:12.5px;color:var(--mut);margin:0 2px 13px;font-style:italic}
 .rule{height:1px;background:linear-gradient(90deg,var(--line2),transparent);margin:2px 0 12px}
 
@@ -66,11 +75,13 @@ padding:13px 14px;box-shadow:var(--shadow);touch-action:pan-y}
 .card.urgent{border-left:4px solid var(--gold2);border-radius:0 15px 15px 0}
 .card.done{opacity:.35;pointer-events:none;transition:opacity .3s}
 .chead{display:flex;align-items:center;gap:9px}
-.mono{width:34px;height:34px;border-radius:50%;background:var(--paper2);border:1px solid var(--line2);
-color:var(--gold2);font-family:Georgia,serif;font-size:15px;font-weight:700;
-display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mono{width:36px;height:36px;border-radius:50%;background:var(--paper2);border:1px solid var(--line2);
+font-size:19px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chead .id{font-size:11px;letter-spacing:1.2px;color:var(--mut);text-transform:uppercase}
-.chead .urg{margin-left:auto;font-size:10.5px;color:var(--gold2);letter-spacing:1px;text-transform:uppercase}
+.chead .who{font-size:12.5px;font-weight:600;color:var(--ink)}
+.xp{margin-left:auto;font-size:10.5px;font-weight:700;letter-spacing:.8px;color:var(--gold2);
+border:1px solid var(--line2);border-radius:12px;padding:2px 8px;background:var(--paper2);white-space:nowrap}
+.xp.hot{color:#fff;background:var(--gold2);border-color:var(--gold2)}
 .card .line{font-size:14.5px;line-height:1.5;margin:9px 2px 12px;white-space:pre-line;word-break:break-word}
 .card .line a{color:var(--vio);text-decoration:none;font-weight:600}
 .card .line code{font-family:Consolas,monospace;font-size:13px;background:var(--paper2);padding:0 4px;border-radius:4px}
@@ -94,15 +105,20 @@ font-family:Georgia,serif;letter-spacing:1.2px;margin:6px 0 18px}
 .signall small{display:block;font-family:'Segoe UI',sans-serif;font-size:10.5px;letter-spacing:1.6px;
 color:var(--gold);margin-top:3px;text-transform:uppercase}
 
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-.tile{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:11px 12px;
-box-shadow:var(--shadow);min-width:0;overflow:hidden}
-.tile:active{background:var(--paper2)}
-.tile .n{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
-.tile .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.tile .dot.ok{background:var(--green)}.tile .dot.warn{background:var(--amber)}
-.tile .s{font-size:12.5px;margin-top:4px;color:var(--ink);word-break:break-word}
-.tile .m{font-size:11.5px;color:var(--mut);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* b10 the staff */
+.staff{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.sc{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:11px 12px;
+box-shadow:var(--shadow);min-width:0;overflow:hidden;position:relative}
+.sc:active{background:var(--paper2)}
+.sc .av{width:44px;height:44px;border-radius:50%;background:var(--paper2);border:1px solid var(--line2);
+font-size:24px;display:flex;align-items:center;justify-content:center;margin-bottom:7px;position:relative}
+.sc .av .dot{position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;border:2px solid var(--paper)}
+.sc .dot.ok{background:var(--green)}.sc .dot.warn{background:var(--amber)}.sc .dot.dark{background:var(--mut)}
+.sc .n{font-family:Georgia,serif;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc .r{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--gold2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc .s{font-size:12.5px;margin-top:6px;color:var(--ink);word-break:break-word;line-height:1.4}
+.sc .m{font-size:11px;color:var(--mut);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc .strk{position:absolute;top:10px;right:10px;font-size:11px;font-weight:700;color:var(--amber);background:var(--amberbg);border-radius:10px;padding:2px 7px}
 .dials{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .dial{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:10px;
 display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);min-width:0}
@@ -112,7 +128,7 @@ display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);min-width:0}
 .dial .v{font-family:Georgia,serif;font-size:17px;font-weight:700;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dial .su{font-size:10.5px;color:var(--mut);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-.micwrap{text-align:center;margin:22px 0 6px}
+.micwrap{text-align:center;margin:18px 0 6px}
 .mic{width:92px;height:92px;border-radius:50%;border:2px solid var(--golddim);background:var(--walnut2);
 color:var(--gold);font-size:36px;box-shadow:var(--shadow)}
 .mic:active{transform:scale(.95)}
@@ -135,6 +151,13 @@ textarea:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 3px rgba(
 .chip{border:1px solid var(--line2);background:var(--paper);border-radius:20px;
 padding:8px 14px;font-size:12.5px;color:var(--ink);font-family:inherit}
 .chip:active{background:var(--paper2)}
+/* b10 recipients — text a member of staff */
+.rcps{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px 6px;scrollbar-width:none}
+.rcps::-webkit-scrollbar{display:none}
+.rcp{flex-shrink:0;border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:6px 12px 6px 8px;
+font-size:12.5px;color:var(--ink);font-family:inherit;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.rcp .a{font-size:16px}
+.rcp.on{background:var(--walnut2);border-color:var(--golddim);color:var(--gold);font-weight:600}
 
 .wfilter{display:flex;gap:8px;margin:0 0 10px}
 .wf{border:1px solid var(--line2);background:none;color:var(--mut);border-radius:16px;
@@ -142,21 +165,22 @@ padding:5px 14px;font-size:12px;font-family:inherit}
 .wf.on{background:var(--walnut2);color:var(--gold);border-color:var(--golddim)}
 .wday{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);
 margin:14px 2px 5px;font-weight:700}
-.wireln{display:flex;gap:10px;padding:9px 3px;border-bottom:1px dotted var(--line);font-size:13px;line-height:1.45}
-.wireln .t{color:var(--mut);font-size:11px;white-space:nowrap;padding-top:2px;min-width:40px}
-.wireln .tx{word-break:break-word}
+.wireln{display:flex;gap:10px;padding:9px 3px;border-bottom:1px dotted var(--line);font-size:13px;line-height:1.45;align-items:flex-start}
+.wireln .wav{width:26px;height:26px;border-radius:50%;background:var(--paper2);border:1px solid var(--line);
+font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wireln .t{color:var(--mut);font-size:11px;white-space:nowrap;padding-top:5px;min-width:34px}
+.wireln .tx{word-break:break-word;padding-top:3px}
 .wireln .tx a{color:var(--vio);text-decoration:none;font-weight:600}
 .wireln.me .tx{color:var(--green);font-weight:600}
-.wireln.me .t::before{content:'✒ '}
 
 nav{position:fixed;bottom:0;left:0;right:0;background:var(--walnut);display:flex;
 justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom));z-index:30;
 border-top:1px solid var(--golddim)}
 nav button{background:none;border:none;color:#8d7c62;font-size:10.5px;letter-spacing:.5px;font-family:inherit;
-display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 12px;position:relative}
+display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 10px;position:relative}
 nav button .ic{font-size:20px}
 nav button.on{color:var(--gold)}
-nav .badge{position:absolute;top:-3px;right:2px;background:var(--gold2);color:var(--walnut);
+nav .badge{position:absolute;top:-3px;right:0;background:var(--gold2);color:var(--walnut);
 font-size:10px;font-weight:700;border-radius:9px;min-width:17px;padding:1px 4px}
 
 .modal{position:fixed;inset:0;background:rgba(18,13,6,.6);display:none;
@@ -178,34 +202,59 @@ border:1px solid var(--line);border-radius:10px;padding:9px 11px;margin-top:10px
 .occfull{font-size:13.5px;line-height:1.55;white-space:pre-line;word-break:break-word;max-height:52vh;overflow-y:auto;
 background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin-top:4px}
 .occfull a{color:var(--vio);text-decoration:none;font-weight:600}
+.ppr{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--line);
+ padding:11px 2px;font:inherit;color:inherit;font-size:13.5px;line-height:1.45;cursor:pointer}
+.ppr:last-child{border-bottom:none}
+.ppr .pt{display:inline-block;min-width:52px;font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;
+ color:var(--gold2);font-weight:700;margin-right:6px}
+.pph{font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;opacity:.55;margin:12px 0 2px;font-weight:700}
+.stuIn{width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--paper);
+ padding:12px 13px;font:inherit;font-size:15px;color:var(--ink)}
+.stuIn:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 3px rgba(201,169,106,.18)}
 
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));
 background:var(--walnut);color:#e7dcc2;font-size:13px;padding:11px 20px;border-radius:24px;z-index:50;
 opacity:0;transition:opacity .25s;pointer-events:none;max-width:88%;text-align:center;
 border:1px solid var(--golddim)}
 .toast.on{opacity:1}
+.toast.xpup{border-color:var(--gold);color:var(--gold);font-weight:700}
 .banner{background:var(--amberbg);color:var(--amber);border:1px solid var(--line2);border-radius:12px;
 padding:10px 13px;font-size:12.5px;margin-bottom:13px}
 .banner.red{background:var(--redbg);color:var(--redink)}
 .empty{text-align:center;color:var(--mut);font-style:italic;font-size:13.5px;padding:30px 12px}
 .empty .big{font-size:30px;color:var(--gold2);margin-bottom:8px;font-family:Georgia,serif}
+#burst{position:fixed;inset:0;pointer-events:none;z-index:60}
+.lvup{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%) scale(.8);z-index:61;pointer-events:none;
+background:var(--walnut);color:#efe4c8;border:2px solid var(--gold);border-radius:20px;padding:18px 26px;text-align:center;
+opacity:0;transition:all .35s ease;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.lvup.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.lvup .k{font-size:10.5px;letter-spacing:2.4px;color:var(--gold);text-transform:uppercase}
+.lvup .t{font-family:Georgia,serif;font-size:22px;font-weight:600;margin-top:4px}
 </style>
 </head>
 <body>
 
 <header>
   <div class="hrow">
-    <div>
+    <div style="min-width:0">
       <div class="greet serif" id="greet">Good evening, Sir</div>
-      <div class="dline" id="dline">the bridge · wayne estate · b9.2</div>
+      <div class="dline" id="dline">the bridge · wayne estate · b10</div>
     </div>
-    <div style="display:flex">
+    <div style="display:flex;flex-shrink:0">
       <button class="hbtn" id="btnPaper" aria-label="today's paper">📰</button>
       <button class="hbtn" id="btnRefresh" aria-label="refresh">↻</button>
       <button class="hbtn" id="btnGear" aria-label="settings">⚙</button>
     </div>
   </div>
   <div class="statusln" id="topStat">The wire waits to be laid.</div>
+  <div class="lvlrow">
+    <div class="ring" id="houseRing"></div>
+    <div class="lv">
+      <div class="lt" id="lvTitle"><small>Lv 1</small>Squire of the House</div>
+      <div class="xpbar"><i id="xpFill"></i></div>
+      <div class="xt" id="xpText">0 / 100 XP · the house keeps your score</div>
+    </div>
+  </div>
   <div class="wirebar" id="wireBar"></div>
   <div id="occWrap"></div>
 </header>
@@ -215,8 +264,8 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
 <section class="view on" id="v-muster">
   <div id="demoBanner" class="banner" style="display:none">A specimen is shown, Sir — open ⚙ and lay the wire to see the living estate.</div>
   <div id="wireBanner" class="banner red" style="display:none"></div>
-  <h2 class="serif">The muster</h2>
-  <p class="note">Swipe right to approve, left to veto — or use the buttons. Your word is law.</p>
+  <h2 class="serif"><span>Today's quests</span><span class="xpav" id="xpAvail"></span></h2>
+  <p class="note">Each is a decision the house needs. Swipe right to approve, left to veto — every verdict earns XP.</p>
   <div class="rule"></div>
   <div id="musterList"></div>
   <button class="signall" id="btnSignAll">
@@ -226,18 +275,37 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
 </section>
 
 <section class="view" id="v-offices">
-  <h2 class="serif">The offices</h2>
-  <p class="note">Each desk's last word. Tap a tile for its latest paper.</p>
+  <h2 class="serif"><span>The staff</span><span class="xpav" id="staffCount"></span></h2>
+  <p class="note">Meet the household. Green means on duty today; amber wants a word. Tap anyone for their papers.</p>
   <div class="rule"></div>
-  <div class="tiles" id="officeTiles"></div>
-  <h2 class="serif">The dials</h2>
+  <div class="staff" id="staffGrid"></div>
+  <h2 class="serif"><span>The dials</span></h2>
   <p class="note">Facts, never verdicts.</p>
   <div class="rule"></div>
   <div class="dials" id="dialGrid"></div>
 </section>
 
+<section class="view" id="v-study">
+  <h2 class="serif"><span>The study</span></h2>
+  <p class="note">The estate's second brain — every thought kept, every answer one look away.</p>
+  <div class="rule"></div>
+  <input class="stuIn" id="stuQ" placeholder="recall… e.g. samarkand · visa · BLO · ombudsman">
+  <div class="commrow" style="margin-top:9px">
+    <button class="b2 send" id="btnStuGo" style="flex:1">🔎&nbsp; Recall from the Study</button>
+  </div>
+  <div id="stuList" style="margin-top:10px"></div>
+  <div class="rule" style="margin:18px 0 12px"></div>
+  <h2 class="serif" style="font-size:15px"><span>Leave a thought</span><span class="xpav">+5 xp</span></h2>
+  <textarea id="stuNote" placeholder="an idea, a fact, a stray thought worth keeping — it is shelved tonight, never lost"></textarea>
+  <div class="commrow">
+    <button class="b2 send" id="btnStuNote" style="flex:1">🧠&nbsp; File to the Study</button>
+  </div>
+</section>
+
 <section class="view" id="v-comm">
-  <h2 class="serif">Your orders, Sir</h2>
+  <h2 class="serif"><span>Text the house</span><span class="xpav">+5 xp</span></h2>
+  <p class="note">Pick who should hear it — or leave it to Alfred to route.</p>
+  <div class="rcps" id="rcpRow"></div>
   <div class="micwrap">
     <button class="mic" id="btnMic" aria-label="speak">🎙</button>
     <p id="micHint">tap once, speak — it types itself for your approval</p>
@@ -257,34 +325,16 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <button class="chip">draft —</button>
     <button class="chip">remind me —</button>
     <button class="chip">note: watch —</button>
-    <button class="chip">stage a cart —</button>
+    <button class="chip">apply to —</button>
     <button class="chip">status</button>
     <button class="chip">brief</button>
   </div>
-  <p class="note">Orders ride the same wire as Telegram — logged, mirrored, acted on by the next round. Photographs go to the Picture Desk: caption = order, none = context.</p>
-</section>
-
-<section class="view" id="v-study">
-  <h2 class="serif">The study</h2>
-  <p class="note">The estate's second brain — every thought kept, every answer one look away.</p>
-  <div class="rule"></div>
-  <input class="stuIn" id="stuQ" placeholder="recall… e.g. samarkand · visa · BLO · ombudsman">
-  <div class="commrow" style="margin-top:9px">
-    <button class="b2 send" id="btnStuGo" style="flex:1">🔎&nbsp; Recall from the Study</button>
-  </div>
-  <div id="stuList" style="margin-top:10px"></div>
-  <div class="rule" style="margin:18px 0 12px"></div>
-  <h2 class="serif" style="font-size:15px">Leave a thought</h2>
-  <textarea id="stuNote" placeholder="an idea, a fact, a stray thought worth keeping — it is shelved tonight, never lost"></textarea>
-  <div class="commrow">
-    <button class="b2 send" id="btnStuNote" style="flex:1">🧠&nbsp; File to the Study</button>
-  </div>
-  <p class="note">Thoughts ride the wire as notes; the night Valet shelves each into its dossier. Ask, and the house answers with sources.</p>
+  <p class="note">Orders ride the same wire as Telegram — logged, mirrored, acted on by the next round. Photographs go to the Picture Desk.</p>
 </section>
 
 <section class="view" id="v-wire">
-  <h2 class="serif">The wire</h2>
-  <p class="note">The house's correspondence — what was heard, filed, sent and done.</p>
+  <h2 class="serif"><span>The feed</span></h2>
+  <p class="note">What the household heard, filed, sent and did.</p>
   <div class="rule"></div>
   <div class="wfilter">
     <button class="wf on" data-f="all">all</button>
@@ -297,11 +347,11 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
 </main>
 
 <nav>
-  <button data-v="v-muster" class="on"><span class="ic">✒</span>Muster<span class="badge" id="nBadge" style="display:none"></span></button>
-  <button data-v="v-offices"><span class="ic">🏛</span>Offices</button>
+  <button data-v="v-muster" class="on"><span class="ic">✒</span>Quests<span class="badge" id="nBadge" style="display:none"></span></button>
+  <button data-v="v-offices"><span class="ic">🏛</span>Staff</button>
   <button data-v="v-study"><span class="ic">🧠</span>Study</button>
-  <button data-v="v-comm"><span class="ic">🎙</span>Commission</button>
-  <button data-v="v-wire"><span class="ic">📜</span>Wire</button>
+  <button data-v="v-comm"><span class="ic">💬</span>Text</button>
+  <button data-v="v-wire"><span class="ic">📜</span>Feed</button>
 </nav>
 
 <div class="modal" id="mSettings">
@@ -315,14 +365,13 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
     <button class="b2 ghost" id="btnTestSet">Test the wire</button>
     <button class="b2 ghost" id="btnCloseSet">Close</button>
     <div class="diag" id="diag">no wire test yet</div>
-    <p class="note" style="text-align:center;margin:12px 0 0">build 9.2 · 4 Sep 2026 — size law (b9.1) + every Drive/Docs link opens through the dressing room (dr2)</p>
+    <p class="note" style="text-align:center;margin:12px 0 0">build 10 · 13 Sep 2026 — THE HOUSEHOLD: named staff, quests, XP and levels, text-a-member · honest wire, size law and the door kept from b9.x</p>
   </div>
 </div>
 
 <div class="modal" id="mOcc">
   <div class="sheet">
     <h3 class="serif">The occasion, in full</h3>
-    <p class="note" style="margin-top:-6px">What the house wrote — the chip shows only its first line.</p>
     <div class="occfull" id="occFull"></div>
     <button class="b2 ghost" id="btnOccNo" style="width:100%;margin-top:10px">Close</button>
   </div>
@@ -369,22 +418,15 @@ padding:10px 13px;font-size:12.5px;margin-bottom:13px}
 <div class="modal" id="mPapers">
   <div class="sheet">
     <h3 class="serif" id="ppTitle">Papers of the house</h3>
-    <p class="note" style="margin-top:-6px">Filed these last three days — tap one to open it in Drive.</p>
+    <p class="note" style="margin-top:-6px" id="ppNote">Filed these last three days — tap one to open it dressed.</p>
     <div id="ppList" style="max-height:52vh;overflow-y:auto;margin-top:6px"></div>
-    <button class="b2 ghost" id="btnPpNo" style="width:100%;margin-top:10px">Close</button>
+    <button class="b2 ghost" id="btnPpText" style="width:100%;margin-top:10px">💬 Text this member</button>
+    <button class="b2 ghost" id="btnPpNo" style="width:100%;margin-top:8px">Close</button>
   </div>
 </div>
-<style>
-.ppr{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--line);
- padding:11px 2px;font:inherit;color:inherit;font-size:13.5px;line-height:1.45;cursor:pointer}
-.ppr:last-child{border-bottom:none}
-.ppr .pt{display:inline-block;min-width:52px;font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;
- color:var(--gold2);font-weight:700;margin-right:6px}
-.pph{font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;opacity:.55;margin:12px 0 2px;font-weight:700}
-.stuIn{width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--paper);
- padding:12px 13px;font:inherit;font-size:15px;color:var(--ink)}
-.stuIn:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 3px rgba(201,169,106,.18)}
-</style>
+
+<canvas id="burst"></canvas>
+<div class="lvup" id="lvup"><div class="k">The house promotes you</div><div class="t" id="lvupT">Keeper of the Keys</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -393,8 +435,8 @@ var cache=null;try{cache=JSON.parse(localStorage.getItem('br_cache')||'null');}c
 var sentLocal=[];try{sentLocal=JSON.parse(localStorage.getItem('br_sent')||'[]');}catch(e){}
 var lang=localStorage.getItem('br_lang')||'en-IN';
 var pendingVeto=null,pendingPic=null,wFilter='all',decided={};
-var stale=false; /* true when the screen is drawn from cache, not from a live answer */
-var wire={busy:false,lastMs:0,lastErr:'',lastAt:0,tries:0}; /* b9: the wire's own diary */
+var stale=false;
+var wire={busy:false,lastMs:0,lastErr:'',lastAt:0,tries:0};
 try{decided=JSON.parse(localStorage.getItem('br_decided2')||'{}');}catch(e){}
 (function(){var now=Date.now(),ch=0;for(var k in decided){
  if(!decided[k]||typeof decided[k]!=='number'||now-decided[k]>30*864e5){delete decided[k];ch=1;}}
@@ -403,10 +445,95 @@ function isDecided(it){if(!it||!it.id)return false;var ts=decided[it.id];if(!ts)
  var sa=(cache&&cache.stateAt)?new Date(cache.stateAt).getTime():0;
  return !sa||ts>=sa;}
 
-/* b9.1 THE SIZE LAW (mirror of DESK INSTRUCTIONS — bridge-state-keeper v2). The keeper is told to
-   write short; the Bridge no longer TRUSTS it to. Every field has a ceiling here; nothing is lost —
-   the full text is one tap away (chip → sheet; card → "more"; office → papers). */
-var LIM={next:72,safe:14,line:320,status:160,meta:40,wire:220,muster:20,dials:4,offices:12};
+/* ===== b10 THE HOUSEHOLD ===== */
+var STAFF=[
+ [/steward|chief of staff|chief|estate/i,'🎩','The Steward','runs the house'],
+ [/treasur|bursar|money|finance/i,'💰','The Treasurer','minds the purse'],
+ [/career scout|scout/i,'🔭','The Scout','finds the roles'],
+ [/draughtsman|drafts/i,'✒️','The Draughtsman','writes the letters'],
+ [/conversion|envoy|apply|application/i,'🎯','The Envoy','applies and reaches out'],
+ [/physician|health/i,'🩺','The Physician','keeps you well'],
+ [/concierge|occasion/i,'🎁','The Concierge','remembers everyone'],
+ [/travel/i,'✈️','The Travel Office','plots the journeys'],
+ [/sentinel|dawn|security|phishing/i,'🛡️','The Sentinel','watches the gates'],
+ [/keeper|bridge/i,'🔔','The Keeper','rings the bell hourly'],
+ [/anticipat|seer/i,'🔮','The Seer','sees what is coming'],
+ [/inspector|verifier|audit/i,'🔍','The Inspector','checks the work'],
+ [/valet|evening/i,'🕯️','The Valet','lays out tomorrow'],
+ [/minutes|night|clerk/i,'📜','The Clerk','keeps the minutes'],
+ [/synthesis|sunday/i,'☀️','The Sunday Letter','writes the week'],
+ [/morning|brief|board paper|paper/i,'📰','The Morning Paper','the first word of the day'],
+ [/claims/i,'🏥','The Claims Agent','fights the insurer'],
+ [/quartermaster|provision|replenish|nutrition/i,'📦','The Quartermaster','stocks the larder'],
+ [/surveyor/i,'🗺️','The Surveyor','maps what you own'],
+ [/footman/i,'🧤','The Footman','runs the errands'],
+ [/negotiator/i,'⚖️','The Negotiator','cuts the bills'],
+ [/outbox|to send|postman/i,'📤','The Postman','keeps the outbox honest'],
+ [/midday|sweep/i,'🧹','The Sweep','the noon round'],
+ [/venture|tdn|nomad|amazon|market/i,'🛶','The Ventures Desk','minds the side business'],
+ [/jester|surprise/i,'🃏','The Jester','one delight a day'],
+ [/herald/i,'📣','The Herald','speaks for you'],
+ [/tutor/i,'📚','The Tutor','the monthly deep read'],
+ [/mentor/i,'🧭','The Mentor','the long game'],
+ [/analyst|statistic/i,'📊','The Analyst','counts the month'],
+ [/family|electoral|amma/i,'👪','The Family Desk','keeps the family close'],
+ [/hand-hour|hand hour|sitting/i,'🤝','The Hand-Hour','with you at the desk'],
+ [/backstop/i,'🪢','The Backstop','catches what falls'],
+ [/alfred/i,'🦇','Alfred','at your service']];
+function persona(name){var n=String(name||'');for(var i=0;i<STAFF.length;i++){if(STAFF[i][0].test(n))return {av:STAFF[i][1],title:STAFF[i][2],blurb:STAFF[i][3],raw:n};}
+ return {av:'🏛️',title:n||'The House',blurb:'a desk of the estate',raw:n};}
+function personaOfDesk(desk){return persona(desk);}
+
+/* XP + levels, kept on the phone. The house's own record is the Logs; this is the scoreboard. */
+var LEVELS=[[0,'Squire of the House'],[100,'Steward\'s Ward'],[250,'Keeper of the Keys'],[500,'Master of the House'],[900,'Lord of the Manor'],[1400,'The Wayne Standard'],[2200,'Legend of the Estate']];
+var game={xp:0,day:'',today:0,streak:0};
+try{game=Object.assign(game,JSON.parse(localStorage.getItem('br_game')||'{}'));}catch(e){}
+function saveGame(){try{localStorage.setItem('br_game',JSON.stringify(game));}catch(e){}}
+function levelOf(xp){var lv=0;for(var i=0;i<LEVELS.length;i++)if(xp>=LEVELS[i][0])lv=i;return lv;}
+function xpOf(it){return it&&it.urgent?50:20;}
+function award(n,why){
+ var d=new Date().toDateString();
+ if(game.day!==d){var y=new Date(Date.now()-864e5).toDateString();game.streak=(game.day===y&&game.today>0)?game.streak+1:1;game.day=d;game.today=0;}
+ var before=levelOf(game.xp);game.xp+=n;game.today+=n;saveGame();
+ var after=levelOf(game.xp);renderLevel();
+ toast('+'+n+' XP — '+why,true);
+ if(after>before){vib([20,60,20,60,40]);burst(120);var l=$('lvup');$('lvupT').textContent=LEVELS[after][1];l.classList.add('on');setTimeout(function(){l.classList.remove('on');},2600);}
+}
+function renderLevel(){
+ var lv=levelOf(game.xp),cur=LEVELS[lv][0],next=LEVELS[lv+1]?LEVELS[lv+1][0]:null;
+ $('lvTitle').innerHTML='<small>Lv '+(lv+1)+'</small>'+esc(LEVELS[lv][1]);
+ var pct=next?Math.round(100*(game.xp-cur)/(next-cur)):100;
+ $('xpFill').style.width=pct+'%';
+ $('xpText').textContent=next?(game.xp+' / '+next+' XP'):(game.xp+' XP · the top of the house')
+  +(game.streak>1?' · 🔥 '+game.streak+'-day streak':'')+(game.today?' · +'+game.today+' today':'');
+}
+function houseScore(s){
+ if(!s)return 0;
+ var of=(s.offices||[]),ok=of.filter(function(o){return o&&o.ok;}).length;
+ var a=of.length?ok/of.length:0.5;
+ var all=(s.muster||[]).length,pend=(s.muster||[]).filter(function(it){return !isDecided(it);}).length;
+ var b=all?1-(pend/all):1;
+ var age=stateAge();var c=!age?0.5:age<2*36e5?1:age<8*36e5?0.7:0.3;
+ return Math.round(100*(0.5*a+0.3*b+0.2*c));
+}
+function ringSvg(pct,size,label){
+ var r=(size-8)/2,c=2*Math.PI*r,f=Math.max(.03,Math.min(1,pct/100));
+ return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'">'+
+ '<circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="#3a2e1c" stroke-width="4"/>'+
+ '<circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="'+(pct>=70?'#7fbf9e':pct>=40?'#d3b478':'#d98f85')+'" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 '+size/2+' '+size/2+')"/>'+
+ '<text x="50%" y="50%" text-anchor="middle" dy="4" font-family="Georgia,serif" font-size="14" font-weight="700" fill="#efe4c8">'+pct+'</text>'+
+ '<text x="50%" y="50%" text-anchor="middle" dy="15" font-family="Segoe UI,sans-serif" font-size="7" letter-spacing="1" fill="#c9a96a">'+label+'</text></svg>';
+}
+/* confetti — gold and green, one second, no sound */
+function burst(n){var cv=$('burst'),ctx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;
+ var P=[],cols=['#c9a96a','#d3b478','#7fbf9e','#efe4c8','#a98a4e'];
+ for(var i=0;i<(n||70);i++)P.push({x:cv.width/2,y:cv.height*0.35,vx:(Math.random()-.5)*14,vy:-Math.random()*12-4,g:.35,s:4+Math.random()*5,c:cols[i%cols.length],r:Math.random()*6.28,a:1});
+ var t0=Date.now();(function f(){ctx.clearRect(0,0,cv.width,cv.height);var alive=0;
+  P.forEach(function(p){p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.r+=.2;p.a-=.012;if(p.a<=0)return;alive++;
+   ctx.save();ctx.globalAlpha=p.a;ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);ctx.restore();});
+  if(alive&&Date.now()-t0<1800)requestAnimationFrame(f);else ctx.clearRect(0,0,cv.width,cv.height);})();}
+
+var LIM={next:72,safe:14,line:320,status:160,meta:40,wire:220,muster:20,dials:4,offices:30};
 function clamp(s,n){s=String(s==null?'':s).replace(/\s+/g,' ').trim();
  if(s.length<=n)return s;var c=s.slice(0,n-1);var sp=c.lastIndexOf(' ');
  if(sp>n*0.6)c=c.slice(0,sp);return c+'…';}
@@ -419,32 +546,28 @@ muster:[
  {id:'m3',desk:'family desk',line:'Sunday letter to Archana drafted, warm and short — forward when it pleases you.'}],
 offices:[
  {name:'Treasurer',status:'roll-call 6/8 ✓',ok:1,meta:'sitting 12 Aug'},
- {name:'Ventures',status:'1 proposal in TDN docket',ok:0,meta:'digest 15 Jul'},
+ {name:'Career Scout',status:'2 fresh roles, 1 ≥85',ok:1,meta:'ran 09:12'},
+ {name:'Conversion Desk',status:'applied 1 · sent 2 · 0 credits',ok:1,meta:'ran 10:31'},
  {name:'Travel',status:'BOM–TAS down ₹2,100',ok:1,meta:'fare watch live'},
- {name:'Career',status:'1 reply owed',ok:0,meta:'3 applied this week'},
- {name:'Concierge',status:'gift cart staged',ok:1,meta:'occasion T-10'},
- {name:'Steward',status:'2 dispatched, verified',ok:1,meta:'ran 10:32'}],
+ {name:'Concierge',status:'gift cart staged',ok:0,meta:'occasion T-10'},
+ {name:'Physician',status:'weight stale 41 days',ok:0,meta:'wants a word'}],
 dials:[{k:'freedom',v:'36.2 mo',su:'runway at current burn',pct:.62},
  {k:'evenings',v:'4 in a row',su:'this week',pct:.57},
  {k:'bills due',v:'2 · ₹9,120',su:'next 7 days',pct:.29},
- {k:'weight',v:'▼ 0.4 kg',su:'vs last Saturday',pct:.8}],
-wire:[{t:Date.now()-35e5,line:'script: swept 2026-07-18 HDFC statement.pdf'},
+ {k:'applications',v:'3 this week',su:'2 replies owed',pct:.6}],
+wire:[{t:Date.now()-35e5,line:'Conversion Desk: applied OpenAI · sent Shania T. (free)'},
  {t:Date.now()-7e6,line:'telegram: 📷 picture — dinner (context logged)'},
- {t:Date.now()-2e7,line:'run: T1 morning brief filed — all clean'},
- {t:Date.now()-9e7,line:'script: SENT reply → nivabupa.com (claim papers)'}]};
+ {t:Date.now()-2e7,line:'Morning Paper: T1 filed — all clean'},
+ {t:Date.now()-9e7,line:'Claims Agent: SENT reply → nivabupa.com (claim papers)'}]};
 
 function $(id){return document.getElementById(id);}
 function vib(ms){try{if(navigator.vibrate)navigator.vibrate(ms);}catch(e){}}
-function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('on');
+function toast(msg,xp){var t=$('toast');t.textContent=msg;t.classList.add('on');t.classList.toggle('xpup',!!xp);
  clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('on');},2800);}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-/* b9.2 THE DOOR: any Drive / Docs link is re-routed through the Actuator's dressing room (op=doc),
-   so every paper opens as an estate page, never raw text. No wire = the plain link. */
 function door(u){u=String(u||'');if(!live())return u;
  var m=u.match(/(?:docs\.google\.com\/(?:document|spreadsheets|presentation)\/d\/|drive\.google\.com\/file\/d\/|drive\.google\.com\/(?:open|uc)\?(?:[^\s]*&)?id=)([-\w]{20,})/);
  return m?cfg.url+'?key='+encodeURIComponent(cfg.key)+'&op=doc&id='+m[1]:u;}
-/* b9 FORMATTING: the desks write **bold**, *italic*, `code`, [text](url) and bare links.
-   Escape first (safety), then dress the marks. Never raw HTML from the wire. */
 function md(s){
  var t=esc(s);
  t=t.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(m,a,u){return '<a href="'+door(u)+'" target="_blank" rel="noopener">'+a+'</a>';});
@@ -469,7 +592,7 @@ function greet(){
  else g='A quiet night, Sir';
  $('greet').textContent=g;
  $('dline').textContent=new Date().toLocaleDateString('en-GB',
-  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b9.2';}
+  {weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b10';}
 
 function gauge(pct,size){
  var r=(size-8)/2,c=2*Math.PI*r,f=Math.max(.04,Math.min(1,pct||0));
@@ -483,12 +606,22 @@ var occText='';
 function openOcc(){if(!occText)return;$('occFull').innerHTML=md(occText);$('mOcc').classList.add('on');vib(6);}
 $('btnOccNo').onclick=function(){$('mOcc').classList.remove('on');};
 
+/* recipients for Text — built from the live staff list */
+var rcp='';
+function renderRcps(s){
+ var row=$('rcpRow');row.innerHTML='';
+ var list=[{key:'',av:'🦇',title:'Alfred'}];
+ var seen={};
+ ((s&&s.offices)||[]).forEach(function(o){var p=persona(o.name);if(seen[p.title])return;seen[p.title]=1;list.push({key:p.title,av:p.av,title:p.title});});
+ list.forEach(function(x){var b=document.createElement('button');b.className='rcp'+(rcp===x.key?' on':'');
+  b.innerHTML='<span class="a">'+x.av+'</span>'+esc(x.title.replace(/^The /,''));
+  b.onclick=function(){rcp=x.key;renderRcps(s);vib(5);$('cmdText').focus();};row.appendChild(b);});}
+
 function render(){
- greet();
+ greet();renderLevel();
  $('demoBanner').style.display=live()?'none':'block';
  var s=stateNow();
  var warn=s&&s.glyph==='warn';
- /* b9: the header says WHICH state is on screen, HOW OLD it is, and admits when it is cached. */
  var age=stateAge();
  var stamp=(cache&&(cache.stateAt||cache.at))?String(cache.stateAt||cache.at):'';
  var hhmm=stamp?esc(stamp).slice(11,16):'';
@@ -498,16 +631,15 @@ function render(){
    : stale&&hhmm ? ' · <span class="'+(old?'old':'')+'">showing '+hhmm+' ('+ageTxt+' old) · wire down</span>'
    : hhmm ? ' · state '+hhmm+(old?' <span class="old">('+ageTxt+' old — the house has not published since)</span>':' ('+ageTxt+')')
    : ' · awaiting the first answer';
- /* b9.1: "safe" is a FIGURE or a dash — never "true", never prose. */
  var safeRaw=(s&&s.safe!=null)?String(s.safe):'';
  var safeTxt=/\d/.test(safeRaw)?clamp(safeRaw,LIM.safe):'—';
  $('topStat').innerHTML='<b>'+(warn?'⚠ A matter wants your eye.':'✅ The house is in order.')+'</b> '+
   'Safe to spend '+esc(safeTxt)+when;
- /* b9.1: the occasion chip is the FIRST LINE, ≤72 chars; tap for the whole text. */
+ $('houseRing').innerHTML=ringSvg(houseScore(s),54,'HOUSE');
  occText=(s&&s.next)?String(s.next):'';
  var occShort=occText?clamp(firstLine(occText),LIM.next):'';
  var occCut=occText&&(occShort.length<occText.replace(/\s+/g,' ').trim().length);
- $('occWrap').innerHTML=occShort?'<span class="occ" id="occChip" title="tap for the full text">🎂 '+esc(occShort)+(occCut?' ›':'')+'</span>':'';
+ $('occWrap').innerHTML=occShort?'<span class="occ" id="occChip">🎂 '+esc(occShort)+(occCut?' ›':'')+'</span>':'';
  var oc=$('occChip');if(oc)oc.onclick=openOcc;
  var wb=$('wireBanner');
  if(live()&&stale&&wire.lastErr){wb.style.display='block';
@@ -516,15 +648,16 @@ function render(){
   var a=$('wireAgain');if(a)a.onclick=function(e){e.preventDefault();fetchState();};}
  else wb.style.display='none';
 
- /* a bare-string muster entry is a REPORTABLE DEFECT — render it, never swallow it. */
  var allItems=((s&&s.muster)||[]).map(function(it){
    return (it&&typeof it==='object')?it:{id:String(it||'?'),desk:'',line:''};
   }).filter(function(it){return !isDecided(it);});
  var items=allItems.slice(0,LIM.muster),overflow=allItems.length-items.length;
+ var avail=allItems.reduce(function(a,it){return a+xpOf(it);},0);
+ $('xpAvail').textContent=allItems.length?('+'+avail+' xp on the table'):'';
  $('nBadge').style.display=allItems.length?'block':'none';
  $('nBadge').textContent=allItems.length;
  $('signSub').textContent=allItems.length?
-  ('press and hold — '+allItems.length+' pending'):'the docket is clear';
+  ('press and hold — '+allItems.length+' pending · +'+avail+' xp'):'the docket is clear';
  var ml=$('musterList');ml.innerHTML='';
  if(!items.length)ml.innerHTML='<div class="empty"><div class="big">✒</div>'+
   'The docket is clear, Sir —<br>the house holds nothing against your hand.</div>';
@@ -533,14 +666,14 @@ function render(){
   wrap.innerHTML='<div class="under"><span class="ua">APPROVE ›</span><span class="uv">‹ VETO</span></div>';
   var d=document.createElement('div');
   d.className='card'+(it.urgent?' urgent':'');
-  /* b9.1: the line is clamped; "more" unfolds it in place (or opens the paper if one is named). */
+  var p=personaOfDesk(it.desk||'');
   var full=it.line?String(it.line):'';
   var shown=clamp(full,LIM.line);
   var cut=shown.length<full.replace(/\s+/g,' ').trim().length;
   var paperA=it.paper?' <a href="'+esc(door(it.paper))+'" target="_blank" rel="noopener">paper ↗</a>':'';
-  d.innerHTML='<div class="chead"><div class="mono">'+esc((it.desk||'H')[0].toUpperCase())+'</div>'+
-   '<div><div class="id">'+esc(it.id||'')+' · '+esc(it.desk||'the house')+'</div></div>'+
-   (it.urgent?'<div class="urg">today</div>':'')+'</div>'+
+  d.innerHTML='<div class="chead"><div class="mono">'+p.av+'</div>'+
+   '<div style="min-width:0"><div class="who">'+esc(p.title)+'</div><div class="id">'+esc(it.id||'')+(it.urgent?' · today':'')+'</div></div>'+
+   '<span class="xp'+(it.urgent?' hot':'')+'">+'+xpOf(it)+' xp</span></div>'+
    '<div class="line">'+(full?md(shown):'<i>malformed entry — '+esc(it.id||'no id')+'</i>')+
    (cut?' <a href="#" class="more">more ›</a>':'')+paperA+'</div>'+
    '<div class="btns"><button class="b ap">Approve</button><button class="b df">Hold</button>'+
@@ -548,24 +681,34 @@ function render(){
    '<button class="bw">✎&nbsp; a word — your own instruction</button>';
   attachSwipe(d,it);
   var mo=d.querySelector('.more');
-  if(mo)mo.onclick=function(e){e.preventDefault();e.stopPropagation();
-   d.querySelector('.line').innerHTML=md(full)+paperA;vib(5);};
-  d.querySelector('.ap').onclick=function(){if(d._moved)return;decide(it,d,'approve '+it.id,'Approving '+it.id);};
-  d.querySelector('.df').onclick=function(){if(d._moved)return;decide(it,d,'defer '+it.id,'Holding '+it.id);};
+  if(mo)mo.onclick=function(e){e.preventDefault();e.stopPropagation();d.querySelector('.line').innerHTML=md(full)+paperA;vib(5);};
+  d.querySelector('.ap').onclick=function(){if(d._moved)return;decide(it,d,'approve '+it.id,'Approving '+it.id,xpOf(it),p.title+' thanks you');};
+  d.querySelector('.df').onclick=function(){if(d._moved)return;decide(it,d,'defer '+it.id,'Holding '+it.id,5,'held for later');};
   d.querySelector('.vt').onclick=function(){if(d._moved)return;openVeto(it,d);};
   d.querySelector('.bw').onclick=function(){if(d._moved)return;openWord(it);};
   wrap.appendChild(d);ml.appendChild(wrap);});
  if(overflow>0){var ov=document.createElement('div');ov.className='empty';
   ov.innerHTML='+'+overflow+' more on the docket, Sir — sign these, and the rest come forward.';ml.appendChild(ov);}
 
- var ot=$('officeTiles');ot.innerHTML='';
- ((s&&s.offices)||[]).slice(0,LIM.offices).forEach(function(o){
-  var d=document.createElement('div');d.className='tile';
-  d.innerHTML='<div class="n"><span class="dot '+(o.ok?'ok':'warn')+'"></span>'+esc(clamp(o.name,24))+'</div>'+
-   '<div class="s">'+md(clamp(o.status||'',LIM.status))+'</div><div class="m">'+esc(clamp(o.meta||'',LIM.meta))+'</div>';
-  d.onclick=function(){openPapers(o);};
-  ot.appendChild(d);});
- if(!ot.innerHTML)ot.innerHTML='<div class="empty" style="grid-column:1/-1">The offices have not yet published today.</div>';
+ /* the staff */
+ var sg=$('staffGrid');sg.innerHTML='';
+ var offs=((s&&s.offices)||[]).slice(0,LIM.offices);
+ var onDuty=offs.filter(function(o){return o&&o.ok;}).length;
+ $('staffCount').textContent=offs.length?(onDuty+' / '+offs.length+' on duty'):'';
+ offs.forEach(function(o){
+  var p=persona(o.name);
+  var d=document.createElement('div');d.className='sc';
+  var meta=String(o.meta||'');
+  var dark=/absent|silent|stale|dark|not yet/i.test(meta+' '+(o.status||''));
+  var strk=(String(o.status||'')+' '+meta).match(/(\d+)\s*(?:-day|day|in a row|straight)/i);
+  d.innerHTML='<div class="av">'+p.av+'<span class="dot '+(o.ok?'ok':dark?'dark':'warn')+'"></span></div>'+
+   (strk?'<span class="strk">🔥 '+esc(strk[1])+'</span>':'')+
+   '<div class="n">'+esc(p.title)+'</div><div class="r">'+esc(clamp(o.name,26))+' · '+esc(p.blurb)+'</div>'+
+   '<div class="s">'+md(clamp(o.status||'',LIM.status))+'</div>'+
+   '<div class="m">'+esc(clamp(meta,LIM.meta)||(o.ok?'on duty':'wants a word'))+'</div>';
+  d.onclick=function(){openPapers(o,p);};
+  sg.appendChild(d);});
+ if(!sg.innerHTML)sg.innerHTML='<div class="empty" style="grid-column:1/-1">The staff have not yet reported today.</div>';
 
  var dg=$('dialGrid');dg.innerHTML='';
  ((s&&s.dials)||[]).slice(0,LIM.dials).forEach(function(x){
@@ -574,6 +717,7 @@ function render(){
    '<div class="v serif">'+esc(clamp(x.v,14))+'</div>'+
    (x.su?'<div class="su">'+esc(clamp(x.su,28))+'</div>':'')+'</div>';
   dg.appendChild(d);});
+ renderRcps(s);
  renderWire();}
 
 function renderWire(){
@@ -595,7 +739,8 @@ function renderWire(){
   if(label&&label!==lastDay){lastDay=label;
    var h=document.createElement('div');h.className='wday';h.textContent=label;wl.appendChild(h);}
   var d=document.createElement('div');d.className='wireln'+(x.me?' me':'');
-  d.innerHTML='<span class="t">'+(x.t?ago(x.t):'')+'</span><span class="tx">'+md(clamp(x.line,LIM.wire))+'</span>';
+  var who=x.me?{av:'✒'}:persona(String(x.line||'').split(/[:—-]/)[0]);
+  d.innerHTML='<span class="wav">'+who.av+'</span><span class="t">'+(x.t?ago(x.t):'')+'</span><span class="tx">'+md(clamp(x.line,LIM.wire))+'</span>';
   wl.appendChild(d);});}
 
 /* ---- swipe ---- */
@@ -613,27 +758,24 @@ function attachSwipe(el,it){
  el.addEventListener('touchend',function(){
   el.style.transition='transform .25s ease';
   if(dx>92){el.style.transform='translateX(410px)';vib(14);
-   setTimeout(function(){decide(it,el,'approve '+it.id,'Approving '+it.id);},140);}
+   var p=personaOfDesk(it.desk||'');
+   setTimeout(function(){decide(it,el,'approve '+it.id,'Approving '+it.id,xpOf(it),p.title+' thanks you');},140);}
   else if(dx<-92){el.style.transform='';openVeto(it,el);}
   else el.style.transform='';
   setTimeout(function(){el._moved=false;},250);});}
 
 /* ---- decide (immediate) ---- */
-function decide(it,el,cmdText,label){
+function decide(it,el,cmdText,label,xp,why){
  vib(12);
  if(el)el.classList.add('done');
  if(it)decided[it.id]=Date.now();
  persistDecided();
- if(live()){rawSend(cmdText,true);toast('✓ '+label+' — the house has it.');}
+ if(live()){rawSend(cmdText,true);}
  else{sentLocal.push({t:Date.now(),text:cmdText+'  (specimen — not sent)'});
-  localStorage.setItem('br_sent',JSON.stringify(sentLocal));
-  toast('Specimen, Sir — nothing left the house.');}
+  localStorage.setItem('br_sent',JSON.stringify(sentLocal));}
+ if(xp)award(xp,why||label);else toast('✓ '+label+' — the house has it.');
  setTimeout(render,400);}
 function persistDecided(){try{localStorage.setItem('br_decided2',JSON.stringify(decided));}catch(e){}}
-function renderBadge(){
- var s=stateNow();
- var n=((s&&s.muster)||[]).filter(function(it){return !isDecided(it);}).length;
- $('nBadge').style.display=n?'block':'none';$('nBadge').textContent=n;}
 
 /* ---- transport ---- */
 function rawSend(text,silent){
@@ -647,7 +789,7 @@ function rawSend(text,silent){
    localStorage.setItem('br_sent',JSON.stringify(sentLocal));renderWire();}
   else toast('Refused — '+(j.err==='key'?'the key was not honoured':j.err||'unknown'));})
  .catch(function(){toast('The wire is down, Sir — Telegram still hears you.');});}
-function sendCmd(text){
+function sendCmd(text,xp,why){
  text=String(text||'').trim();if(!text)return;
  vib(10);
  if(!live()){
@@ -655,17 +797,16 @@ function sendCmd(text){
   localStorage.setItem('br_sent',JSON.stringify(sentLocal));
   $('cmdText').value='';renderWire();
   toast('Specimen, Sir — lay the wire in ⚙ to reach the house.');return;}
- toast('Dispatching…');rawSend(text);$('cmdText').value='';}
+ rawSend(text,!!xp);$('cmdText').value='';
+ if(xp)award(xp,why);else toast('Dispatching…');}
 
-/* b9 HONEST WIRE: a visible clock while ringing, a hard 25s timeout, the true reason on failure
-   (HTTP status, a login page instead of JSON, a refused key), one automatic retry, and the
-   last-good state kept on screen throughout. Never "Ringing the house…" forever. */
 function diary(){var d=$('diag');if(!d)return;
  d.textContent='url: '+(cfg.url?cfg.url.replace(/\/macros\/s\/([^/]{8})[^/]*\//,'/macros/s/$1…/'):'—')+
   '\nlast ring: '+(wire.lastAt?new Date(wire.lastAt).toLocaleTimeString('en-GB'):'—')+
   '\nanswer time: '+(wire.lastMs?(wire.lastMs/1000).toFixed(1)+'s':'—')+
   '\nresult: '+(wire.lastErr||'ok')+
   '\nstate stamp: '+((cache&&(cache.stateAt||cache.at))||'—')+
+  '\nxp: '+game.xp+' · streak '+game.streak+
   '\nsw: '+(navigator.serviceWorker&&navigator.serviceWorker.controller?'active':'none');}
 function ringOnce(timeoutMs){
  var ctl=('AbortController' in window)?new AbortController():null;
@@ -690,7 +831,7 @@ function fetchState(){
  function done(){clearInterval(tick);bar.classList.remove('on');wire.busy=false;diary();render();}
  function attempt(){
   wire.tries++;
-  ringOnce(25000).then(function(j){
+  ringOnce(40000).then(function(j){
    if(!j.ok){stale=true;wire.lastErr=(j.err==='key'?'the key was refused — check ⚙':'the house said: '+(j.err||'unknown'));
     toast(wire.lastErr);done();return;}
    stale=false;wire.lastErr='';cache=j;
@@ -721,7 +862,7 @@ function sendPic(file,caption){
    body:JSON.stringify({key:cfg.key,op:'picture',b64:b64,ext:'jpg',caption:caption||''})})
   .then(function(r){return r.json();})
   .then(function(j){
-   if(j.ok){vib(12);toast('✓ Filed, Sir — read on the next round.');
+   if(j.ok){award(5,'the Picture Desk has it');
     sentLocal.push({t:Date.now(),text:'📷 '+(caption||'photograph — context')});
     localStorage.setItem('br_sent',JSON.stringify(sentLocal));renderWire();}
    else toast('Refused — '+(j.err||'unknown'));})
@@ -740,31 +881,37 @@ function officeKws(name){var n=String(name||'').toLowerCase();
  if(/family/.test(n))return['family','electoral','archana','amma','lakshmi','hariharan','sunday','form 8','sir '];
  if(/steward|chief/.test(n))return['dispatch','synthesis','week','steward','state of the estate','minutes','board paper'];
  if(/footman/.test(n))return['errand','work','instamart','hands hour','hand-hour','form'];
- if(/career/.test(n))return['career','job','application','applied','resume','scout','role','send sheet','uber','linkedin','referral'];
+ if(/career|conversion|envoy|scout|draughts/.test(n))return['career','job','application','applied','resume','scout','role','send sheet','uber','linkedin','referral','conversion','outreach','openai'];
  if(/venture|tdn|nomad/.test(n))return['venture','tdn','nomad','amazon','seller','proposal','digest'];
  if(/physician|health/.test(n))return['physician','health','weight','nutrition','momentum','care'];
  if(/sentinel/.test(n))return['sentinel','watch','gap','silent'];
  if(/anticipat/.test(n))return['anticipation','japan','renewal','signal','question'];
- if(/bridge|telegram/.test(n))return['bridge','telegram','feedback','picture'];
+ if(/bridge|telegram|keeper/.test(n))return['bridge','telegram','feedback','picture','keeper'];
  return n.split(/[^a-z]+/).filter(function(x){return x.length>3;});}
-function openPapers(o){
+var ppPersona=null;
+function openPapers(o,p){
+ ppPersona=p||persona(o&&o.name);
  var ps=(cache&&cache.papers)||[];
  var kws=officeKws(o&&o.name),mine=[],rest=[];
- ps.forEach(function(p){var n=String(p.n||'').toLowerCase();
-  (kws.length&&kws.some(function(k){return n.indexOf(k)>-1;})?mine:rest).push(p);});
- $('ppTitle').textContent=(o&&o.name?o.name+' — ':'')+'papers of the house';
+ ps.forEach(function(x){var n=String(x.n||'').toLowerCase();
+  (kws.length&&kws.some(function(k){return n.indexOf(k)>-1;})?mine:rest).push(x);});
+ $('ppTitle').textContent=ppPersona.av+' '+ppPersona.title;
+ $('ppNote').textContent=(o&&o.status?clamp(o.status,120)+' · ':'')+'tap a paper to open it dressed.';
  var el=$('ppList');el.innerHTML='';
  function hd(t){var h=document.createElement('div');h.className='pph';h.textContent=t;el.appendChild(h);}
- function row(p,lab){var b=document.createElement('button');b.className='ppr';
-  b.innerHTML='<span class="pt">'+esc(lab||dayLab(p.t))+'</span>'+esc(clamp(p.n||'',90))+
-   (p.s?'<div style="font-size:12px;color:var(--mut);margin-top:2px">'+esc(clamp(p.s,140))+'</div>':'');
-  b.onclick=function(){if(p.u)window.open(door(p.u),'_blank');};el.appendChild(b);}
- if(o&&o.paper)row({n:(o.name||'the desk')+" — today's paper ↗",u:o.paper},'today');
- if(mine.length){hd('from this desk');mine.forEach(function(p){row(p);});}
- if(rest.length){hd(mine.length?'the rest of the house':'filed these last days');rest.forEach(function(p){row(p);});}
- if(!el.childNodes.length)el.innerHTML='<div class="empty">Nothing on the shelf yet, Sir — the house has not published papers to this wire.</div>';
+ function row(x,lab){var b=document.createElement('button');b.className='ppr';
+  b.innerHTML='<span class="pt">'+esc(lab||dayLab(x.t))+'</span>'+esc(clamp(x.n||'',90))+
+   (x.s?'<div style="font-size:12px;color:var(--mut);margin-top:2px">'+esc(clamp(x.s,140))+'</div>':'');
+  b.onclick=function(){if(x.u)window.open(door(x.u),'_blank');};el.appendChild(b);}
+ if(o&&o.paper)row({n:"today's paper ↗",u:o.paper},'today');
+ if(mine.length){hd('from this desk');mine.forEach(function(x){row(x);});}
+ if(rest.length){hd(mine.length?'the rest of the house':'filed these last days');rest.forEach(function(x){row(x);});}
+ if(!el.childNodes.length)el.innerHTML='<div class="empty">Nothing on the shelf yet, Sir.</div>';
  $('mPapers').classList.add('on');vib(6);}
 $('btnPpNo').onclick=function(){$('mPapers').classList.remove('on');};
+$('btnPpText').onclick=function(){$('mPapers').classList.remove('on');
+ rcp=ppPersona?ppPersona.title:'';document.querySelector('nav button[data-v="v-comm"]').click();renderRcps(stateNow());
+ setTimeout(function(){$('cmdText').focus();},300);};
 
 /* ---- word sheet ---- */
 var pendingWord=null;
@@ -777,7 +924,7 @@ $('btnWordNo').onclick=function(){$('mWord').classList.remove('on');pendingWord=
 $('btnWordGo').onclick=function(){
  var t=$('wordText').value.trim();
  $('mWord').classList.remove('on');
- if(pendingWord&&t)sendCmd('on '+pendingWord.id+' — '+t);
+ if(pendingWord&&t)sendCmd('on '+pendingWord.id+' — '+t,10,'your word is law');
  pendingWord=null;};
 
 /* ---- veto sheet ---- */
@@ -792,7 +939,7 @@ $('btnVetoGo').onclick=function(){
  var why=$('vetoWhy').value.trim()||'no reason given';
  $('mVeto').classList.remove('on');
  if(pendingVeto)decide(pendingVeto.it,pendingVeto.el,
-  'veto '+pendingVeto.it.id+' — '+why,'Vetoing '+pendingVeto.it.id);
+  'veto '+pendingVeto.it.id+' — '+why,'Vetoing '+pendingVeto.it.id,10,'a firm no is worth ten');
  pendingVeto=null;};
 
 /* ---- hold to sign ---- */
@@ -801,14 +948,15 @@ $('btnVetoGo').onclick=function(){
  function stop(){clearInterval(t);t=null;p=0;fill.style.width='0';}
  function start(e){e.preventDefault();
   var s=stateNow();
-  var n=((s&&s.muster)||[]).filter(function(it){return !isDecided(it);}).length;
-  if(!n){toast('The docket is already clear, Sir.');return;}
+  var pend=((s&&s.muster)||[]).filter(function(it){return !isDecided(it);});
+  if(!pend.length){toast('The docket is already clear, Sir.');return;}
   p=0;t=setInterval(function(){p+=2.2;fill.style.width=Math.min(100,p)+'%';
    if(p>=100){stop();vib([16,60,16]);
-    var s2=stateNow();
-    ((s2&&s2.muster)||[]).forEach(function(it){decided[it.id]=Date.now();});
+    var sum=pend.reduce(function(a,it){return a+xpOf(it);},0);
+    pend.forEach(function(it){decided[it.id]=Date.now();});
     persistDecided();
-    decide(null,null,'SIGNED — approve all pending','Signing all pending');
+    if(live())rawSend('SIGNED — approve all pending',true);
+    burst(90);award(sum,'the whole docket signed');
     render();}},24);}
  btn.addEventListener('pointerdown',start);
  btn.addEventListener('pointerup',stop);
@@ -832,13 +980,15 @@ $('btnTestSet').onclick=function(){
  var u=$('setUrl').value.trim(),k=$('setKey').value.trim();
  if(!u||!k){toast('Both lines first, Sir.');return;}
  toast('Ringing…');var t0=Date.now();
- fetch(u+'?key='+encodeURIComponent(k)+'&t='+t0,{cache:'no-store'}).then(function(r){return r.text().then(function(x){return {s:r.status,x:x};});})
+ fetch(u+'?key='+encodeURIComponent(k)+'&op=ping&t='+t0,{cache:'no-store'}).then(function(r){return r.text().then(function(x){return {s:r.status,x:x};});})
  .then(function(o){var ms=Date.now()-t0;var j=null;try{j=JSON.parse(o.x);}catch(e){}
-  $('diag').textContent='test: HTTP '+o.s+' in '+(ms/1000).toFixed(1)+'s — '+(j?(j.ok?'the house answers ✓':'refused: '+(j.err||'?')):(/<html/i.test(o.x)?'a sign-in page, not JSON — old deployment or access not "Anyone"':'not JSON'));
+  $('diag').textContent='ping: HTTP '+o.s+' in '+(ms/1000).toFixed(1)+'s — '+(j?(j.ok?'the house answers ✓ ('+(j.v||'')+(j.warmAt?', hearth warm '+String(j.warmAt).slice(11,19):'')+')':'refused: '+(j.err||'?')):(/<html/i.test(o.x)?'a sign-in page, not JSON — old deployment or access not "Anyone"':'not JSON'));
   toast(j&&j.ok?'✓ The house answers, Sir.':'The house did not answer properly — see the diary.');})
- .catch(function(e){$('diag').textContent='test: no answer — '+(e&&e.message||'network');toast('No answer — check the URL.');});};
+ .catch(function(e){$('diag').textContent='ping: no answer — '+(e&&e.message||'network');toast('No answer — check the URL.');});};
 $('btnRefresh').onclick=function(){vib(8);fetchState();};
-$('btnSend').onclick=function(){sendCmd($('cmdText').value);};
+$('btnSend').onclick=function(){var t=$('cmdText').value.trim();if(!t)return;
+ var to=rcp?('@'+rcp.replace(/^The /,'').toLowerCase().replace(/\s+/g,'-')+' '):'';
+ sendCmd(to+t,5,rcp?(rcp+' has it'):'Alfred has it');};
 document.querySelectorAll('#chipRow .chip').forEach(function(c){
  c.onclick=function(){var t=c.textContent;
   if(t==='status'||t==='brief'){sendCmd(t);return;}
@@ -902,7 +1052,7 @@ $('btnStuGo').onclick=function(){
 $('stuQ').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('btnStuGo').click();}});
 $('btnStuNote').onclick=function(){
  var t=$('stuNote').value.trim();if(!t){toast('A thought first, Sir.');return;}
- sendCmd('note: '+t);$('stuNote').value='';};
+ sendCmd('note: '+t,5,'shelved in the Study');$('stuNote').value='';};
 $('btnPaper').onclick=function(){
  if(!live()){toast('Lay the wire in ⚙ first, Sir — the paper door needs it.');return;}
  vib(8);window.open(cfg.url+'?key='+encodeURIComponent(cfg.key)+'&op=paper','_blank');};
@@ -912,7 +1062,7 @@ document.addEventListener('visibilitychange',function(){
  if(!document.hidden&&live())fetchState();});
 setInterval(function(){if(!document.hidden&&live())fetchState();},300000);
 if('serviceWorker' in navigator){
- try{navigator.serviceWorker.register('sw.js');}catch(e){}}
+ try{navigator.serviceWorker.register('sw.js').catch(function(){});}catch(e){}}
 render();if(live())fetchState();
 </script>
 </body>
