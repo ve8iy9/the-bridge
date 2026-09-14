@@ -97,6 +97,7 @@ h2 .cnt{font-family:'Segoe UI',sans-serif;font-size:11px;letter-spacing:1.2px;co
 .today{background:var(--paper2);border:1px dashed var(--line2);border-radius:12px;padding:9px 12px;font-size:13px;margin-bottom:10px;line-height:1.45}
 .today b{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold2);display:block;margin-bottom:2px}
 .today.zero{border-color:var(--red);color:var(--red)}
+.today a{color:var(--vio);text-decoration:none;font-weight:600}
 .msgs{display:flex;flex-direction:column;gap:7px;padding:2px 0 10px}
 .day{align-self:center;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold2);font-weight:700;margin:8px 0 2px}
 .msg{max-width:88%;padding:9px 12px;border-radius:16px;font-size:14px;line-height:1.48;word-break:break-word;position:relative}
@@ -194,7 +195,7 @@ body.inchat .compose{display:block}
 .kw .m span{color:var(--mut)}
 
 /* THE CAREER DESK */
-.cnums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.cnums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
 .cn{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 8px 10px;text-align:center;box-shadow:var(--shadow)}
 .cn .v{font-family:Georgia,serif;font-size:30px;font-weight:700;line-height:1}
 .cn .v small{font-size:13px;color:var(--mut);font-weight:400}
@@ -215,6 +216,53 @@ body.inchat .compose{display:block}
 .touch .w{flex:1;min-width:0}
 .touch .r{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--mut);white-space:nowrap}
 .touch .r.yes{color:var(--green)}
+.verdict{background:var(--paper2);border:1px solid var(--line2);border-radius:12px;padding:9px 12px;font-size:13px;line-height:1.45;margin-bottom:10px}
+.verdict b{color:var(--gold2);font-size:10px;letter-spacing:1.4px;text-transform:uppercase;display:block;margin-bottom:2px}
+.verdict.bad{border-color:var(--red)}.verdict.bad b{color:var(--red)}
+.verdict.ok{border-color:var(--green)}.verdict.ok b{color:var(--green)}
+.pipe{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 6px}
+.pipe span{font-size:11px;border:1px solid var(--line2);border-radius:14px;padding:4px 10px;color:var(--mut);background:var(--paper)}
+.pipe span b{color:var(--ink);font-family:Georgia,serif;font-size:13px;margin-right:3px}
+.pipe span.hot{border-color:var(--gold2);color:var(--gold2)}.pipe span.hot b{color:var(--gold2)}
+.desk{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-size:13px;line-height:1.45;margin-bottom:7px;display:flex;gap:9px;align-items:flex-start}
+.desk .dav{font-size:18px;flex-shrink:0;padding-top:1px}
+.desk .dn{font-weight:600;font-size:12.5px}
+.desk .dn small{color:var(--mut);font-weight:400;margin-left:6px}
+.desk .ds{color:var(--ink)}
+.desk .ds.zero{color:var(--red)}
+.desk a{color:var(--vio);text-decoration:none;font-weight:600}
+
+/* MONEY · HEALTH · TRAVEL */
+.pills{display:flex;gap:6px;margin:0 0 12px;background:var(--paper2);border:1px solid var(--line);border-radius:14px;padding:4px}
+.pill{flex:1;border:none;background:none;border-radius:11px;padding:9px 0;font-size:12.5px;font-weight:600;font-family:inherit;color:var(--mut)}
+.pill.on{background:var(--walnut2);color:var(--gold)}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.mbig{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:11px 12px;box-shadow:var(--shadow);min-width:0}
+.mbig .k{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut)}
+.mbig .v{font-family:Georgia,serif;font-size:22px;font-weight:700;margin-top:3px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mbig .s{font-size:11.5px;color:var(--mut);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mbig.red .v{color:var(--red)}.mbig.ok .v{color:var(--green)}.mbig.amber .v{color:var(--amber)}
+.kv{display:flex;gap:10px;align-items:baseline;padding:8px 2px;border-bottom:1px dotted var(--line);font-size:13.5px;line-height:1.4}
+.kv:last-child{border-bottom:none}
+.kv .n{flex:1;min-width:0}
+.kv .n small{display:block;font-size:11.5px;color:var(--mut)}
+.kv .a{font-family:Georgia,serif;font-weight:700;white-space:nowrap}
+.kv .st{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;border-radius:10px;padding:2px 7px;white-space:nowrap}
+.kv .st.bad{background:var(--redbg);color:var(--red)}.kv .st.ok{background:var(--greenbg);color:var(--green)}.kv .st.warn{background:var(--amberbg);color:var(--amber)}.kv .st.mut{background:var(--paper2);color:var(--mut);border:1px solid var(--line)}
+.kv a{color:var(--vio);text-decoration:none;font-weight:600}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:6px 12px;box-shadow:var(--shadow);margin-bottom:10px}
+.src{font-size:11px;color:var(--mut);font-style:italic;margin:4px 2px 12px}
+.hnum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.chipsrow{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 14px}
+.chipsrow button{border:1px solid var(--line2);background:var(--paper);border-radius:20px;padding:8px 13px;font-size:12.5px;color:var(--ink);font-family:inherit}
+.chipsrow button:active{background:var(--paper2)}
+.trip{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:11px 12px;box-shadow:var(--shadow);margin-bottom:8px}
+.trip .tn{font-family:Georgia,serif;font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.trip .tn small{font-family:'Segoe UI',sans-serif;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold2);font-weight:700;white-space:nowrap}
+.trip .ts{font-size:13px;margin-top:3px}
+.trip .ts.bad{color:var(--red)}
+.trip .tm{font-size:11.5px;color:var(--mut);margin-top:3px}
+.trip a{color:var(--vio);text-decoration:none;font-weight:600}
 
 /* STUDY + FEED */
 .stuIn{width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--paper);padding:12px 13px;font:inherit;font-size:15px;color:var(--ink)}
@@ -236,11 +284,11 @@ textarea.big{width:100%;border:1px solid var(--line2);border-radius:13px;backgro
 .wireln.me .tx{color:var(--green);font-weight:600}
 .wday{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);margin:14px 2px 5px;font-weight:700}
 
-nav{position:fixed;bottom:0;left:0;right:0;background:var(--walnut);display:flex;justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom));z-index:30;border-top:1px solid var(--golddim)}
-nav button{background:none;border:none;color:#8d7c62;font-size:10.5px;letter-spacing:.5px;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 9px;position:relative}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--walnut);display:flex;justify-content:space-around;padding:10px 2px calc(10px + env(safe-area-inset-bottom));z-index:30;border-top:1px solid var(--golddim)}
+nav button{background:none;border:none;color:#8d7c62;font-size:10px;letter-spacing:.4px;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 5px;position:relative;min-width:0}
 nav button .ic{font-size:20px}
 nav button.on{color:var(--gold)}
-nav .badge{position:absolute;top:-3px;right:2px;background:var(--gold2);color:var(--walnut);font-size:10px;font-weight:700;border-radius:9px;min-width:17px;padding:1px 4px}
+nav .badge{position:absolute;top:-3px;right:-2px;background:var(--gold2);color:var(--walnut);font-size:10px;font-weight:700;border-radius:9px;min-width:17px;padding:1px 4px}
 nav .badge.red{background:var(--red);color:#fff}
 
 .modal{position:fixed;inset:0;background:rgba(18,13,6,.6);display:none;align-items:flex-end;justify-content:center;z-index:40}
@@ -270,7 +318,7 @@ nav .badge.red{background:var(--red);color:#fff}
 <div class="hrow">
 <div style="min-width:0">
 <div class="greet serif" id="greet">Good evening, Sir</div>
-<div class="dline" id="dline">the bridge · wayne estate · b12.1</div>
+<div class="dline" id="dline">the bridge · wayne estate · b13</div>
 </div>
 <div style="display:flex;flex-shrink:0">
 <button class="hbtn" id="btnPaper" aria-label="today's paper">📰</button>
@@ -309,6 +357,7 @@ nav .badge.red{background:var(--red);color:#fff}
 </section>
 
 <section class="view" id="v-taps">
+<div id="schemaBanner" class="banner" style="display:none"></div>
 <h2 class="serif"><span>Finish these</span><span class="cnt" id="tapCnt"></span></h2>
 <p class="note">Each one is prepared to the last step. One tap opens it; Done tells the house.</p>
 <div class="rule"></div>
@@ -323,17 +372,43 @@ nav .badge.red{background:var(--red);color:#fff}
 
 <section class="view" id="v-career">
 <h2 class="serif"><span>The career desk</span><span class="cnt" id="carCnt"></span></h2>
-<p class="note">The one thing this quarter is for. The week's numbers, every role in play, and the two people working it.</p>
+<p class="note">The one thing this quarter is for. The week's numbers, every role in play, and the people working it.</p>
 <div class="rule"></div>
 <div class="cnums" id="carNums"></div>
 <div id="carList"></div>
 </section>
 
-<section class="view" id="v-kitchen">
+<section class="view" id="v-money">
+<h2 class="serif"><span>The purse</span><span class="cnt" id="monCnt"></span></h2>
+<p class="note">What leaves, what leaks, what is due. The Treasurer counts; your hand pays — the house never moves money.</p>
+<div class="rule"></div>
+<div id="monList"></div>
+</section>
+
+<section class="view" id="v-life">
+<div class="pills" id="lifePills">
+<button class="pill on" data-p="health">🩺 Health</button>
+<button class="pill" data-p="kitchen">🍲 Kitchen</button>
+<button class="pill" data-p="travel">✈️ Travel</button>
+</div>
+<div id="p-health">
+<h2 class="serif"><span>The physician's desk</span><span class="cnt" id="heaCnt"></span></h2>
+<p class="note">Weight, sleep, the doctor's word, the insurer's promises — and one tap to log today.</p>
+<div class="rule"></div>
+<div id="heaList"></div>
+</div>
+<div id="p-kitchen" style="display:none">
 <h2 class="serif"><span>The kitchen</span><span class="cnt" id="kitCnt"></span></h2>
 <p class="note">What to tell the cook. Tomorrow's note goes out on Telegram at 19:30; forward it to the cook in one tap.</p>
 <div class="rule"></div>
 <div id="kitList"></div>
+</div>
+<div id="p-travel" style="display:none">
+<h2 class="serif"><span>The travel office</span><span class="cnt" id="traCnt"></span></h2>
+<p class="note">Journeys booked, journeys dreamed. Ideas you leave here become the Travel Office's watch.</p>
+<div class="rule"></div>
+<div id="traList"></div>
+</div>
 </section>
 
 <section class="view" id="v-study">
@@ -367,7 +442,8 @@ nav .badge.red{background:var(--red);color:#fff}
 <button data-v="v-staff" class="on"><span class="ic">💬</span>Staff<span class="badge" id="sBadge" style="display:none"></span></button>
 <button data-v="v-taps"><span class="ic">✒</span>Finish<span class="badge" id="nBadge" style="display:none"></span></button>
 <button data-v="v-career"><span class="ic">🎯</span>Career<span class="badge" id="cBadge" style="display:none"></span></button>
-<button data-v="v-kitchen"><span class="ic">🍲</span>Kitchen</button>
+<button data-v="v-money"><span class="ic">💰</span>Purse<span class="badge red" id="mBadge" style="display:none"></span></button>
+<button data-v="v-life"><span class="ic">🏡</span>Life<span class="badge" id="lBadge" style="display:none"></span></button>
 <button data-v="v-study"><span class="ic">🧠</span>Study</button>
 </nav>
 
@@ -381,7 +457,7 @@ nav .badge.red{background:var(--red);color:#fff}
 <button class="b2 ghost" id="btnTestSet">Test the wire</button>
 <button class="b2 ghost" id="btnCloseSet">Close</button>
 <div class="diag" id="diag">no wire test yet</div>
-<p class="note" style="text-align:center;margin:12px 0 0">build 12.1 · 13 Sep 2026 — THE STAFF ROOM: every member is a chat; their reports, your orders and the Telegram thread are one record · the Career desk · the Kitchen writes the cook's menu · the canonical wire, self-healing</p>
+<p class="note" style="text-align:center;margin:12px 0 0">build 13 · 14 Sep 2026 — THE PURSE (money: outflow, cards, leaks, renewals, tax, holdings) · LIFE (the Physician's desk, the Kitchen, the Travel Office) · the Career desk reads the week's pace and every stage · Finish names an old-schema state instead of showing an empty docket</p>
 </div></div>
 
 <div class="modal" id="mVeto"><div class="sheet">
@@ -413,6 +489,7 @@ nav .badge.red{background:var(--red);color:#fff}
 <script>
 /* ===== THE CANONICAL WIRE (b11): the URL is the house's own; a stored override is honoured only while it answers. ===== */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
+var BUILD='b13';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 var cache=null;try{cache=JSON.parse(localStorage.getItem('br_cache')||'null');}catch(e){}
@@ -422,6 +499,7 @@ var said=[];try{said=JSON.parse(localStorage.getItem('br_said')||'[]');}catch(e)
 var seen={};try{seen=JSON.parse(localStorage.getItem('br_seen')||'{}');}catch(e){}
 var sentLocal=[];try{sentLocal=JSON.parse(localStorage.getItem('br_sent')||'[]');}catch(e){}
 var lang=localStorage.getItem('br_lang')||'en-IN';
+var lifePill=localStorage.getItem('br_life')||'';
 var pendingVeto=null,decided={},curK='',stale=false,quietOpen=false;
 var wire={busy:false,lastMs:0,lastErr:'',lastAt:0,tries:0,ver:'',failStreak:0,voice:'',threadAt:0};
 try{decided=JSON.parse(localStorage.getItem('br_decided2')||'{}');}catch(e){}
@@ -469,19 +547,32 @@ function persona(name){var n=String(name||'');if(/^script:|sitting|amd-0|law dig
 var LIM={line:320,status:180,meta:40,wire:220,muster:20,offices:30};
 function clamp(s,n){s=String(s==null?'':s).replace(/\s+/g,' ').trim();if(s.length<=n)return s;var c=s.slice(0,n-1);var sp=c.lastIndexOf(' ');if(sp>n*0.6)c=c.slice(0,sp);return c+'…';}
 function firstLine(s){return String(s==null?'':s).split(/\r?\n/)[0];}
+function inr(n){if(n==null||isNaN(n))return '—';n=Math.round(+n);var neg=n<0;n=Math.abs(n);var s=String(n);var last3=s.slice(-3),rest=s.slice(0,-3);if(rest)last3=','+last3;rest=rest.replace(/\B(?=(\d{2})+(?!\d))/g,',');return (neg?'−':'')+'₹'+rest+last3;}
 
 var DEMO={glyph:'clean',next:"advance tax 15 Sep · Nepal T-14 · Amma's birthday T-21",
 scoreboard:{apps:[1,5],touches:[2,10],replies:[0,2],leaks:{n:3,inr:6200}},
 taps:[
 {id:'t1',desk:'envoy',title:'Salesforce — Director, Strategy & Enablement (Bengaluru, hybrid)',why:'form filled to the last step; needs your sign-in, CV and Submit',url:'https://careers.salesforce.com',kind:'tap'},
 {id:'t2',desk:'treasurer',title:'AnyReel ₹420 mandate fires tomorrow',why:'bank app → AutoPay → pause this mandate',url:'https://pay.google.com',kind:'money',amount:'₹420',due:'tomorrow'}],
-muster:[{id:'m1',desk:'concierge',line:'Amma\'s birthday gift — the Concierge proposes the Fabindia shawl, ₹3,200. Approve to stage the cart.'}],
+muster:[{id:'m1',desk:'concierge',line:'Amma\'s birthday gift — the Concierge proposes the Fabindia shawl, ₹3,200. Approve to stage the cart.'},
+{id:'m2',desk:'treasurer',line:'₹35,000 debit to Provenance Land on ••8835 unrecognised 9 days. Recognise it or disown it — default: stays open.'}],
 offices:[
 {name:'Career Scout',status:'358 rows → 4 shortlisted (2 at 80%+)',ok:1,meta:'ran 09:12'},
 {name:'Conversion Desk',status:'applied 1 · sent 2 · 1 tap waiting on you',ok:1,meta:'ran 10:31'},
 {name:'Treasurer',status:'caught the ₹399 Zee mandate · 3 leaks open, ₹6,200/mo',ok:0,meta:'wants a word'},
 {name:'Physician',status:'ZERO — weight not logged in 41 days',ok:0,meta:'wants a word'},
 {name:'Kitchen',status:'tomorrow\'s menu sent at 19:30',ok:1,meta:'ran 19:30'}],
+career:{roles:[{co:'OpenAI',role:'Strategy & Operations Lead - India',stage:'applied',t:Date.now()-9e7,note:'submitted by your own hand'},{co:'Uber',role:'Director, Field Ops',stage:'declined',t:Date.now()-3e8,note:'declined 11 Sep; referral watch open'}],touches:[{who:'Shania T.',co:'Salesforce',via:'LinkedIn',t:Date.now()-8e7},{who:'Rohan M.',co:'OpenAI',via:'warm note',t:Date.now()-7e7,replied:true}]},
+money:{asOf:'12 Sep',close:{n:'Money Close — September 2026',u:'#'},
+ outflowMonth:{fixed:[{name:'Rent (on card, ₹35k recovered)',inr:100000},{name:'Land-loan EMI',inr:23500},{name:'Karthik/Hariharan EMI',inr:29000},{name:'Insurance sinking fund',inr:15000},{name:'Gethu',inr:3000}],note:'the standing lines from the Money Close'},
+ cards:[{name:'Diners ••7384',due:'5 Sep',amount:742576,status:'unverified',note:'no payment receipt on file; card still transacting'},{name:'Tata Neu ••8835',due:'21 Sep',amount:21691,status:'pending',note:'min ₹1,306'}],
+ leaks:[{name:'DramaBox / FlareFlow (Play)',inr:4680,cadence:'₹550–620/wk',rail:'HDFC ••2298 UPI'},{name:'Splitwise ×2',inr:298,cadence:'monthly',rail:'double-billed'},{name:'Zee Entertainment',inr:399,cadence:'monthly',rail:'HDFC CC ••7384'}],
+ renewals:[{name:'Yamaha Fazer two-wheeler',due:'17 Oct',inr:2958},{name:'Sukhwani Campus home',due:'22 Oct',inr:3192},{name:'IFFCO Tokio bank locker',due:'7 Nov'}],
+ tax:[{line:'Advance tax — 2nd instalment',due:'15 Sep',status:'unverified'},{line:'ITR filed & e-verified',status:'confirm'},{line:'AIS / 26AS / Form-16',status:'not on file'}],
+ holdings:[{name:'NSDL CAS (Aug)',status:'locked',note:'recipe unconfirmed'},{name:'INDmoney / ICICI Sec MTH08',status:'locked',note:'US-situs vs $60k line unassessable'},{name:'Physical gold 32 g',status:'read',note:'₹3,39,029 (Apr 2025)'}],
+ balances:[{name:'SBI ••5545',inr:14307,asOf:'31 Aug'},{name:'SBI ••5463',inr:1536,asOf:'31 Aug'}]},
+health:{lastLogged:'41 days ago',weight:[],next:[{name:'Weight — log this morning',due:'today'},{name:'Lakshmi physio reimbursement — send one document',due:'by 25 Oct'}],note:'The Physician has had nothing to read for 41 days, Sir.'},
+travel:{trips:[{name:'Nepal — Pokhara & the Fishtail',when:'27 Sep – 2 Oct',status:'1 seat unbooked (Sharan)',bad:1,u:'#'}],ideas:[{name:'Uzbekistan — Samarkand & Bukhara',when:'Nov?',why:'anniversary shortlist'},{name:'China — Sep/Oct dossier',when:'2027',why:'the once-properly plan'}],visas:[{name:'UK Standard Visitor',status:'appointment lapsed 4 Aug — re-book?'}],fares:[{route:'BOM–KTM',inr:20100,note:'$241/traveller, drifting'}]},
 dials:[],wire:[]};
 var DEMO_THREAD={items:[
 {t:Date.now()-36e5,dir:'out',k:'envoy',who:'The Envoy',av:'🎯',kind:'note',text:'Applied to Salesforce (Director, Strategy & Enablement) to the last step — it needs your sign-in and Submit. Sent 2 touches: Shania T. (LinkedIn, free route) and a warm note to Rohan M. No replies yet.',url:'https://careers.salesforce.com'},
@@ -493,6 +584,16 @@ var DEMO_THREAD={items:[
 var DEMO_KITCHEN={today:{label:'Sun 13 Sep',juice:'Petha juice + nimbu',breakfast:'Besan chilla + dahi','lunch':'Sambar rice + beans poriyal + papad',dinner:'Pasta arrabbiata with paneer + salad',prep:'Pasta, tamatar, paneer le aana',wa:'🍲 Aaj ka khana — Sun 13 Sep\nSubah juice: Petha juice + nimbu\nNashta: Besan chilla + dahi\nLunch: Sambar rice + beans poriyal + papad\nDinner: Pasta arrabbiata with paneer + salad'},
 tomorrow:{label:'Mon 14 Sep',juice:'Palak-kheera-pudina-nimbu-adrak juice',breakfast:'Moong dal chilla (3) + pudina chutney + dahi',lunch:'Rajma, jeera rice, kheera-pyaaz salad, dahi',dinner:'Palak paneer, 2 phulka, tamatar slices',prep:'Rajma bhigo dena; palak aur paneer le aana',wa:'🍲 Kal ka khana — Mon 14 Sep\nSubah juice: Palak-kheera-pudina-nimbu-adrak juice\nNashta: Moong dal chilla (3) + pudina chutney + dahi\nLunch: Rajma, jeera rice, kheera-pyaaz salad, dahi\nDinner: Palak paneer, 2 phulka, tamatar slices\nTaiyari: Rajma bhigo dena; palak aur paneer le aana'},
 week:[{label:'Mon 14 Sep',breakfast:'Moong dal chilla',lunch:'Rajma, jeera rice',dinner:'Palak paneer, phulka'},{label:'Tue 15 Sep',breakfast:'Kanda poha with sprouts',lunch:'Dal tadka, bhindi, phulka',dinner:'Moong dal khichdi + kadhi'},{label:'Wed 16 Sep',breakfast:'Vegetable upma',lunch:'Chole, phulka, rice',dinner:'GOOD FOOD: Pav bhaji'}]};
+
+/* THE LAST MONEY CLOSE — shown only while the Keeper has not yet published a "money" block (v7 §B); always dated, never pretending to be fresh. */
+var SEED_MONEY={asOf:'12 Sep (Money Close)',seed:1,close:{n:'Money Close — September 2026',u:'https://docs.google.com/document/d/1HQ-zsfYL67cTmuiHmV8ZethCEuo9vdR3WtNS_MUe1SY/edit'},workings:{n:'WORKINGS — September 2026',u:'https://docs.google.com/spreadsheets/d/18YvoVYzYj71luI6csUWkxBQye1ZHPOKFC-I07IMnKkc/edit'},
+outflowMonth:{fixed:[{name:'Rent (on card for points; ₹35k recovered via Splitwise)',inr:100000},{name:'Land-loan EMI (ICICI)',inr:23500},{name:'Karthik/Hariharan EMI (HDFC policy)',inr:29000},{name:'Insurance sinking fund (Dec wall)',inr:15000},{name:'Term premium — Axis Max Life',inr:7630,paid:1},{name:'Gethu',inr:3000}],note:'the standing lines of the Money Close; Ajmera flat net and family transfers not yet struck'},
+cards:[{name:'Diners Black ••7384',due:'5 Sep',amount:742576,status:'unverified',note:'no payment receipt in mail; a 13 Sep note says a partial cleared via CRED — confirm in full'},{name:'Tata Neu ••8835',due:'21 Sep',amount:21691,status:'pending',note:'min ₹1,306'}],
+leaks:[{name:'Short-drama & reading apps (DramaBox, FlareFlow…)',inr:2500,cadence:'₹550–620 a week',rail:'HDFC ••2298 UPI-AutoPay'},{name:'Google Play auto-pay',inr:149,cadence:'recurring',rail:'a/c ••2298'},{name:'Zee Entertainment',inr:399,cadence:'monthly, first fired 14 Sep',rail:'HDFC CC ••7384'},{name:'Splitwise ×2',inr:149,cadence:'double-billed',rail:'••2298'}],
+renewals:[{name:'Yamaha Fazer two-wheeler (HDFC ERGO)',due:'17 Oct',inr:2958},{name:'Sukhwani Campus home (HDFC ERGO)',due:'22 Oct',inr:3192},{name:'IFFCO Tokio bank locker',due:'7 Nov'},{name:'December insurance wall — 7 policies',due:'5–23 Dec',inr:155000,note:'sinking fund still short'}],
+tax:[{line:'Advance tax — 2nd instalment',due:'15 Sep',status:'unverified'},{line:'ITR filed & e-verified (Quicko nudge 27 Aug)',status:'confirm'},{line:'Schedule FA (US-situs holdings)',status:'flag',note:'INDmoney statement locked'},{line:'AIS / 26AS / Form-16',status:'not on file'}],
+holdings:[{name:'NSDL CAS — Aug 2026',status:'locked',note:'recipe unconfirmed; named, not guessed'},{name:'INDmoney / ICICI Sec — MTH08',status:'locked',note:'US-situs vs the $60k line unassessable'},{name:'Physical gold — 32 g 24k',status:'read',note:'₹3,39,029 at Apr 2025'}],
+balances:[{name:'SBI savings ••5545',inr:14307,asOf:'31 Aug'},{name:'SBI savings ••5463 (inoperative)',inr:1536,asOf:'31 Aug'}]};
 
 function $(id){return document.getElementById(id);}
 function vib(ms){try{if(navigator.vibrate)navigator.vibrate(ms);}catch(e){}}
@@ -512,9 +613,13 @@ function stateNow(){if(cache&&cache.state)return cache.state;if(live())return (c
 function threadNow(){if(thread&&thread.items)return thread;if(live())return {items:[]};return DEMO_THREAD;}
 function kitchenNow(){if(kitchen&&kitchen.tomorrow)return kitchen;if(live())return null;return DEMO_KITCHEN;}
 function stateAge(){var st=(cache&&(cache.stateAt||cache.at))?new Date(cache.stateAt||cache.at).getTime():0;return st?Date.now()-st:0;}
-function greet(){var h=new Date().getHours(),g;if(h<5)g='The small hours, Sir';else if(h<12)g='Good morning, Sir';else if(h<16)g='Good afternoon, Sir';else if(h<21)g='Good evening, Sir';else g='A quiet night, Sir';$('greet').textContent=g;$('dline').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+' · wayne estate · b12.1';}
+function greet(){var h=new Date().getHours(),g;if(h<5)g='The small hours, Sir';else if(h<12)g='Good morning, Sir';else if(h<16)g='Good afternoon, Sir';else if(h<21)g='Good evening, Sir';else g='A quiet night, Sir';$('greet').textContent=g;$('dline').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+' · wayne estate · '+BUILD;}
 function saveSeen(){try{localStorage.setItem('br_seen',JSON.stringify(seen));}catch(e){}}
 function saveSaid(){if(said.length>60)said=said.slice(-60);try{localStorage.setItem('br_said',JSON.stringify(said));}catch(e){}}
+function officeFor(s,re){return ((s&&s.offices)||[]).filter(function(o){return re.test(String(o.name||''));});}
+function isZero(st){return /^\s*zero\b|nothing|no change|not yet|absent|not logged/i.test(String(st||''));}
+function deskCard(o,av){var d=document.createElement('div');d.className='desk';var z=isZero(o.status);
+d.innerHTML='<span class="dav">'+(av||'🏛')+'</span><div style="min-width:0"><div class="dn">'+esc(o.name)+(o.meta?'<small>'+esc(clamp(o.meta,40))+'</small>':'')+'</div><div class="ds'+(z?' zero':'')+'">'+md(clamp(o.status||'',LIM.status))+(o.paper?' <a href="'+esc(door(o.paper))+'" target="_blank" rel="noopener">paper ↗</a>':'')+'</div></div>';return d;}
 
 /* ---- THE SCOREBOARD ---- */
 function scoreboard(s){var sb=(s&&s.scoreboard)||{};
@@ -530,6 +635,7 @@ return '<div class="sc4 '+cls+'"><div class="k">'+k+'</div><div class="v">'+v+'<
 function renderScore(s){var sb=scoreboard(s);var lk=sb.leaks?sb.leaks.n:null;
 $('score').innerHTML=cell('applied',sb.apps[0],sb.apps[1])+cell('touches',sb.touches[0],sb.touches[1])+cell('replies',sb.replies[0],sb.replies[1])+cell(sb.leaks&&sb.leaks.inr?('leaks ₹'+Math.round(sb.leaks.inr/1000)+'k/mo'):'leaks open',lk,null,true);
 var nx=(s&&(s.upcoming||s.next))||'';if(Array.isArray(nx))nx=nx.join(' · ');$('nextln').innerHTML=nx?'<b>Next</b>'+esc(clamp(firstLine(nx),90)):'';}
+function oldSchema(s){return !!(s&&!s.scoreboard&&!s.taps);}
 
 /* ---- TAPS and DECISIONS ---- */
 function tapsAndDecisions(s){var taps=[],decs=[];var pub=(s&&s.taps)||[];pub.forEach(function(t){if(t&&t.id&&!isDecided(t))taps.push(t);});var have={};taps.forEach(function(t){have[t.id]=1;});
@@ -538,6 +644,11 @@ var line=String(it.line||''),u=it.url||it.tap||firstUrl(line)||'';var money=/₹
 if(u&&!/drive\.google|docs\.google/.test(u)){taps.push({id:it.id,desk:it.desk,title:firstLine(line).replace(/https?:\/\/\S+/,'').trim(),why:line.split(/\r?\n/).slice(1).join(' ').replace(/https?:\/\/\S+/,'').trim(),url:u,kind:money?'money':'tap',urgent:it.urgent,paper:it.paper,line:line});}
 else decs.push(it);});
 taps.sort(function(a,b){return (b.kind==='money')-(a.kind==='money')||(b.urgent?1:0)-(a.urgent?1:0);});return {taps:taps,decs:decs};}
+var MONEY_RE=/₹|\brs\.?\s?\d|mandate|autopay|auto-pay|debit|bill\b|card\b|premium|insurance|tax\b|itr\b|emi\b|statement|leak|renew|payment|paid|refund|deposit|treasur|bursar|money/i;
+var HEALTH_RE=/physician|health|weight|physio|medic|doctor|hospital|clinic|sleep|steps|nutrition|diet|blood|bp\b|sugar|dental|eye\b|vaccin|gym|run\b|yoga/i;
+var TRAVEL_RE=/travel|trip|flight|fare|visa|itinerar|hotel|nepal|kathmandu|pokhara|china|samarkand|uzbek|japan|passport|seat\b|booking|train|pnr|airport/i;
+var GENERIC_RE=/projects v\d|state of the estate|board paper|synthesis|runcards|law digest|amd-0|estate index/i;
+function itemsMatching(s,re){var td=tapsAndDecisions(s);var out=[];td.taps.forEach(function(t){if(re.test(String((t.desk||'')+' '+(t.title||'')+' '+(t.why||''))))out.push({tap:t});});td.decs.forEach(function(it){if(re.test(String((it.desk||'')+' '+(it.line||''))))out.push({dec:it});});return out;}
 
 /* ---- THE THREAD: server items + what Sir just said (until the server echoes it) ---- */
 function allItems(){var th=threadNow();var items=(th.items||[]).slice();
@@ -546,6 +657,8 @@ said.forEach(function(x){if(Date.now()-x.t>2*864e5)return;if(x.dir==='in'&&have[
 items.forEach(function(x){if(!x.k){var p=persona(x.who||x.text);x.k=p.k;x.av=x.av||p.av;x.who=x.who||p.title;}});
 return items;}
 function itemsFor(k){return allItems().filter(function(x){return x.k===k;}).sort(function(a,b){return (a.t||0)-(b.t||0);});}
+function lastWords(keys,n){var K={};keys.forEach(function(k){K[k]=1;});return allItems().filter(function(x){return K[x.k]&&x.kind!=='reply';}).sort(function(a,b){return b.t-a.t;}).slice(0,n||6);}
+function wordRow(x){var w=document.createElement('div');w.className='wireln'+(x.dir==='in'?' me':'');w.innerHTML='<span class="wav">'+(x.dir==='in'?'✒':esc(x.av||''))+'</span><span class="t">'+ago(x.t)+'</span><span class="tx">'+(x.dir==='in'?'':'<b>'+esc(String(x.who||'').replace(/^The /,''))+'</b> · ')+md(clamp(String(x.text||'').replace(/^run:\s*/i,''),LIM.wire))+'</span>';return w;}
 
 /* ---- THE STAFF LIST ---- */
 function renderRoster(){var s=stateNow()||{},items=allItems(),members={},order=[];
@@ -563,7 +676,7 @@ list.sort(function(a,b){if(a.k==='house')return -1;if(b.k==='house')return 1;ret
 var un=list.filter(function(m){return m.unread;}).length;var sb=$('sBadge');sb.style.display=un?'block':'none';sb.textContent=un;
 $('staffCnt').textContent=list.length+(quiet.length?' · '+quiet.length+' quiet':'');
 function row(m){var d=document.createElement('div');d.className='row'+(m.k==='house'?' house':'');
-var st=m.office?String(m.office.status||''):'';var z=/^\s*zero\b|nothing|no change|not yet|absent/i.test(st);
+var st=m.office?String(m.office.status||''):'';var z=isZero(st);
 var prev='',pcls='';if(m.last){prev=m.last.kind==='run'?String(m.last.text||'').replace(/^run:\s*/i,''):m.last.text;pcls=m.last.dir==='in'?'me':(m.last.kind==='note'?'live':'');}
 if(m.office&&(!m.last||m.t>m.last.t)){prev=st;pcls=z?'zero':'live';}
 var extra=(m.taps?m.taps+' to finish':'')+(m.decs?(m.taps?' · ':'')+m.decs+' for your word':'');
@@ -576,26 +689,30 @@ $('btnQuiet').onclick=function(){quietOpen=!quietOpen;renderRoster();};
 
 /* ---- THE CHAT ---- */
 function showView(id){document.querySelectorAll('nav button').forEach(function(x){x.classList.toggle('on',x.dataset.v===id||(id==='v-chat'&&x.dataset.v==='v-staff'));});document.querySelectorAll('.view').forEach(function(x){x.classList.toggle('on',x.id===id);});document.body.classList.toggle('inchat',id==='v-chat');$('hdr').classList.toggle('compact',id==='v-chat');window.scrollTo(0,0);}
-function openChat(k){curK=k;var m=member(k);$('chAv').textContent=m.av;$('chName').textContent=m.title;$('chBlurb').textContent=m.blurb;$('cmdText').placeholder=k==='house'?'Tell the house…':'Tell '+m.title.replace(/^The /,'the ')+'…';showView('v-chat');renderChat();seen[k]=Date.now();saveSeen();renderRoster();vib(6);}
+function openChat(k,prefill){curK=k;var m=member(k);$('chAv').textContent=m.av;$('chName').textContent=m.title;$('chBlurb').textContent=m.blurb;$('cmdText').placeholder=k==='house'?'Tell the house…':'Tell '+m.title.replace(/^The /,'the ')+'…';showView('v-chat');renderChat();seen[k]=Date.now();saveSeen();renderRoster();vib(6);
+if(prefill){$('cmdText').value=prefill;autoGrow();setTimeout(function(){$('cmdText').focus();},200);}}
+function tapMsg(t,k){var p=member(k);var d=document.createElement('div');d.className='msg tap'+(t.kind==='money'?' money':'');
+d.innerHTML='<span class="tg'+(t.kind==='money'?' money':'')+'">'+(t.kind==='money'?esc(t.amount||'money'):'one tap')+(t.due?' · '+esc(t.due):'')+'</span>'+md(clamp(t.title||t.line||'',160))+(t.why?'<div class="why">'+esc(clamp(t.why,160))+'</div>':'')+'<div class="mbtns"><button class="mb go">Open ↗</button><button class="mb dn">Done</button><button class="mb df">Later</button></div>';
+d.querySelector('.go').onclick=function(){vib(8);window.open(t.url,'_blank');};d.querySelector('.dn').onclick=function(){decide(t,d,'done '+t.id,p.title+' is told: done');};d.querySelector('.df').onclick=function(){decide(t,d,'defer '+t.id,'held for later');};return d;}
+function decMsg(it,k){var p2=member(k);var d=document.createElement('div');d.className='msg dec';var full=String(it.line||'');
+d.innerHTML='<span class="tg">your word</span>'+md(clamp(full,LIM.line))+(it.paper?' <a href="'+esc(door(it.paper))+'" target="_blank" rel="noopener">paper ↗</a>':'')+'<div class="mbtns"><button class="mb dn">Approve</button><button class="mb df">Hold</button><button class="mb vt">Veto</button></div>';
+d.querySelector('.dn').onclick=function(){decide(it,d,'approve '+it.id,p2.title+' thanks you');};d.querySelector('.df').onclick=function(){decide(it,d,'defer '+it.id,'held for later');};d.querySelector('.vt').onclick=function(){openVeto(it,d);};return d;}
 function renderChat(){if(!curK)return;var k=curK,s=stateNow()||{},el=$('msgs');el.innerHTML='';
 var off=(s.offices||[]).filter(function(o){return persona(o.name).k===k;})[0];var td=$('chToday');
-if(off){var st=String(off.status||'');var z=/^\s*zero\b|nothing|no change|not yet|absent/i.test(st);td.style.display='block';td.className='today'+(z?' zero':'');td.innerHTML='<b>Today\'s report'+(off.meta?' · '+esc(clamp(off.meta,40)):'')+'</b>'+md(clamp(st,LIM.status));}else td.style.display='none';
+if(off){var st=String(off.status||'');var z=isZero(st);td.style.display='block';td.className='today'+(z?' zero':'');td.innerHTML='<b>Today\'s report'+(off.meta?' · '+esc(clamp(off.meta,40)):'')+'</b>'+md(clamp(st,LIM.status))+(off.paper?' <a href="'+esc(door(off.paper))+'" target="_blank" rel="noopener">paper ↗</a>':'');}else td.style.display='none';
 var items=itemsFor(k);var tdd=tapsAndDecisions(s);
 tdd.taps.filter(function(t){return persona(t.desk||'').k===k;}).forEach(function(t){items.push({t:Date.now(),kind:'tap',tap:t});});
 tdd.decs.filter(function(it){return persona(it.desk||'').k===k;}).forEach(function(it){items.push({t:Date.now()+1,kind:'dec',dec:it});});
 if(!items.length){el.innerHTML='<div class="empty"><div class="big">'+member(k).av+'</div>Nothing said yet, Sir — say the word below.</div>';}
 var lastDay='';items.forEach(function(x){var lab=dayLab(x.t);if(lab&&lab!==lastDay){lastDay=lab;var h=document.createElement('div');h.className='day';h.textContent=lab;el.appendChild(h);}
-var d=document.createElement('div');
-if(x.kind==='tap'){var t=x.tap,p=member(k);d.className='msg tap'+(t.kind==='money'?' money':'');
-d.innerHTML='<span class="tg'+(t.kind==='money'?' money':'')+'">'+(t.kind==='money'?esc(t.amount||'money'):'one tap')+(t.due?' · '+esc(t.due):'')+'</span>'+md(clamp(t.title||t.line||'',160))+(t.why?'<div class="why">'+esc(clamp(t.why,160))+'</div>':'')+'<div class="mbtns"><button class="mb go">Open ↗</button><button class="mb dn">Done</button><button class="mb df">Later</button></div>';
-d.querySelector('.go').onclick=function(){vib(8);window.open(t.url,'_blank');};d.querySelector('.dn').onclick=function(){decide(t,d,'done '+t.id,p.title+' is told: done');};d.querySelector('.df').onclick=function(){decide(t,d,'defer '+t.id,'held for later');};}
-else if(x.kind==='dec'){var it=x.dec,p2=member(k);d.className='msg dec';var full=String(it.line||'');
-d.innerHTML='<span class="tg">your word</span>'+md(clamp(full,LIM.line))+(it.paper?' <a href="'+esc(door(it.paper))+'" target="_blank" rel="noopener">paper ↗</a>':'')+'<div class="mbtns"><button class="mb dn">Approve</button><button class="mb df">Hold</button><button class="mb vt">Veto</button></div>';
-d.querySelector('.dn').onclick=function(){decide(it,d,'approve '+it.id,p2.title+' thanks you');};d.querySelector('.df').onclick=function(){decide(it,d,'defer '+it.id,'held for later');};d.querySelector('.vt').onclick=function(){openVeto(it,d);};}
-else if(x.dir==='in'){d.className='msg me';d.innerHTML=md(x.text)+'<span class="t">'+hhmm(x.t)+(x.pending?' · sending…':'')+'</span>';}
+var d;
+if(x.kind==='tap'){d=tapMsg(x.tap,k);}
+else if(x.kind==='dec'){d=decMsg(x.dec,k);}
+else{d=document.createElement('div');
+if(x.dir==='in'){d.className='msg me';d.innerHTML=md(x.text)+'<span class="t">'+hhmm(x.t)+(x.pending?' · sending…':'')+'</span>';}
 else if(x.kind==='reply'){d.className='msg reply';d.innerHTML=md(x.text)+'<span class="t">'+hhmm(x.t)+'</span>';}
 else if(x.kind==='run'){d.className='msg run'+(x.zero?' zero':'');var txt=String(x.text||'').replace(/^run:\s*/i,'');d.innerHTML='<span class="k">filed</span>'+(x.url&&x.url!=='#'?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(clamp(txt,150))+' ↗</a>':esc(clamp(txt,150)))+'<span class="t">'+hhmm(x.t)+'</span>';}
-else{d.className='msg house';d.innerHTML=(k==='house'&&x.who&&x.who!=='Alfred'?'<span class="who">'+esc(x.av||'')+' '+esc(x.who)+'</span>':'')+md(x.text)+(x.url?'<br><a class="open" href="'+esc(x.url)+'" target="_blank" rel="noopener">Open ↗</a>':'')+'<span class="t">'+hhmm(x.t)+'</span>';}
+else{d.className='msg house';d.innerHTML=(k==='house'&&x.who&&x.who!=='Alfred'?'<span class="who">'+esc(x.av||'')+' '+esc(x.who)+'</span>':'')+md(x.text)+(x.url?'<br><a class="open" href="'+esc(x.url)+'" target="_blank" rel="noopener">Open ↗</a>':'')+'<span class="t">'+hhmm(x.t)+'</span>';}}
 el.appendChild(d);});
 setTimeout(function(){window.scrollTo(0,document.body.scrollHeight);},30);}
 $('btnBack').onclick=function(){showView('v-staff');curK='';renderRoster();};
@@ -625,47 +742,134 @@ $('topStat').innerHTML='<b>'+(warn?'⚠ A matter wants your eye.':'The house is 
 renderScore(s);
 var wb=$('wireBanner');if(live()&&stale&&wire.lastErr){wb.style.display='block';wb.innerHTML='The wire did not answer — <b>'+esc(wire.lastErr)+'</b>'+(wire.lastMs?' after '+(wire.lastMs/1000).toFixed(1)+'s':'')+'. <a href="#" id="wireAgain">Ring again</a>'+(cfg.url&&cfg.url!==CANON?' · <a href="#" id="wireCanon">use the house\'s own wire</a>':'')+' · ⚙ for the diary.';
 var a=$('wireAgain');if(a)a.onclick=function(e){e.preventDefault();fetchState();};var c=$('wireCanon');if(c)c.onclick=function(e){e.preventDefault();cfg.url='';localStorage.removeItem('br_url');toast('Ringing the canonical wire…');fetchState();};}else wb.style.display='none';
+var sb2=$('schemaBanner');if(live()&&s&&(oldSchema(s)||old)){sb2.style.display='block';sb2.innerHTML=(oldSchema(s)?'The Keeper\'s last state is the old shape (no scoreboard, no taps)':'The Keeper\'s last state is <b>'+ageTxt+' old</b>')+' — the docket below may be stale. <a href="#" id="ringAgain">Ring the house ↻</a>';var ra=$('ringAgain');if(ra)ra.onclick=function(e){e.preventDefault();fetchState();};}else sb2.style.display='none';
 var td=tapsAndDecisions(s);var tl=$('tapList');tl.innerHTML='';$('tapCnt').textContent=td.taps.length?(td.taps.length+' to finish'):'';
-if(!td.taps.length)tl.innerHTML='<div class="empty"><div class="big">✒</div>Nothing waits on your hand, Sir.</div>';
+if(!td.taps.length)tl.innerHTML='<div class="empty"><div class="big">✒</div>'+(td.decs.length?'Nothing to open, Sir — but your word is needed below.':'Nothing waits on your hand, Sir.')+'</div>';
 td.taps.slice(0,LIM.muster).forEach(function(t){var p=persona(t.desk||'');var d=document.createElement('div');d.className='card '+(t.kind==='money'?'money':t.urgent?'urgent':'');var title=clamp(t.title||t.line||'',140),why=clamp(t.why||'',160);
 d.innerHTML='<div class="chead"><div class="mono">'+p.av+'</div><div style="min-width:0"><div class="who">'+esc(p.title)+'</div><div class="id">'+esc(t.id||'')+(t.due?' · '+esc(t.due):'')+'</div></div><span class="tag '+(t.kind==='money'?'money':t.urgent?'today':'tap')+'">'+(t.kind==='money'?esc(t.amount||'money'):t.urgent?'today':'one tap')+'</span></div><div class="line">'+md(title)+(t.paper?' <a href="'+esc(door(t.paper))+'" target="_blank" rel="noopener">paper ↗</a>':'')+'</div>'+(why?'<div class="why">'+esc(why)+'</div>':'')+'<div class="btns"><button class="b go">Open ↗</button><button class="b dn">Done</button><button class="b df">Later</button></div>';
 d.querySelector('.go').onclick=function(){vib(8);window.open(t.url,'_blank');};d.querySelector('.dn').onclick=function(){decide(t,d,'done '+t.id,p.title+' is told: done');};d.querySelector('.df').onclick=function(){decide(t,d,'defer '+t.id,'held for later');};tl.appendChild(d);});
 var dl=$('decList');dl.innerHTML='';$('decHead').style.display=td.decs.length?'flex':'none';$('btnSignAll').style.display=td.decs.length?'block':'none';$('signSub').textContent=td.decs.length+' pending';
-td.decs.slice(0,LIM.muster).forEach(function(it){var wrap=document.createElement('div');wrap.className='swipe';wrap.innerHTML='<div class="under"><span class="ua">APPROVE ›</span><span class="uv">‹ VETO</span></div>';var d=document.createElement('div');d.className='card'+(it.urgent?' urgent':'');var p=persona(it.desk||'');
+td.decs.slice(0,LIM.muster).forEach(function(it){dl.appendChild(decCard(it));});
+var pend=td.taps.length+td.decs.length;var nb=$('nBadge');nb.style.display=pend?'block':'none';nb.textContent=pend;nb.className='badge'+(td.taps.some(function(t){return t.kind==='money';})?' red':'');
+renderRoster();if(curK)renderChat();renderCareer();renderMoney();renderLife();renderWire();}
+function decCard(it){var wrap=document.createElement('div');wrap.className='swipe';wrap.innerHTML='<div class="under"><span class="ua">APPROVE ›</span><span class="uv">‹ VETO</span></div>';var d=document.createElement('div');d.className='card'+(it.urgent?' urgent':'');var p=persona(it.desk||'');
 var full=it.line?String(it.line):'';var shown=clamp(full,LIM.line);var cut=shown.length<full.replace(/\s+/g,' ').trim().length;var paperA=it.paper?' <a href="'+esc(door(it.paper))+'" target="_blank" rel="noopener">paper ↗</a>':'';
 d.innerHTML='<div class="chead"><div class="mono">'+p.av+'</div><div style="min-width:0"><div class="who">'+esc(p.title)+'</div><div class="id">'+esc(it.id||'')+'</div></div>'+(it.urgent?'<span class="tag today">today</span>':'')+'</div><div class="line">'+(full?md(shown):'<i>malformed entry</i>')+(cut?' <a href="#" class="more">more ›</a>':'')+paperA+'</div><div class="btns"><button class="b ap">Approve</button><button class="b df">Hold</button><button class="b vt">Veto</button></div><button class="bw">✎&nbsp; a word — your own instruction</button>';
 attachSwipe(d,it);var mo=d.querySelector('.more');if(mo)mo.onclick=function(e){e.preventDefault();d.querySelector('.line').innerHTML=md(full)+paperA;};
-d.querySelector('.ap').onclick=function(){if(d._moved)return;decide(it,d,'approve '+it.id,p.title+' thanks you');};d.querySelector('.df').onclick=function(){if(d._moved)return;decide(it,d,'defer '+it.id,'held for later');};d.querySelector('.vt').onclick=function(){if(d._moved)return;openVeto(it,d);};d.querySelector('.bw').onclick=function(){if(d._moved)return;openWord(it);};wrap.appendChild(d);dl.appendChild(wrap);});
-var pend=td.taps.length+td.decs.length;var nb=$('nBadge');nb.style.display=pend?'block':'none';nb.textContent=pend;nb.className='badge'+(td.taps.some(function(t){return t.kind==='money';})?' red':'');
-renderRoster();if(curK)renderChat();renderCareer();renderKitchen();renderWire();}
+d.querySelector('.ap').onclick=function(){if(d._moved)return;decide(it,d,'approve '+it.id,p.title+' thanks you');};d.querySelector('.df').onclick=function(){if(d._moved)return;decide(it,d,'defer '+it.id,'held for later');};d.querySelector('.vt').onclick=function(){if(d._moved)return;openVeto(it,d);};d.querySelector('.bw').onclick=function(){if(d._moved)return;openWord(it);};wrap.appendChild(d);return wrap;}
+function tapCard(t){var p=persona(t.desk||'');var d=document.createElement('div');d.className='card '+(t.kind==='money'?'money':t.urgent?'urgent':'');var title=clamp(t.title||t.line||'',140),why=clamp(t.why||'',160);
+d.innerHTML='<div class="chead"><div class="mono">'+p.av+'</div><div style="min-width:0"><div class="who">'+esc(p.title)+'</div><div class="id">'+esc(t.id||'')+(t.due?' · '+esc(t.due):'')+'</div></div><span class="tag '+(t.kind==='money'?'money':t.urgent?'today':'tap')+'">'+(t.kind==='money'?esc(t.amount||'money'):t.urgent?'today':'one tap')+'</span></div><div class="line">'+md(title)+'</div>'+(why?'<div class="why">'+esc(why)+'</div>':'')+'<div class="btns"><button class="b go">Open ↗</button><button class="b dn">Done</button><button class="b df">Later</button></div>';
+d.querySelector('.go').onclick=function(){vib(8);window.open(t.url,'_blank');};d.querySelector('.dn').onclick=function(){decide(t,d,'done '+t.id,p.title+' is told: done');};d.querySelector('.df').onclick=function(){decide(t,d,'defer '+t.id,'held for later');};return d;}
+function sectHead(el,txt,cnt){var h=document.createElement('div');h.className='sect';h.innerHTML='<span>'+esc(txt)+'</span>'+(cnt!=null?'<span>'+esc(String(cnt))+'</span>':'');el.appendChild(h);}
+function chips(el,list){var c=document.createElement('div');c.className='chipsrow';list.forEach(function(x){var b=document.createElement('button');b.textContent=x[0];b.onclick=x[1];c.appendChild(b);});el.appendChild(c);}
 
 /* ---- THE CAREER DESK: state.career if the Keeper publishes it, else composed from taps, muster and the Envoy's and Scout's own words ---- */
-var CAREER_K={envoy:1,scout:1,draughtsman:1};
-function careerRoles(s){var c=(s&&s.career)||{};var roles=(c.roles||[]).slice();var seen={};roles.forEach(function(r){seen[String((r.co||'')+'|'+(r.role||'')).toLowerCase()]=1;});
+var CAREER_K={envoy:1,scout:1,draughtsman:1,hand:1};
+function careerRoles(s){var c=(s&&s.career)||{};var roles=(c.roles||[]).slice();var seen={};roles.forEach(function(r){seen[String((r.co||'')+'|'+(r.role||'')).toLowerCase()]=1;seen[String(r.co||'').toLowerCase().slice(0,40)]=1;});
 var td=tapsAndDecisions(s);
-td.taps.forEach(function(t){if(!CAREER_K[persona(t.desk||'').k]&&!/apply|application|role|director|manager|lead|resume|cv|portal|easy apply/i.test(String(t.title||'')))return;var key=String(t.title||'').toLowerCase().slice(0,40);if(seen[key])return;seen[key]=1;roles.push({co:'',role:t.title||t.line||'',stage:'tap',t:0,url:t.url,note:t.why||'',tap:t});});
+td.taps.forEach(function(t){if(!CAREER_K[persona(t.desk||'').k]&&!/apply|application|role|director|manager|lead|resume|cv|portal|easy apply/i.test(String(t.title||'')))return;var key=String(t.title||'').toLowerCase().slice(0,40);var co=String(t.title||'').split(/\s[—–-]\s/)[0].trim().toLowerCase().slice(0,40);if(seen[key]||seen[co])return;seen[key]=1;roles.push({co:'',role:t.title||t.line||'',stage:'tap',t:0,url:t.url,note:t.why||'',tap:t});});
+roles.forEach(function(r){if(r.stage==='tap'&&!r.tap){var t=td.taps.filter(function(x){return String(x.title||'').toLowerCase().indexOf(String(r.co||'').toLowerCase())===0;})[0];if(t)r.tap=t;}});
 allItems().filter(function(x){return x.kind==='note'&&CAREER_K[x.k]&&Date.now()-x.t<7*864e5;}).forEach(function(x){var m=String(x.text||'').match(/applied to ([^—.,(]{3,50})/i);if(!m)return;var key=m[1].trim().toLowerCase().slice(0,40);if(seen[key])return;seen[key]=1;roles.push({co:m[1].trim(),role:'',stage:/last step|needs your|waiting/i.test(x.text)?'tap':'applied',t:x.t,url:x.url||'',note:clamp(x.text,120)});});
+roles.forEach(function(r){if(r.t&&typeof r.t==='string')r.t=new Date(r.t).getTime()||0;});
 return roles;}
 function renderCareer(){var s=stateNow()||{},sb=scoreboard(s),el=$('carList'),nums=$('carNums');el.innerHTML='';
 function num(k,a,cls){return '<div class="cn '+cls+'"><div class="v">'+(a[0]==null?'—':a[0])+'<small>/'+(a[1]||'?')+'</small></div><div class="k">'+k+'</div></div>';}
 function cls(a){if(a[0]==null||!a[1])return '';var need=a[1]*pace();return a[0]>=a[1]?'ok':a[0]>=need*0.8?'ok':a[0]>0?'warn':'bad';}
 nums.innerHTML=num('applied',sb.apps,cls(sb.apps))+num('touches',sb.touches,cls(sb.touches))+num('replies',sb.replies,cls(sb.replies));
-var d=new Date().getDay();var left=d===0?'the week closes tonight':(7-d)+' days left in the week';
-var p=document.createElement('p');p.className='note';p.textContent='Targets are for Monday to Sunday — '+left+'. The Envoy runs at 10:30 every day; the Scout in the morning.';el.appendChild(p);
-var b=document.createElement('div');b.className='cbtns';b.innerHTML='<button class="cb" id="carEnvoy">🎯 Text the Envoy</button><button class="cb" id="carScout">🔭 Text the Scout</button>';el.appendChild(b);
-b.querySelector('#carEnvoy').onclick=function(){openChat('envoy');};b.querySelector('#carScout').onclick=function(){openChat('scout');};
-var roles=careerRoles(s);var waiting=roles.filter(function(r){return r.stage==='tap';}),play=roles.filter(function(r){return r.stage!=='tap';});
+var d=new Date().getDay();var di=d===0?7:d;var left=d===0?'the week closes tonight':(7-di)+' day'+(7-di===1?'':'s')+' left';
+/* the verdict — where the week stands against its pace */
+var a=sb.apps[0],at=sb.apps[1]||5,tt=sb.touches[0],ttt=sb.touches[1]||10;var need=Math.round(at*(di-1)/7),needT=Math.round(ttt*(di-1)/7);
+var vcls='',vtxt='';
+if(a==null){vtxt='The Keeper has not published this week\'s numbers yet — the desk\'s own words below still count.';}
+else if(a>=at){vcls='ok';vtxt='Week made — '+a+' of '+at+' applied. Anything more is surplus; the touches ('+(tt==null?'—':tt)+'/'+ttt+') and replies decide the rest.';}
+else if(di===1){vcls='ok';vtxt='A fresh week — '+at+' applications and '+ttt+' touches to make by Sunday. The Envoy sits at 10:30; the first tap is yours (see below).';}
+else if(a>=need){vcls='ok';vtxt='On pace — '+a+' applied against '+need+' due by now. '+(at-a)+' more by Sunday · touches '+(tt==null?'—':tt)+'/'+ttt+'.';}
+else{vcls=(a===0&&di>=3)?'bad':'';vtxt='Behind pace — '+a+' applied, '+need+' due by now. '+(at-a)+' to go · '+left+(tt!=null&&tt<needT?' · touches also short ('+tt+'/'+ttt+')':'')+'.';}
+var v=document.createElement('div');v.className='verdict '+vcls;v.innerHTML='<b>Day '+di+' of 7 · '+left+'</b>'+esc(vtxt);el.appendChild(v);
+var roles=careerRoles(s);var waiting=roles.filter(function(r){return r.stage==='tap';}),play=roles.filter(function(r){return r.stage!=='tap'&&r.stage!=='declined';}),gone=roles.filter(function(r){return r.stage==='declined';});
+var st={};roles.forEach(function(r){var k=String(r.stage||'applied').toLowerCase();st[k]=(st[k]||0)+1;});
+var pipe=document.createElement('div');pipe.className='pipe';var order=['tap','applied','replied','interview','offer','declined'];var labels={tap:'waiting on you',applied:'applied',replied:'replied',interview:'interview',offer:'offer',declined:'declined'};
+order.forEach(function(k){if(st[k])pipe.innerHTML+='<span class="'+(k==='interview'||k==='offer'||k==='replied'?'hot':'')+'"><b>'+st[k]+'</b>'+labels[k]+'</span>';});Object.keys(st).forEach(function(k){if(order.indexOf(k)<0)pipe.innerHTML+='<span><b>'+st[k]+'</b>'+esc(k)+'</span>';});
+if(pipe.innerHTML)el.appendChild(pipe);
 $('carCnt').textContent=roles.length?(roles.length+' in play'):'';var cb=$('cBadge');cb.style.display=waiting.length?'block':'none';cb.textContent=waiting.length;
-function roleRow(r){var x=document.createElement('div');x.className='role';var st=String(r.stage||'applied');
-x.innerHTML='<span class="st '+esc(st)+'">'+esc(st==='tap'?'your tap':st)+'</span><div class="bd"><div class="co">'+esc(clamp(r.co||firstLine(r.role||''),60))+'</div>'+(r.co&&r.role?'<div class="rl">'+esc(clamp(r.role,80))+'</div>':'')+'<div class="m">'+esc(clamp(r.note||'',110))+(r.t?' · '+dayLab(r.t):'')+(r.url?' · <a href="'+esc(r.url)+'" target="_blank" rel="noopener">open ↗</a>':'')+'</div>'+(r.tap?'<div class="mbtns"><button class="mb go">Open ↗</button><button class="mb dn">Done</button><button class="mb df">Later</button></div>':'')+'</div>';
-if(r.tap){x.querySelector('.go').onclick=function(){vib(8);window.open(r.tap.url,'_blank');};x.querySelector('.dn').onclick=function(){decide(r.tap,x,'done '+r.tap.id,'The Envoy is told: done');};x.querySelector('.df').onclick=function(){decide(r.tap,x,'defer '+r.tap.id,'held for later');};}
+var b=document.createElement('div');b.className='cbtns';b.innerHTML='<button class="cb" id="carEnvoy">🎯 Text the Envoy</button><button class="cb" id="carScout">🔭 Text the Scout</button><button class="cb" id="carDraft">✒️ Draughtsman</button>';el.appendChild(b);
+b.querySelector('#carEnvoy').onclick=function(){openChat('envoy');};b.querySelector('#carScout').onclick=function(){openChat('scout');};b.querySelector('#carDraft').onclick=function(){openChat('draughtsman');};
+/* the desks today */
+var offs=officeFor(s,/scout|conversion|envoy|draughtsman|hand-hour|sitting|career|apply/i);var absent=(s.absent||[]).filter(function(x){return /scout|draughtsman|envoy|conversion|career|apply/i.test(String(x));});
+if(offs.length||absent.length){sectHead(el,'The desks today');offs.forEach(function(o){el.appendChild(deskCard(o,persona(o.name).av));});
+if(absent.length){var ab=document.createElement('div');ab.className='desk';ab.innerHTML='<span class="dav">⚠️</span><div><div class="dn">Absent today</div><div class="ds zero">'+esc(absent.join(' · '))+' — no clean run in 24h. Tap Text the Scout to ask why.</div></div>';el.appendChild(ab);}}
+function roleRow(r){var x=document.createElement('div');x.className='role';var stg=String(r.stage||'applied');
+x.innerHTML='<span class="st '+esc(stg)+'">'+esc(stg==='tap'?'your tap':stg)+'</span><div class="bd"><div class="co">'+esc(clamp(r.co||firstLine(r.role||''),60))+'</div>'+(r.co&&r.role?'<div class="rl">'+esc(clamp(r.role,80))+'</div>':'')+'<div class="m">'+esc(clamp(r.note||'',110))+(r.t?' · '+dayLab(r.t):'')+(r.url?' · <a href="'+esc(r.url)+'" target="_blank" rel="noopener">open ↗</a>':'')+'</div>'+(r.tap?'<div class="mbtns"><button class="mb go">Open ↗</button><button class="mb dn">Done</button><button class="mb df">Later</button></div>':'')+'</div>';
+if(r.tap){x.querySelector('.go').onclick=function(){vib(8);window.open(r.tap.url||r.url,'_blank');};x.querySelector('.dn').onclick=function(){decide(r.tap,x,'done '+r.tap.id,'The Envoy is told: done');};x.querySelector('.df').onclick=function(){decide(r.tap,x,'defer '+r.tap.id,'held for later');};}
 return x;}
-if(waiting.length){var h1=document.createElement('div');h1.className='sect';h1.innerHTML='<span>Waiting on your hand</span>';el.appendChild(h1);waiting.forEach(function(r){el.appendChild(roleRow(r));});}
-var h2=document.createElement('div');h2.className='sect';h2.innerHTML='<span>In play</span>';el.appendChild(h2);
-if(play.length)play.forEach(function(r){el.appendChild(roleRow(r));});else{var e=document.createElement('div');e.className='empty';e.textContent='No role in play this week yet — the Envoy applies at 10:30; anything he does appears here and in his chat.';el.appendChild(e);}
-var touches=((s.career||{}).touches||[]);if(touches.length){var h3=document.createElement('div');h3.className='sect';h3.innerHTML='<span>Touches this week</span>';el.appendChild(h3);touches.slice(0,12).forEach(function(t){var x=document.createElement('div');x.className='touch';x.innerHTML='<div class="w">'+esc(clamp((t.who||'')+(t.co?' · '+t.co:'')+(t.via?' · '+t.via:''),80))+'</div><span class="r'+(t.replied?' yes':'')+'">'+(t.replied?'replied':dayLab(t.t)||'sent')+'</span>';el.appendChild(x);});}
-var last=allItems().filter(function(x){return CAREER_K[x.k]&&x.kind!=='reply';}).sort(function(a,b){return b.t-a.t;}).slice(0,6);
-if(last.length){var h4=document.createElement('div');h4.className='sect';h4.innerHTML='<span>Last words from the desk</span>';el.appendChild(h4);last.forEach(function(x){var w=document.createElement('div');w.className='wireln'+(x.dir==='in'?' me':'');w.innerHTML='<span class="wav">'+(x.dir==='in'?'✒':esc(x.av||''))+'</span><span class="t">'+ago(x.t)+'</span><span class="tx">'+(x.dir==='in'?'':'<b>'+esc(String(x.who||'').replace(/^The /,''))+'</b> · ')+md(clamp(String(x.text||'').replace(/^run:\s*/i,''),LIM.wire))+'</span>';el.appendChild(w);});}}
+if(waiting.length){sectHead(el,'Waiting on your hand',waiting.length);waiting.forEach(function(r){el.appendChild(roleRow(r));});}
+sectHead(el,'In play',play.length||null);
+if(play.length)play.sort(function(a,b){return (b.t||0)-(a.t||0);}).forEach(function(r){el.appendChild(roleRow(r));});else{var e=document.createElement('div');e.className='empty';e.textContent='No role in play this week yet — the Envoy applies at 10:30; anything he does appears here and in his chat.';el.appendChild(e);}
+var touches=((s.career||{}).touches||[]);if(touches.length){sectHead(el,'Touches this week',touches.length);touches.slice(0,12).forEach(function(t){var x=document.createElement('div');x.className='touch';x.innerHTML='<div class="w">'+esc(clamp((t.who||'')+(t.co?' · '+t.co:'')+(t.via?' · '+t.via:''),80))+'</div><span class="r'+(t.replied?' yes':'')+'">'+(t.replied?'replied':dayLab(t.t)||'sent')+'</span>';el.appendChild(x);});}
+else{var ne=document.createElement('p');ne.className='note';ne.textContent='No touches recorded this week — the Envoy sends LinkedIn notes under the Hand Law; each one lands here.';el.appendChild(ne);}
+if(gone.length){sectHead(el,'Closed',gone.length);gone.forEach(function(r){el.appendChild(roleRow(r));});}
+var ps=((cache&&cache.papers)||(s.papers)||[]).filter(function(p){return /job scout|shortlist|career|outreach|application facts|apply/i.test(String(p.n||''))&&!GENERIC_RE.test(String(p.n||''));}).slice(0,5);
+if(ps.length){sectHead(el,'The desk\'s papers');var bx=document.createElement('div');bx.className='box';ps.forEach(function(p){var b2=document.createElement('button');b2.className='ppr';b2.innerHTML='<span class="pt">'+esc(dayLab(p.t))+'</span>'+esc(clamp(p.n||'',70))+(p.s?'<br><small style="color:var(--mut)">'+esc(clamp(p.s,110))+'</small>':'');b2.onclick=function(){if(p.u)window.open(door(p.u),'_blank');};bx.appendChild(b2);});el.appendChild(bx);}
+var last=lastWords(['envoy','scout','draughtsman','hand'],6);
+if(last.length){sectHead(el,'Last words from the desk');last.forEach(function(x){el.appendChild(wordRow(x));});}}
+
+/* ---- THE PURSE: state.money (Keeper v7 §B) · else the docket's money items over the last Money Close, dated ---- */
+function renderMoney(){var s=stateNow()||{},el=$('monList');el.innerHTML='';var sb=scoreboard(s);
+var m=s.money||null;var seed=false;if(!m){m=SEED_MONEY;seed=true;}
+var items=itemsMatching(s,MONEY_RE);var moneyTaps=items.filter(function(x){return x.tap;}),moneyDecs=items.filter(function(x){return x.dec;});
+var mb=$('mBadge');var nMoney=moneyTaps.filter(function(x){return x.tap.kind==='money';}).length;mb.style.display=nMoney?'block':'none';mb.textContent=nMoney;
+$('monCnt').textContent=m.asOf?('as of '+m.asOf):'';
+/* the four figures */
+var fixed=(m.outflowMonth&&m.outflowMonth.fixed)||[];var fixedSum=fixed.reduce(function(a,x){return a+(+x.inr||0);},0);
+var cardDue=(m.cards||[]).filter(function(c){return c.status!=='paid';}).reduce(function(a,c){return a+(+c.amount||0);},0);
+var leakN=sb.leaks?sb.leaks.n:(m.leaks||[]).length;var leakInr=sb.leaks&&sb.leaks.inr!=null?sb.leaks.inr:(m.leaks||[]).reduce(function(a,x){return a+(+x.inr||0);},0);
+var bal=(m.balances||[]).reduce(function(a,x){return a+(+x.inr||0);},0);
+var g=document.createElement('div');g.className='mgrid';
+g.innerHTML='<div class="mbig"><div class="k">Leaves each month</div><div class="v">'+(fixedSum?inr(fixedSum):'—')+'</div><div class="s">'+esc(fixed.length?fixed.length+' standing lines':'no standing lines on file')+'</div></div>'+
+'<div class="mbig '+(cardDue?'red':'ok')+'"><div class="k">Cards unpaid</div><div class="v">'+(cardDue?inr(cardDue):'nil')+'</div><div class="s">'+esc((m.cards||[]).filter(function(c){return c.status!=='paid';}).map(function(c){return c.name.replace(/^.*?(••\d+).*$/,'$1')+' '+(c.due||'');}).join(' · ')||'nothing due')+'</div></div>'+
+'<div class="mbig '+(leakN?'amber':'ok')+'"><div class="k">Leaks open</div><div class="v">'+(leakN==null?'—':leakN)+'</div><div class="s">'+esc(leakInr?'≈ '+inr(leakInr)+' a month':'none known')+'</div></div>'+
+'<div class="mbig"><div class="k">Cash on hand</div><div class="v">'+(bal?inr(bal):'—')+'</div><div class="s">'+esc((m.balances||[]).length?(m.balances[0].asOf?'as of '+m.balances[0].asOf:'bank balances on file'):'no statement read yet')+'</div></div>';
+el.appendChild(g);
+var src=document.createElement('div');src.className='src';src.innerHTML=seed?'From the Treasurer\'s last close, '+esc(m.asOf)+' — the Keeper will publish a fresh purse at the next rebuild. '+(m.close&&m.close.u?'<a href="'+esc(door(m.close.u))+'" target="_blank" rel="noopener" style="color:var(--vio);font-weight:600">Open the Money Close ↗</a>':''):(m.close&&m.close.u?'<a href="'+esc(door(m.close.u))+'" target="_blank" rel="noopener" style="color:var(--vio);font-weight:600">'+esc(m.close.n||'Open the Money Close')+' ↗</a>':'');el.appendChild(src);
+chips(el,[['💰 Text the Treasurer',function(){openChat('treasurer');}],['📄 The Money Close',function(){if(m.close&&m.close.u)window.open(door(m.close.u),'_blank');else openPapers({name:'Treasurer'},member('treasurer'));}],['🧾 Send a statement',function(){openChat('treasurer','Treasurer, a statement is coming by mail — ');}]]);
+/* money that needs your hand */
+if(moneyTaps.length||moneyDecs.length){sectHead(el,'Needs your hand',moneyTaps.length+moneyDecs.length);moneyTaps.forEach(function(x){var c=tapCard(x.tap);c.style.marginBottom='10px';el.appendChild(c);});moneyDecs.forEach(function(x){el.appendChild(decCard(x.dec));});}
+function kvRow(n,sub,a,stCls,stTxt){var d=document.createElement('div');d.className='kv';d.innerHTML='<div class="n">'+esc(n)+(sub?'<small>'+esc(sub)+'</small>':'')+'</div>'+(a!=null&&a!==''?'<span class="a">'+esc(a)+'</span>':'')+(stTxt?'<span class="st '+stCls+'">'+esc(stTxt)+'</span>':'');return d;}
+function box(){var b=document.createElement('div');b.className='box';return b;}
+if((m.cards||[]).length){sectHead(el,'The cards');var bx=box();m.cards.forEach(function(c){var cls=c.status==='paid'?'ok':c.status==='pending'?'warn':'bad';bx.appendChild(kvRow(c.name,(c.due?'due '+c.due:'')+(c.note?' · '+c.note:''),inr(c.amount),cls,c.status||''));});el.appendChild(bx);}
+if(fixed.length){sectHead(el,'Leaves each month',inr(fixedSum));var bf=box();fixed.forEach(function(x){bf.appendChild(kvRow(x.name,'',inr(x.inr),x.paid?'ok':'mut',x.paid?'paid':''));});if(m.outflowMonth.note){var nn=document.createElement('p');nn.className='src';nn.style.margin='6px 2px 8px';nn.textContent=m.outflowMonth.note;bf.appendChild(nn);}el.appendChild(bf);}
+if((m.leaks||[]).length){sectHead(el,'The leaks',(leakInr?'≈ '+inr(leakInr)+'/mo':''));var bl=box();m.leaks.forEach(function(x){bl.appendChild(kvRow(x.name,[x.cadence,x.rail].filter(Boolean).join(' · '),x.inr?inr(x.inr)+'/mo':'','bad','open'));});var nl=document.createElement('p');nl.className='src';nl.style.margin='6px 2px 8px';nl.textContent='Cancelling is your hand alone — the bank app → UPI-AutoPay → pause. Tell the Bursar when one is gone and it leaves this list.';bl.appendChild(nl);el.appendChild(bl);}
+if((m.renewals||[]).length){sectHead(el,'Due & renewals');var br=box();m.renewals.forEach(function(x){br.appendChild(kvRow(x.name,(x.due?'due '+x.due:'')+(x.note?' · '+x.note:''),x.inr?inr(x.inr):'','mut',''));});el.appendChild(br);}
+if((m.tax||[]).length){sectHead(el,'The tax corner');var bt=box();m.tax.forEach(function(x){var cls=/paid|done|filed|ok/i.test(x.status)?'ok':/unverified|confirm|flag/i.test(x.status)?'warn':/not on file|missing/i.test(x.status)?'bad':'mut';bt.appendChild(kvRow(x.line,(x.due?'due '+x.due:'')+(x.note?' · '+x.note:''),'',cls,x.status||''));});el.appendChild(bt);}
+if((m.holdings||[]).length||(m.balances||[]).length){sectHead(el,'Holdings & balances');var bh=box();(m.balances||[]).forEach(function(x){bh.appendChild(kvRow(x.name,x.asOf?'as of '+x.asOf:'',inr(x.inr),'ok','read'));});(m.holdings||[]).forEach(function(x){bh.appendChild(kvRow(x.name,x.note||'',x.inr?inr(x.inr):'',x.status==='locked'?'bad':'ok',x.status||''));});el.appendChild(bh);
+if((m.holdings||[]).some(function(x){return x.status==='locked';})){var nh=document.createElement('p');nh.className='src';nh.textContent='Locked = the statement arrived but its password recipe is not yet in the Treasurer\'s keys. Send the rule once and it stays open.';el.appendChild(nh);}}
+var offs=officeFor(s,/treasur|bursar|money|anticipat|renewal/i);if(offs.length){sectHead(el,'The desks today');offs.forEach(function(o){el.appendChild(deskCard(o,persona(o.name).av));});}
+var ps=((cache&&cache.papers)||(s.papers)||[]).filter(function(p){return /money|close|renewal|treasur|bursar|statement|tax|claims register|budget|workings/i.test(String(p.n||''))&&!GENERIC_RE.test(String(p.n||''));}).slice(0,6);
+if(ps.length){sectHead(el,'The purse\'s papers');var bp=box();ps.forEach(function(p){var b2=document.createElement('button');b2.className='ppr';b2.innerHTML='<span class="pt">'+esc(dayLab(p.t))+'</span>'+esc(clamp(p.n||'',70))+(p.s?'<br><small style="color:var(--mut)">'+esc(clamp(p.s,110))+'</small>':'');b2.onclick=function(){if(p.u)window.open(door(p.u),'_blank');};bp.appendChild(b2);});el.appendChild(bp);}
+var last=lastWords(['treasurer','negotiator','seer'],5);if(last.length){sectHead(el,'Last words from the purse');last.forEach(function(x){el.appendChild(wordRow(x));});}}
+
+/* ---- LIFE: the Physician · the Kitchen · the Travel Office ---- */
+function setPill(p){lifePill=p;localStorage.setItem('br_life',p);document.querySelectorAll('#lifePills .pill').forEach(function(b){b.classList.toggle('on',b.dataset.p===p);});['health','kitchen','travel'].forEach(function(k){$('p-'+k).style.display=k===p?'block':'none';});if(p==='kitchen')fetchKitchen();window.scrollTo(0,0);}
+document.querySelectorAll('#lifePills .pill').forEach(function(b){b.onclick=function(){vib(6);setPill(b.dataset.p);};});
+function defaultPill(){if(lifePill)return lifePill;var h=new Date().getHours();return (h>=18||h<9)?'kitchen':'health';}
+function renderLife(){renderHealth();renderKitchen();renderTravel();var n=itemsMatching(stateNow()||{},HEALTH_RE).length+itemsMatching(stateNow()||{},TRAVEL_RE).length;var lb=$('lBadge');lb.style.display=n?'block':'none';lb.textContent=n;}
+function renderHealth(){var s=stateNow()||{},el=$('heaList');el.innerHTML='';var h=s.health||null;
+var off=officeFor(s,/physician|health/i)[0];var st=off?String(off.status||''):'';var z=isZero(st);
+var items=itemsMatching(s,HEALTH_RE);$('heaCnt').textContent=items.length?(items.length+' open'):'';
+var g=document.createElement('div');g.className='hnum';
+var w=(h&&h.weight&&h.weight.length)?h.weight[h.weight.length-1]:null;var prev=(h&&h.weight&&h.weight.length>1)?h.weight[h.weight.length-2]:null;
+g.innerHTML='<div class="mbig '+(w?'ok':'red')+'"><div class="k">Weight</div><div class="v">'+(w?esc(w.kg)+'<small style="font-size:12px"> kg</small>':'—')+'</div><div class="s">'+esc(w?(prev?((w.kg-prev.kg)>0?'▲ ':'▼ ')+Math.abs(w.kg-prev.kg).toFixed(1)+' kg vs last':'logged '+(w.d||''))+'':(h&&h.lastLogged?'last '+h.lastLogged:'not logged'))+'</div></div>'+
+'<div class="mbig"><div class="k">Sleep</div><div class="v">'+(h&&h.sleep?esc(h.sleep):'—')+'</div><div class="s">'+esc(h&&h.sleepNote||'from the [Mirror] if it comes')+'</div></div>'+
+'<div class="mbig '+(items.length?'amber':'')+'"><div class="k">Open</div><div class="v">'+items.length+'</div><div class="s">'+esc(items.length?'claims, physio, doctor':'nothing on the docket')+'</div></div>';
+el.appendChild(g);
+var v=document.createElement('div');v.className='verdict '+(z?'bad':off?'ok':'');v.innerHTML='<b>The Physician\'s word'+(off&&off.meta?' · '+esc(clamp(off.meta,40)):'')+'</b>'+(off?md(clamp(st,LIM.status))+(off.paper?' <a href="'+esc(door(off.paper))+'" target="_blank" rel="noopener" style="color:var(--vio);font-weight:600">paper ↗</a>':''):(h&&h.note?esc(h.note):'The Physician has not reported today, Sir. He reads what you log — a weight in the morning is enough to start him.'));el.appendChild(v);
+chips(el,[['⚖️ Log weight',function(){openChat('physician','Physician, weight today: ');}],['💊 Log a symptom',function(){openChat('physician','Physician, note: ');}],['🩺 Text the Physician',function(){openChat('physician');}],['🏥 Claims Agent',function(){openChat('claims');}]]);
+if(h&&h.next&&h.next.length){sectHead(el,'Next');var bx=document.createElement('div');bx.className='box';h.next.forEach(function(x){var d=document.createElement('div');d.className='kv';d.innerHTML='<div class="n">'+esc(x.name)+'</div>'+(x.due?'<span class="st warn">'+esc(x.due)+'</span>':'');bx.appendChild(d);});el.appendChild(bx);}
+if(items.length){sectHead(el,'On the docket',items.length);items.forEach(function(x){if(x.tap){var c=tapCard(x.tap);c.style.marginBottom='10px';el.appendChild(c);}else el.appendChild(decCard(x.dec));});}
+if(h&&h.weight&&h.weight.length>1){sectHead(el,'The last readings');var bw=document.createElement('div');bw.className='box';h.weight.slice(-8).reverse().forEach(function(x){var d=document.createElement('div');d.className='kv';d.innerHTML='<div class="n">'+esc(x.d||'')+'</div><span class="a">'+esc(x.kg)+' kg</span>';bw.appendChild(d);});el.appendChild(bw);}
+var kt=kitchenNow();if(kt&&kt.today){sectHead(el,'Today\'s plate');var kb=document.createElement('div');kb.className='box';[['🥤',kt.today.juice],['🍳',kt.today.breakfast],['🍛',kt.today.lunch],['🌙',kt.today.dinner]].forEach(function(r){if(!r[1])return;var d=document.createElement('div');d.className='kv';d.innerHTML='<div class="n">'+r[0]+' '+esc(r[1])+'</div>';kb.appendChild(d);});var lk=document.createElement('button');lk.className='ppr';lk.innerHTML='<span class="pt">→</span>the week\'s menu, in the Kitchen';lk.onclick=function(){setPill('kitchen');};kb.appendChild(lk);el.appendChild(kb);}
+var offs=officeFor(s,/claims|physician|health|niva|insur/i);if(offs.length){sectHead(el,'The desks today');offs.forEach(function(o){el.appendChild(deskCard(o,persona(o.name).av));});}
+var last=lastWords(['physician','claims'],5);if(last.length){sectHead(el,'Last words');last.forEach(function(x){el.appendChild(wordRow(x));});}}
 
 /* ---- THE KITCHEN ---- */
 function waLink(text){return 'https://wa.me/?text='+encodeURIComponent(text);}
@@ -675,15 +879,34 @@ d.innerHTML='<div class="kh"><b>'+esc(label)+'</b><small>'+esc(k.label||'')+'</s
 '<div class="kbtns"><button class="kb wa">Send to cook · WhatsApp</button><button class="kb cp">Copy</button><button class="kb sw">Swap</button></div>';
 d.querySelector('.wa').onclick=function(){vib(8);window.open(waLink(k.wa||''),'_blank');};
 d.querySelector('.cp').onclick=function(){try{navigator.clipboard.writeText(k.wa||'');toast('Copied, Sir.');}catch(e){toast('Could not copy.');}};
-d.querySelector('.sw').onclick=function(){openChat('kitchen');$('cmdText').value='Kitchen, swap '+(tom?'tomorrow':'today')+'\'s dinner for ';autoGrow();$('cmdText').focus();};
+d.querySelector('.sw').onclick=function(){openChat('kitchen','Kitchen, swap '+(tom?'tomorrow':'today')+'\'s dinner for ');};
 return d;}
 function renderKitchen(){var kt=kitchenNow(),el=$('kitList');el.innerHTML='';
-if(!kt){el.innerHTML='<div class="empty"><div class="big">🍲</div>'+(live()?'The Kitchen has not answered yet — ring ↻.':'Lay the wire in ⚙, Sir.')+'</div>';$('kitCnt').textContent='';return;}
+if(!kt){el.innerHTML='<div class="empty"><div class="big">🍲</div>'+(live()?'The Kitchen has not answered yet — ring ↻.':'Enter the key in ⚙, Sir.')+'</div>';$('kitCnt').textContent='';return;}
 $('kitCnt').textContent=kt.tomorrow&&kt.tomorrow.v?('plan v'+kt.tomorrow.v):'';
 if(kt.tomorrow)el.appendChild(kcard(kt.tomorrow,'Tomorrow',true));if(kt.today)el.appendChild(kcard(kt.today,'Today',false));
 if(kt.week&&kt.week.length){var h=document.createElement('div');h.className='sect';h.innerHTML='<span>The week ahead</span>';el.appendChild(h);var w=document.createElement('div');w.className='kweek';
 kt.week.forEach(function(x){var r=document.createElement('div');r.className='kw';r.innerHTML='<span class="d">'+esc(String(x.label||'').slice(0,3))+'<br>'+esc(String(x.label||'').slice(4,10))+'</span><span class="m">'+esc(clamp(x.breakfast,40))+' <span>·</span> '+esc(clamp(x.lunch,48))+' <span>·</span> '+esc(clamp(x.dinner,48))+'</span>';w.appendChild(r);});el.appendChild(w);}
 var n=document.createElement('p');n.className='note';n.style.marginTop='12px';n.textContent='Tell the Kitchen what to change — “Kitchen, no lauki” · “more paneer” · “Thursday dinner khichdi” — and next week\'s plan honours it.';el.appendChild(n);}
+
+/* ---- THE TRAVEL OFFICE: state.travel (Keeper v7 §B) · else composed from the docket and the next line ---- */
+function renderTravel(){var s=stateNow()||{},el=$('traList');el.innerHTML='';var t=s.travel||{};
+var items=itemsMatching(s,TRAVEL_RE);
+var trips=(t.trips||[]).slice();
+if(!trips.length){var nx=String(s.next||'');var m=nx.match(/(nepal|china|japan|uzbek|samarkand|goa|bhutan|trip)/i),tm=nx.match(/T-\d+/);if(m)trips.push({name:clamp(nx.split('·')[0],40),when:tm?tm[0]:'',status:items.length?items.length+' matter'+(items.length>1?'s':'')+' open on the docket':'',bad:items.length>0});}
+$('traCnt').textContent=trips.length?(trips.length+' journey'+(trips.length>1?'s':'')):'';
+if(trips.length){sectHead(el,'Booked & near');trips.forEach(function(x){var d=document.createElement('div');d.className='trip';d.innerHTML='<div class="tn"><span>'+esc(x.name)+'</span><small>'+esc(x.when||'')+'</small></div>'+(x.status?'<div class="ts'+(x.bad?' bad':'')+'">'+esc(x.status)+'</div>':'')+(x.note?'<div class="tm">'+esc(x.note)+'</div>':'')+(x.u&&x.u!=='#'?'<div class="tm"><a href="'+esc(door(x.u))+'" target="_blank" rel="noopener">itinerary ↗</a></div>':'');el.appendChild(d);});}
+chips(el,[['✈️ Text the Travel Office',function(){openChat('travel');}],['💡 Leave a travel idea',function(){openChat('travel','Travel Office, idea: ');}],['🛂 Ask about a visa',function(){openChat('travel','Travel Office, visa question: ');}]]);
+if(items.length){sectHead(el,'Needs your hand',items.length);items.forEach(function(x){if(x.tap){var c=tapCard(x.tap);c.style.marginBottom='10px';el.appendChild(c);}else el.appendChild(decCard(x.dec));});}
+if((t.fares||[]).length){sectHead(el,'Fares watched');var bf=document.createElement('div');bf.className='box';t.fares.forEach(function(x){var d=document.createElement('div');d.className='kv';d.innerHTML='<div class="n">'+esc(x.route)+(x.note?'<small>'+esc(x.note)+'</small>':'')+'</div>'+(x.inr?'<span class="a">'+inr(x.inr)+'</span>':'');bf.appendChild(d);});el.appendChild(bf);}
+if((t.visas||[]).length){sectHead(el,'Visas & papers');var bv=document.createElement('div');bv.className='box';t.visas.forEach(function(x){var d=document.createElement('div');d.className='kv';d.innerHTML='<div class="n">'+esc(x.name)+'</div><span class="st '+(/lapsed|expired|missing/i.test(x.status)?'bad':/valid|done/i.test(x.status)?'ok':'warn')+'">'+esc(clamp(x.status||'',40))+'</span>';bv.appendChild(d);});el.appendChild(bv);}
+sectHead(el,'Ideas',(t.ideas||[]).length||null);
+if((t.ideas||[]).length){t.ideas.forEach(function(x){var d=document.createElement('div');d.className='trip';d.innerHTML='<div class="tn"><span>'+esc(x.name)+'</span><small>'+esc(x.when||'someday')+'</small></div>'+(x.why?'<div class="tm">'+esc(x.why)+'</div>':'')+(x.u&&x.u!=='#'?'<div class="tm"><a href="'+esc(door(x.u))+'" target="_blank" rel="noopener">the paper ↗</a></div>':'');el.appendChild(d);});}
+else{var e=document.createElement('div');e.className='empty';e.innerHTML='No ideas shelved yet, Sir. Say <i>“Travel Office, idea: Bhutan in spring”</i> and it lives here until you book it or bin it.';el.appendChild(e);}
+var ps=((cache&&cache.papers)||(s.papers)||[]).filter(function(p){return TRAVEL_RE.test(String(p.n||''))&&!GENERIC_RE.test(String(p.n||''));}).slice(0,6);
+if(ps.length){sectHead(el,'The office\'s papers');var bp=document.createElement('div');bp.className='box';ps.forEach(function(p){var b2=document.createElement('button');b2.className='ppr';b2.innerHTML='<span class="pt">'+esc(dayLab(p.t))+'</span>'+esc(clamp(p.n||'',70))+(p.s?'<br><small style="color:var(--mut)">'+esc(clamp(p.s,110))+'</small>':'');b2.onclick=function(){if(p.u)window.open(door(p.u),'_blank');};bp.appendChild(b2);});el.appendChild(bp);}
+var offs=officeFor(s,/travel|concierge/i);if(offs.length){sectHead(el,'The desks today');offs.forEach(function(o){el.appendChild(deskCard(o,persona(o.name).av));});}
+var last=lastWords(['travel','concierge'],5);if(last.length){sectHead(el,'Last words');last.forEach(function(x){el.appendChild(wordRow(x));});}}
 
 /* ---- THE FEED ---- */
 function renderWire(){var wl=$('wireList');wl.innerHTML='';var items=allItems().filter(function(x){return x.kind!=='reply';}).sort(function(a,b){return (b.t||0)-(a.t||0);}).slice(0,60);
@@ -729,7 +952,7 @@ if(!el.childNodes.length)el.innerHTML='<div class="empty">Nothing on the shelf y
 $('btnPpNo').onclick=function(){$('mPapers').classList.remove('on');};
 
 /* ---- the wire ---- */
-function diary(){var d=$('diag');if(!d)return;var u=wireUrl();d.innerHTML='wire: '+esc(u.replace(/\/macros\/s\/([^/]{8})[^/]*\//,'/macros/s/$1…/'))+(cfg.url?' (override)':' <b>(canonical)</b>')+'\nlast ring: '+(wire.lastAt?new Date(wire.lastAt).toLocaleTimeString('en-GB'):'—')+'\nanswer: '+(wire.lastMs?(wire.lastMs/1000).toFixed(1)+'s':'—')+' · '+(wire.lastErr||'<b>ok</b>')+'\nhouse: '+(wire.ver||'—')+' · '+(wire.voice||'voice not yet heard')+'\nstate stamp: '+((cache&&(cache.stateAt||cache.at))||'—')+'\nthread: '+(thread&&thread.n!=null?thread.n+' items · '+(thread.at||''):'—')+'\nsw: '+(navigator.serviceWorker&&navigator.serviceWorker.controller?'active':'none');}
+function diary(){var d=$('diag');if(!d)return;var u=wireUrl();d.innerHTML='wire: '+esc(u.replace(/\/macros\/s\/([^/]{8})[^/]*\//,'/macros/s/$1…/'))+(cfg.url?' (override)':' <b>(canonical)</b>')+'\nlast ring: '+(wire.lastAt?new Date(wire.lastAt).toLocaleTimeString('en-GB'):'—')+'\nanswer: '+(wire.lastMs?(wire.lastMs/1000).toFixed(1)+'s':'—')+' · '+(wire.lastErr||'<b>ok</b>')+'\nhouse: '+(wire.ver||'—')+' · '+(wire.voice||'voice not yet heard')+'\nstate stamp: '+((cache&&(cache.stateAt||cache.at))||'—')+'\nstate shape: '+(cache&&cache.state?(cache.state.scoreboard?'b11+':'old')+(cache.state.money?' · money':'')+(cache.state.travel?' · travel':'')+(cache.state.health?' · health':''):'—')+'\nthread: '+(thread&&thread.n!=null?thread.n+' items · '+(thread.at||''):'—')+'\nsw: '+(navigator.serviceWorker&&navigator.serviceWorker.controller?'active':'none');}
 function ringOnce(url,q,timeoutMs){var ctl=('AbortController' in window)?new AbortController():null;var t0=Date.now();var tm=setTimeout(function(){if(ctl)ctl.abort();},timeoutMs);var opts={cache:'no-store'};if(ctl)opts.signal=ctl.signal;
 return fetch(url+'?key='+encodeURIComponent(cfg.key)+(q||'')+'&t='+t0,opts).then(function(r){clearTimeout(tm);if(!r.ok)throw new Error('HTTP '+r.status);return r.text().then(function(txt){try{return JSON.parse(txt);}catch(e){throw new Error(/<html|<!doctype/i.test(txt)?'a sign-in page, not the house':'not JSON');}});})
 .catch(function(err){clearTimeout(tm);throw new Error(err&&err.name==='AbortError'?'no answer in '+(timeoutMs/1000)+'s':(err&&err.message)||'network');});}
@@ -754,12 +977,12 @@ ringOnce(wireUrl(),'&op=thread',40000).then(function(j){thBusy=false;if(!j||!j.o
 thread=j;wire.threadAt=Date.now();try{localStorage.setItem('br_thread',JSON.stringify(j));}catch(e){}
 /* what Sir said is now on the record — drop the local copies the server echoes */
 said=said.filter(function(x){return x.kind==='reply'||!(j.items||[]).some(function(y){return y.dir===x.dir&&String(y.text||'').slice(0,60)===String(x.text||'').slice(0,60);});});saveSaid();
-renderRoster();if(curK)renderChat();renderCareer();renderWire();diary();}).catch(function(){thBusy=false;});}
-function fetchKitchen(){if(!live())return;ringOnce(wireUrl(),'&op=kitchen',40000).then(function(j){if(j&&j.ok&&j.tomorrow){kitchen=j;try{localStorage.setItem('br_kitchen',JSON.stringify(j));}catch(e){}renderKitchen();}}).catch(function(){});}
+renderRoster();if(curK)renderChat();renderCareer();renderMoney();renderLife();renderWire();diary();}).catch(function(){thBusy=false;});}
+function fetchKitchen(){if(!live())return;ringOnce(wireUrl(),'&op=kitchen',40000).then(function(j){if(j&&j.ok&&j.tomorrow){kitchen=j;try{localStorage.setItem('br_kitchen',JSON.stringify(j));}catch(e){}renderKitchen();renderHealth();}}).catch(function(){});}
 function fetchVoice(){if(!live())return;ringOnce(wireUrl(),'&op=voiceping',15000).then(function(j){if(j&&j.ok&&j.v){wire.voice=j.v;diary();}}).catch(function(){});}
 
 /* ---- nav · settings · study · speech ---- */
-document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){showView(b.dataset.v);vib(6);if(b.dataset.v==='v-staff'){curK='';renderRoster();fetchThread();}if(b.dataset.v==='v-kitchen')fetchKitchen();};});
+document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){showView(b.dataset.v);vib(6);if(b.dataset.v==='v-staff'){curK='';renderRoster();fetchThread();}if(b.dataset.v==='v-life'){setPill(lifePill||defaultPill());}};});
 $('btnGear').onclick=function(){$('setUrl').value=cfg.url;$('setKey').value=cfg.key;diary();$('mSettings').classList.add('on');};
 $('btnCloseSet').onclick=function(){$('mSettings').classList.remove('on');};
 $('btnSaveSet').onclick=function(){cfg.url=$('setUrl').value.trim();cfg.key=$('setKey').value.trim();if(cfg.url===CANON)cfg.url='';localStorage.setItem('br_url',cfg.url);localStorage.setItem('br_key',cfg.key);$('mSettings').classList.remove('on');toast('The wire is laid, Sir.');fetchState();fetchThread();fetchKitchen();fetchVoice();};
@@ -789,7 +1012,7 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden&&liv
 setInterval(function(){if(!document.hidden&&live())fetchState();},300000);
 setInterval(function(){if(!document.hidden&&live()&&(document.getElementById('v-staff').classList.contains('on')||document.getElementById('v-chat').classList.contains('on')))fetchThread();},90000);
 if('serviceWorker' in navigator){try{navigator.serviceWorker.register('sw.js').catch(function(){});}catch(e){}}
-render();if(live()){fetchState();fetchThread();fetchKitchen();fetchVoice();}
+setPill(defaultPill());render();if(live()){fetchState();fetchThread();fetchKitchen();fetchVoice();}
 </script>
 </body>
 </html>
