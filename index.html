@@ -204,11 +204,13 @@ body.inchat .compose{display:block}
 .role{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:11px 12px;box-shadow:var(--shadow);margin-bottom:8px;display:flex;gap:10px;align-items:flex-start}
 .role .st{flex-shrink:0;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;border-radius:10px;padding:3px 8px;margin-top:2px;background:var(--viobg);color:var(--vio);white-space:nowrap}
 .role .st.tap{background:var(--gold2);color:#fff}.role .st.replied{background:var(--green);color:#fff}.role .st.declined{background:var(--paper2);color:var(--mut);border:1px solid var(--line)}.role .st.interview{background:var(--red);color:#fff}
+.role .st.apply{background:var(--walnut2);color:var(--gold)}.role .st.note{background:var(--viobg);color:var(--vio)}.role .st.held{background:var(--amberbg);color:var(--amber)}
 .role .bd{min-width:0;flex:1}
 .role .co{font-family:Georgia,serif;font-size:15px;font-weight:600}
 .role .rl{font-size:13px;color:var(--ink);margin-top:1px}
 .role .m{font-size:11.5px;color:var(--mut);margin-top:3px}
 .role a{color:var(--vio);text-decoration:none;font-weight:600}
+.role.pack{border-left:4px solid var(--gold2);border-radius:0 14px 14px 0}
 .cbtns{display:flex;gap:8px;margin:6px 0 14px}
 .cb{flex:1;border:1px solid var(--line2);background:var(--paper);border-radius:12px;padding:11px 0;font-size:13px;font-weight:600;font-family:inherit;color:var(--ink)}
 .cb:active{background:var(--paper2)}
@@ -220,6 +222,9 @@ body.inchat .compose{display:block}
 .verdict b{color:var(--gold2);font-size:10px;letter-spacing:1.4px;text-transform:uppercase;display:block;margin-bottom:2px}
 .verdict.bad{border-color:var(--red)}.verdict.bad b{color:var(--red)}
 .verdict.ok{border-color:var(--green)}.verdict.ok b{color:var(--green)}
+.verdict.sit{border-color:var(--gold2);background:linear-gradient(180deg,var(--amberbg),var(--paper2))}
+.verdict.sit b{color:var(--gold2)}
+.verdict .say{display:inline-block;font-family:Georgia,serif;font-weight:700;background:var(--walnut2);color:var(--gold);border-radius:8px;padding:2px 9px;margin:0 2px}
 .pipe{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 6px}
 .pipe span{font-size:11px;border:1px solid var(--line2);border-radius:14px;padding:4px 10px;color:var(--mut);background:var(--paper)}
 .pipe span b{color:var(--ink);font-family:Georgia,serif;font-size:13px;margin-right:3px}
@@ -318,7 +323,7 @@ nav .badge.red{background:var(--red);color:#fff}
 <div class="hrow">
 <div style="min-width:0">
 <div class="greet serif" id="greet">Good evening, Sir</div>
-<div class="dline" id="dline">the bridge · wayne estate · b13</div>
+<div class="dline" id="dline">the bridge · wayne estate · b13.1</div>
 </div>
 <div style="display:flex;flex-shrink:0">
 <button class="hbtn" id="btnPaper" aria-label="today's paper">📰</button>
@@ -372,7 +377,7 @@ nav .badge.red{background:var(--red);color:#fff}
 
 <section class="view" id="v-career">
 <h2 class="serif"><span>The career desk</span><span class="cnt" id="carCnt"></span></h2>
-<p class="note">The one thing this quarter is for. The week's numbers, every role in play, and the people working it.</p>
+<p class="note">The one thing this quarter is for. The week's numbers, what is packed for your word, every role in play, and the people working it.</p>
 <div class="rule"></div>
 <div class="cnums" id="carNums"></div>
 <div id="carList"></div>
@@ -457,7 +462,7 @@ nav .badge.red{background:var(--red);color:#fff}
 <button class="b2 ghost" id="btnTestSet">Test the wire</button>
 <button class="b2 ghost" id="btnCloseSet">Close</button>
 <div class="diag" id="diag">no wire test yet</div>
-<p class="note" style="text-align:center;margin:12px 0 0">build 13 · 14 Sep 2026 — THE PURSE (money: outflow, cards, leaks, renewals, tax, holdings) · LIFE (the Physician's desk, the Kitchen, the Travel Office) · the Career desk reads the week's pace and every stage · Finish names an old-schema state instead of showing an empty docket</p>
+<p class="note" style="text-align:center;margin:12px 0 0">build 13.1 · 18 Sep 2026 — THE PURSE (money: outflow, cards, leaks, renewals, tax, holdings) · LIFE (the Physician's desk, the Kitchen, the Travel Office) · the Career desk reads the week's pace, the Envoy's packs and the Sitting (AMD-053) · Finish names an old-schema state instead of showing an empty docket</p>
 </div></div>
 
 <div class="modal" id="mVeto"><div class="sheet">
@@ -489,7 +494,7 @@ nav .badge.red{background:var(--red);color:#fff}
 <script>
 /* ===== THE CANONICAL WIRE (b11): the URL is the house's own; a stored override is honoured only while it answers. ===== */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b13';
+var BUILD='b13.1';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 var cache=null;try{cache=JSON.parse(localStorage.getItem('br_cache')||'null');}catch(e){}
@@ -558,11 +563,13 @@ muster:[{id:'m1',desk:'concierge',line:'Amma\'s birthday gift — the Concierge 
 {id:'m2',desk:'treasurer',line:'₹35,000 debit to Provenance Land on ••8835 unrecognised 9 days. Recognise it or disown it — default: stays open.'}],
 offices:[
 {name:'Career Scout',status:'358 rows → 4 shortlisted (2 at 80%+)',ok:1,meta:'ran 09:12'},
-{name:'Conversion Desk',status:'applied 1 · sent 2 · 1 tap waiting on you',ok:1,meta:'ran 10:31'},
+{name:'Conversion Desk',status:'packs 3 (new 2) · follow-ups 1 · sitting called',ok:1,meta:'ran 10:31'},
 {name:'Treasurer',status:'caught the ₹399 Zee mandate · 3 leaks open, ₹6,200/mo',ok:0,meta:'wants a word'},
 {name:'Physician',status:'ZERO — weight not logged in 41 days',ok:0,meta:'wants a word'},
 {name:'Kitchen',status:'tomorrow\'s menu sent at 19:30',ok:1,meta:'ran 19:30'}],
-career:{roles:[{co:'OpenAI',role:'Strategy & Operations Lead - India',stage:'applied',t:Date.now()-9e7,note:'submitted by your own hand'},{co:'Uber',role:'Director, Field Ops',stage:'declined',t:Date.now()-3e8,note:'declined 11 Sep; referral watch open'}],touches:[{who:'Shania T.',co:'Salesforce',via:'LinkedIn',t:Date.now()-8e7},{who:'Rohan M.',co:'OpenAI',via:'warm note',t:Date.now()-7e7,replied:true}]},
+career:{roles:[{co:'OpenAI',role:'Strategy & Operations Lead - India',stage:'applied',t:Date.now()-9e7,note:'submitted by your own hand'},{co:'Uber',role:'Director, Field Ops',stage:'declined',t:Date.now()-3e8,note:'declined 11 Sep; referral watch open'}],touches:[{who:'Shania T.',co:'Salesforce',via:'LinkedIn',t:Date.now()-8e7},{who:'Rohan M.',co:'OpenAI',via:'warm note',t:Date.now()-7e7,replied:true}],
+ sitting:{at:'12:30',packs:3,mins:12,last:'yesterday (applied 2 · sent 1)'},
+ packs:[{co:'Salesforce',role:'Director, Strategy & Enablement',hand:'sign in to Workday',kind:'apply',u:'#'},{co:'eBay',role:'Chief of Staff (Bengaluru)',hand:'say submit — Easy Apply',kind:'apply',u:'#'},{co:'Barclays',role:'Amogh Sathye · warm note',hand:'say send',kind:'note',u:'#'},{co:'HSBC',role:'VP Business Manager · culture gate unverified (5 contacts)',hand:'go / skip',kind:'held',u:'#'}]},
 money:{asOf:'12 Sep',close:{n:'Money Close — September 2026',u:'#'},
  outflowMonth:{fixed:[{name:'Rent (on card, ₹35k recovered)',inr:100000},{name:'Land-loan EMI',inr:23500},{name:'Karthik/Hariharan EMI',inr:29000},{name:'Insurance sinking fund',inr:15000},{name:'Gethu',inr:3000}],note:'the standing lines from the Money Close'},
  cards:[{name:'Diners ••7384',due:'5 Sep',amount:742576,status:'unverified',note:'no payment receipt on file; card still transacting'},{name:'Tata Neu ••8835',due:'21 Sep',amount:21691,status:'pending',note:'min ₹1,306'}],
@@ -575,7 +582,7 @@ health:{lastLogged:'41 days ago',weight:[],next:[{name:'Weight — log this morn
 travel:{trips:[{name:'Nepal — Pokhara & the Fishtail',when:'27 Sep – 2 Oct',status:'1 seat unbooked (Sharan)',bad:1,u:'#'}],ideas:[{name:'Uzbekistan — Samarkand & Bukhara',when:'Nov?',why:'anniversary shortlist'},{name:'China — Sep/Oct dossier',when:'2027',why:'the once-properly plan'}],visas:[{name:'UK Standard Visitor',status:'appointment lapsed 4 Aug — re-book?'}],fares:[{route:'BOM–KTM',inr:20100,note:'$241/traveller, drifting'}]},
 dials:[],wire:[]};
 var DEMO_THREAD={items:[
-{t:Date.now()-36e5,dir:'out',k:'envoy',who:'The Envoy',av:'🎯',kind:'note',text:'Applied to Salesforce (Director, Strategy & Enablement) to the last step — it needs your sign-in and Submit. Sent 2 touches: Shania T. (LinkedIn, free route) and a warm note to Rohan M. No replies yet.',url:'https://careers.salesforce.com'},
+{t:Date.now()-36e5,dir:'out',k:'envoy',who:'The Envoy',av:'🎯',kind:'note',text:'3 packs ready — Salesforce, eBay, Barclays; about 12 minutes. Your hand: the Workday sign-in. Say "Envoy, sit" in Cowork.',url:'#'},
 {t:Date.now()-72e5,dir:'in',k:'envoy',who:'The Envoy',av:'🎯',kind:'word',text:'Envoy, look at the Barclays PBWM role too.'},
 {t:Date.now()-2e7,dir:'out',k:'treasurer',who:'The Treasurer',av:'💰',kind:'note',text:'The ₹420 AnyReel mandate fires tomorrow, Sir. One tap in the bank app pauses it — link on your Finish list.'},
 {t:Date.now()-3e7,dir:'out',k:'scout',who:'The Scout',av:'🔭',kind:'run',text:'run: Career Scout — 358 rows → 4 shortlisted (2 at 80%+)',url:'#'},
@@ -712,7 +719,7 @@ else{d=document.createElement('div');
 if(x.dir==='in'){d.className='msg me';d.innerHTML=md(x.text)+'<span class="t">'+hhmm(x.t)+(x.pending?' · sending…':'')+'</span>';}
 else if(x.kind==='reply'){d.className='msg reply';d.innerHTML=md(x.text)+'<span class="t">'+hhmm(x.t)+'</span>';}
 else if(x.kind==='run'){d.className='msg run'+(x.zero?' zero':'');var txt=String(x.text||'').replace(/^run:\s*/i,'');d.innerHTML='<span class="k">filed</span>'+(x.url&&x.url!=='#'?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(clamp(txt,150))+' ↗</a>':esc(clamp(txt,150)))+'<span class="t">'+hhmm(x.t)+'</span>';}
-else{d.className='msg house';d.innerHTML=(k==='house'&&x.who&&x.who!=='Alfred'?'<span class="who">'+esc(x.av||'')+' '+esc(x.who)+'</span>':'')+md(x.text)+(x.url?'<br><a class="open" href="'+esc(x.url)+'" target="_blank" rel="noopener">Open ↗</a>':'')+'<span class="t">'+hhmm(x.t)+'</span>';}}
+else{d.className='msg house';d.innerHTML=(k==='house'&&x.who&&x.who!=='Alfred'?'<span class="who">'+esc(x.av||'')+' '+esc(x.who)+'</span>':'')+md(x.text)+(x.url&&x.url!=='#'?'<br><a class="open" href="'+esc(x.url)+'" target="_blank" rel="noopener">Open ↗</a>':'')+'<span class="t">'+hhmm(x.t)+'</span>';}}
 el.appendChild(d);});
 setTimeout(function(){window.scrollTo(0,document.body.scrollHeight);},30);}
 $('btnBack').onclick=function(){showView('v-staff');curK='';renderRoster();};
@@ -782,16 +789,22 @@ var a=sb.apps[0],at=sb.apps[1]||5,tt=sb.touches[0],ttt=sb.touches[1]||10;var nee
 var vcls='',vtxt='';
 if(a==null){vtxt='The Keeper has not published this week\'s numbers yet — the desk\'s own words below still count.';}
 else if(a>=at){vcls='ok';vtxt='Week made — '+a+' of '+at+' applied. Anything more is surplus; the touches ('+(tt==null?'—':tt)+'/'+ttt+') and replies decide the rest.';}
-else if(di===1){vcls='ok';vtxt='A fresh week — '+at+' applications and '+ttt+' touches to make by Sunday. The Envoy sits at 10:30; the first tap is yours (see below).';}
+else if(di===1){vcls='ok';vtxt='A fresh week — '+at+' applications and '+ttt+' touches to make by Sunday. The Envoy packs by 10:30; the Sitting is at 12:30.';}
 else if(a>=need){vcls='ok';vtxt='On pace — '+a+' applied against '+need+' due by now. '+(at-a)+' more by Sunday · touches '+(tt==null?'—':tt)+'/'+ttt+'.';}
 else{vcls=(a===0&&di>=3)?'bad':'';vtxt='Behind pace — '+a+' applied, '+need+' due by now. '+(at-a)+' to go · '+left+(tt!=null&&tt<needT?' · touches also short ('+tt+'/'+ttt+')':'')+'.';}
 var v=document.createElement('div');v.className='verdict '+vcls;v.innerHTML='<b>Day '+di+' of 7 · '+left+'</b>'+esc(vtxt);el.appendChild(v);
+/* the Envoy's Sitting and the packs (AMD-053) */
+var car=s.career||{};var packs=(car.packs||[]).filter(function(p){return p&&(p.co||p.role);});var sit=car.sitting||null;
+if(sit||packs.length){var sv=document.createElement('div');sv.className='verdict sit';var n=sit&&sit.packs!=null?sit.packs:packs.length;var mins=sit&&sit.mins?sit.mins:Math.max(4,n*4);
+sv.innerHTML='<b>The Envoy\'s Sitting'+(sit&&sit.at?' · today '+esc(sit.at):'')+'</b>'+n+' pack'+(n===1?'':'s')+' · ~'+mins+' min — open Cowork on the laptop and say <span class="say">Envoy, sit</span>. You say submit and send; the Envoy does the rest.'+(sit&&sit.last?'<br><small style="color:var(--mut)">Last sitting: '+esc(sit.last)+'</small>':'');el.appendChild(sv);}
+if(packs.length){sectHead(el,'Packed — one word each',packs.length);packs.slice(0,8).forEach(function(p){var x=document.createElement('div');x.className='role pack';var k=String(p.kind||'apply');var lab=k==='note'?'send':k==='held'?'go / skip':'submit';
+x.innerHTML='<span class="st '+esc(k)+'">'+esc(lab)+'</span><div class="bd"><div class="co">'+esc(clamp(p.co||'',50))+'</div>'+(p.role?'<div class="rl">'+esc(clamp(p.role,90))+'</div>':'')+'<div class="m">'+(p.hand?'your hand: '+esc(clamp(p.hand,80)):'')+(p.d?' · '+esc(p.d):'')+(p.u&&p.u!=='#'?' · <a href="'+esc(door(p.u))+'" target="_blank" rel="noopener">pack ↗</a>':'')+'</div></div>';el.appendChild(x);});}
 var roles=careerRoles(s);var waiting=roles.filter(function(r){return r.stage==='tap';}),play=roles.filter(function(r){return r.stage!=='tap'&&r.stage!=='declined';}),gone=roles.filter(function(r){return r.stage==='declined';});
 var st={};roles.forEach(function(r){var k=String(r.stage||'applied').toLowerCase();st[k]=(st[k]||0)+1;});
 var pipe=document.createElement('div');pipe.className='pipe';var order=['tap','applied','replied','interview','offer','declined'];var labels={tap:'waiting on you',applied:'applied',replied:'replied',interview:'interview',offer:'offer',declined:'declined'};
 order.forEach(function(k){if(st[k])pipe.innerHTML+='<span class="'+(k==='interview'||k==='offer'||k==='replied'?'hot':'')+'"><b>'+st[k]+'</b>'+labels[k]+'</span>';});Object.keys(st).forEach(function(k){if(order.indexOf(k)<0)pipe.innerHTML+='<span><b>'+st[k]+'</b>'+esc(k)+'</span>';});
 if(pipe.innerHTML)el.appendChild(pipe);
-$('carCnt').textContent=roles.length?(roles.length+' in play'):'';var cb=$('cBadge');cb.style.display=waiting.length?'block':'none';cb.textContent=waiting.length;
+$('carCnt').textContent=roles.length?(roles.length+' in play'):'';var cb=$('cBadge');var cbn=packs.length||waiting.length;cb.style.display=cbn?'block':'none';cb.textContent=cbn;
 var b=document.createElement('div');b.className='cbtns';b.innerHTML='<button class="cb" id="carEnvoy">🎯 Text the Envoy</button><button class="cb" id="carScout">🔭 Text the Scout</button><button class="cb" id="carDraft">✒️ Draughtsman</button>';el.appendChild(b);
 b.querySelector('#carEnvoy').onclick=function(){openChat('envoy');};b.querySelector('#carScout').onclick=function(){openChat('scout');};b.querySelector('#carDraft').onclick=function(){openChat('draughtsman');};
 /* the desks today */
@@ -804,11 +817,11 @@ if(r.tap){x.querySelector('.go').onclick=function(){vib(8);window.open(r.tap.url
 return x;}
 if(waiting.length){sectHead(el,'Waiting on your hand',waiting.length);waiting.forEach(function(r){el.appendChild(roleRow(r));});}
 sectHead(el,'In play',play.length||null);
-if(play.length)play.sort(function(a,b){return (b.t||0)-(a.t||0);}).forEach(function(r){el.appendChild(roleRow(r));});else{var e=document.createElement('div');e.className='empty';e.textContent='No role in play this week yet — the Envoy applies at 10:30; anything he does appears here and in his chat.';el.appendChild(e);}
+if(play.length)play.sort(function(a,b){return (b.t||0)-(a.t||0);}).forEach(function(r){el.appendChild(roleRow(r));});else{var e=document.createElement('div');e.className='empty';e.textContent='No role in play this week yet — the Envoy packs at 10:30; what you submit at the Sitting appears here and in his chat.';el.appendChild(e);}
 var touches=((s.career||{}).touches||[]);if(touches.length){sectHead(el,'Touches this week',touches.length);touches.slice(0,12).forEach(function(t){var x=document.createElement('div');x.className='touch';x.innerHTML='<div class="w">'+esc(clamp((t.who||'')+(t.co?' · '+t.co:'')+(t.via?' · '+t.via:''),80))+'</div><span class="r'+(t.replied?' yes':'')+'">'+(t.replied?'replied':dayLab(t.t)||'sent')+'</span>';el.appendChild(x);});}
-else{var ne=document.createElement('p');ne.className='note';ne.textContent='No touches recorded this week — the Envoy sends LinkedIn notes under the Hand Law; each one lands here.';el.appendChild(ne);}
+else{var ne=document.createElement('p');ne.className='note';ne.textContent='No touches sent this week — each note is packed by the Envoy and sent on your word at the Sitting; every one lands here.';el.appendChild(ne);}
 if(gone.length){sectHead(el,'Closed',gone.length);gone.forEach(function(r){el.appendChild(roleRow(r));});}
-var ps=((cache&&cache.papers)||(s.papers)||[]).filter(function(p){return /job scout|shortlist|career|outreach|application facts|apply/i.test(String(p.n||''))&&!GENERIC_RE.test(String(p.n||''));}).slice(0,5);
+var ps=((cache&&cache.papers)||(s.papers)||[]).filter(function(p){return /job scout|shortlist|career|outreach|application facts|apply|envoy|guardian/i.test(String(p.n||''))&&!GENERIC_RE.test(String(p.n||''));}).slice(0,5);
 if(ps.length){sectHead(el,'The desk\'s papers');var bx=document.createElement('div');bx.className='box';ps.forEach(function(p){var b2=document.createElement('button');b2.className='ppr';b2.innerHTML='<span class="pt">'+esc(dayLab(p.t))+'</span>'+esc(clamp(p.n||'',70))+(p.s?'<br><small style="color:var(--mut)">'+esc(clamp(p.s,110))+'</small>':'');b2.onclick=function(){if(p.u)window.open(door(p.u),'_blank');};bx.appendChild(b2);});el.appendChild(bx);}
 var last=lastWords(['envoy','scout','draughtsman','hand'],6);
 if(last.length){sectHead(el,'Last words from the desk');last.forEach(function(x){el.appendChild(wordRow(x));});}}
@@ -952,7 +965,7 @@ if(!el.childNodes.length)el.innerHTML='<div class="empty">Nothing on the shelf y
 $('btnPpNo').onclick=function(){$('mPapers').classList.remove('on');};
 
 /* ---- the wire ---- */
-function diary(){var d=$('diag');if(!d)return;var u=wireUrl();d.innerHTML='wire: '+esc(u.replace(/\/macros\/s\/([^/]{8})[^/]*\//,'/macros/s/$1…/'))+(cfg.url?' (override)':' <b>(canonical)</b>')+'\nlast ring: '+(wire.lastAt?new Date(wire.lastAt).toLocaleTimeString('en-GB'):'—')+'\nanswer: '+(wire.lastMs?(wire.lastMs/1000).toFixed(1)+'s':'—')+' · '+(wire.lastErr||'<b>ok</b>')+'\nhouse: '+(wire.ver||'—')+' · '+(wire.voice||'voice not yet heard')+'\nstate stamp: '+((cache&&(cache.stateAt||cache.at))||'—')+'\nstate shape: '+(cache&&cache.state?(cache.state.scoreboard?'b11+':'old')+(cache.state.money?' · money':'')+(cache.state.travel?' · travel':'')+(cache.state.health?' · health':''):'—')+'\nthread: '+(thread&&thread.n!=null?thread.n+' items · '+(thread.at||''):'—')+'\nsw: '+(navigator.serviceWorker&&navigator.serviceWorker.controller?'active':'none');}
+function diary(){var d=$('diag');if(!d)return;var u=wireUrl();d.innerHTML='wire: '+esc(u.replace(/\/macros\/s\/([^/]{8})[^/]*\//,'/macros/s/$1…/'))+(cfg.url?' (override)':' <b>(canonical)</b>')+'\nlast ring: '+(wire.lastAt?new Date(wire.lastAt).toLocaleTimeString('en-GB'):'—')+'\nanswer: '+(wire.lastMs?(wire.lastMs/1000).toFixed(1)+'s':'—')+' · '+(wire.lastErr||'<b>ok</b>')+'\nhouse: '+(wire.ver||'—')+' · '+(wire.voice||'voice not yet heard')+'\nstate stamp: '+((cache&&(cache.stateAt||cache.at))||'—')+'\nstate shape: '+(cache&&cache.state?(cache.state.scoreboard?'b11+':'old')+(cache.state.money?' · money':'')+(cache.state.travel?' · travel':'')+(cache.state.health?' · health':'')+(cache.state.career&&cache.state.career.packs?' · packs':''):'—')+'\nthread: '+(thread&&thread.n!=null?thread.n+' items · '+(thread.at||''):'—')+'\nsw: '+(navigator.serviceWorker&&navigator.serviceWorker.controller?'active':'none');}
 function ringOnce(url,q,timeoutMs){var ctl=('AbortController' in window)?new AbortController():null;var t0=Date.now();var tm=setTimeout(function(){if(ctl)ctl.abort();},timeoutMs);var opts={cache:'no-store'};if(ctl)opts.signal=ctl.signal;
 return fetch(url+'?key='+encodeURIComponent(cfg.key)+(q||'')+'&t='+t0,opts).then(function(r){clearTimeout(tm);if(!r.ok)throw new Error('HTTP '+r.status);return r.text().then(function(txt){try{return JSON.parse(txt);}catch(e){throw new Error(/<html|<!doctype/i.test(txt)?'a sign-in page, not the house':'not JSON');}});})
 .catch(function(err){clearTimeout(tm);throw new Error(err&&err.name==='AbortError'?'no answer in '+(timeoutMs/1000)+'s':(err&&err.message)||'network');});}
