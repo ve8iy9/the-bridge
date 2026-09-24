@@ -680,7 +680,8 @@ return A;}
 var KIND_LABEL={choice:'your call',leak:'money leaving',renewal:'renewal',money:'money',booking:'booking',job:'career',answer:'a written word',docs:'papers wanted',house:'house notice',decision:'your word',tap:'one tap'};
 /* decided & snoozed matters stay off the screen — 14 days, or until the date you named — unless the house restages them with a real change */
 function decidedFor(it){for(var i=0;i<it.ids.length;i++){var d=decided[it.ids[i]];if(d)return d;}return null;}
-function hiddenBy(it){var d=decidedFor(it);if(!d)return null;if(it.restaged)return null;
+function parseUntil(s){s=String(s||'');var m=s.match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2}))?/);if(!m)return 0;return new Date(+m[1],+m[2]-1,+m[3],m[4]?+m[4]:9,m[5]?+m[5]:0).getTime();}
+function hiddenBy(it){if(it.until){var u=parseUntil(it.until);if(u&&Date.now()<u)return 'snoozed';}var d=decidedFor(it);if(!d)return null;if(it.restaged)return null;
 if(d.until){if(Date.now()<d.until)return 'snoozed';it.back=true;return null;}
 if(d.sig&&it.sig&&d.sig!==it.sig){it.changed=true;return null;}
 return Date.now()-d.t<14*864e5?'decided':null;}
@@ -876,7 +877,7 @@ else toast('Refused — '+(j.err==='key'?'the key was not honoured':j.err||'unkn
 function greet(){var h=new Date().getHours(),g;if(h<5)g='The small hours, Sir';else if(h<12)g='Good morning, Sir';else if(h<16)g='Good afternoon, Sir';else if(h<21)g='Good evening, Sir';else g='A quiet night, Sir';$('greet').textContent=g;}
 function render(){greet();$('demoBanner').style.display=live()?'none':'block';var s=stateNow();var warn=s&&s.glyph==='warn';
 var age=stateAge();var hh=stateAt()?hhmm(stateAt()):'';var ageTxt=age?(age>36e5?Math.floor(age/36e5)+'h':Math.max(1,Math.round(age/6e4))+'m'):'';var old=age>14*36e5;
-var when=!live()?' · specimen':stale&&hh?' · <span class="'+(old?'old':'')+'">showing '+hh+' ('+ageTxt+' old) · wire down</span>':hh?' · '+new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+' · state '+hh+(old?' <span class="old">('+ageTxt+' old)</span>':'')+'':' · awaiting the first answer';
+var when=!live()?' · specimen':stale&&hh?' · <span class="'+(old?'old':'')+'">showing '+hh+' ('+ageTxt+' old) · wire down</span>':hh?' · state '+hh+(old?' <span class="old">('+ageTxt+' old)</span>':'')+'':' · awaiting the first answer';
 $('topStat').innerHTML='<b>'+(warn?'A matter wants your eye':'The house is in order')+'</b>'+when;
 var wb=$('wireBanner');if(live()&&stale&&wire.lastErr){wb.style.display='block';wb.innerHTML='The wire did not answer — <b>'+esc(wire.lastErr)+'</b>'+(wire.lastMs?' after '+(wire.lastMs/1000).toFixed(1)+'s':'')+'. <a href="#" id="wireAgain">Ring again</a>'+(cfg.url&&cfg.url!==CANON?' · <a href="#" id="wireCanon">use the house\'s own wire</a>':'')+' · ⚙ for the diary.';
 var a=$('wireAgain');if(a)a.onclick=function(e){e.preventDefault();fetchState();};var c=$('wireCanon');if(c)c.onclick=function(e){e.preventDefault();cfg.url='';localStorage.removeItem('br_url');toast('Ringing the canonical wire…');fetchState();};}else wb.style.display='none';
