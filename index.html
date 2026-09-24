@@ -611,6 +611,9 @@ var ANSWER_RE=/written (text|answer)|carried no written|what did you do|confirm 
 var STOP={still:1,since:1,again:1,before:1,after:1,which:1,their:1,about:1,default:1,carried:1,deferred:1,overnight:1,fresh:1,found:1,needs:1,alfred:1,house:1,tapped:1,apply:1,approve:1,approved:1,with:1,from:1,this:1,that:1,have:1,been:1,your:1,into:1,over:1,under:1,both:1,either:1,option:1,options:1,record:1,recorded:1,plainly:1,asked:1,stays:1,remain:1,remains:1,window:1,without:1,cannot:1,could:1,would:1,should:1,first:1,second:1,third:1,other:1,another:1,every:1,across:1,between:1,through:1,already:1,neither:1,executed:1,closes:1,unchanged:1,despite:1,confirm:1,confirmed:1,unconfirmed:1,taps:1,later:1,round:1,today:1,night:1,morning:1,three:1,four:1,ledger:1,paper:1,filed:1,write:1,written:1,answer:1,please:1,month:1,months:1,running:1,failed:1,failing:1,payment:1,keep:1,cancel:1,lapse:1,mend:1,renew:1,renews:1,renewal:1,verdict:1,review:1,continue:1,continues:1,lifted:1,proceeds:1,source:1,signup:1,mirror:1,version:1,cheapest:1,move:1,ready:1,await:1,awaits:1};
 function toks(s){var o={},a=String(s||'').toLowerCase().replace(/[^a-z0-9₹$ ]+/g,' ').split(/\s+/);for(var i=0;i<a.length;i++){var w=a[i];if(w.length>=5&&!STOP[w]&&!/^\d+$/.test(w))o[w]=1;}return o;}
 function shared(a,b){var n=0;for(var k in a)if(b[k])n++;return n;}
+var NAME_STOP={the:1,new:1,sir:1,default:1,confirm:1,confirmed:1,defect:1,two:1,window:1,auto:1,cloud:1,board:1,ledger:1,renewals:1,mirror:1,hdfc:1,icici:1,upi:1,sbi:1,axis:1,play:1,google:1,ist:1,amd:1,hand:1,hour:1,bursar:1,travel:1,office:1,claims:1,agent:1,keeper:1,chief:1,staff:1,care:1,file:1,sitting:1,word:1,jan:1,feb:1,mar:1,apr:1,may:1,jun:1,jul:1,aug:1,sep:1,sept:1,oct:1,nov:1,dec:1,ready:1,send:1,close:1,mend:1,clarify:1,pnrs:1,ltt:1,gkp:1,ombudsman:1};
+/* the subject of a title: its first proper name (a capitalised word that is not the sentence's first word, unless it is ALL CAPS like AVG) */
+function subj(t){var w=String(t||'').replace(/[—–:;,.()/]/g,' ').split(/\s+/);for(var i=0;i<w.length;i++){var x=w[i].replace(/[^A-Za-z0-9]/g,'');if(x.length<3)continue;var lc=x.toLowerCase();if(NAME_STOP[lc])continue;var caps=x===x.toUpperCase()&&/[A-Z]/.test(x);var tc=/^[A-Z][a-z]/.test(x);if(caps||(tc&&i>0))return lc;}return '';}
 function capOne(s){s=String(s||'').trim();return s?s.charAt(0).toUpperCase()+s.slice(1):s;}
 /* "A / B / C" · "A, B, or C?" · "A or B?" → options (short, ≤4) */
 function extractOptions(title,rest){var t=String(title||''),r=String(rest||''),m,o;
@@ -641,13 +644,13 @@ function buildItems(s){var out=[],src=[];
 if(s&&s.items&&s.items.length){s.items.forEach(function(x){if(x&&x.id)src.push(Object.assign({src:'item'},x));});}
 else{((s&&s.taps)||[]).forEach(function(x){if(x&&x.id)src.push(Object.assign({src:'tap'},x));});
 ((s&&s.muster)||[]).forEach(function(x){if(!x)return;if(typeof x!=='object')x={id:String(x),line:''};if(!x.id)return;var it=Object.assign({src:'muster'},x);var line=String(x.line||'').replace(/https?:\/\/\S+/g,'').replace(/\s+/g,' ').trim();var body=line.replace(/\s*Default:.*$/i,'').trim();var sm=body.match(/^(.*?[.?!])(?:\s+|$)([\s\S]*)$/);var t1=sm?sm[1]:body,r1=sm?sm[2]:'';if(t1.length>150&&r1===''){var cut=body.indexOf('; ');if(cut>30&&cut<150){t1=body.slice(0,cut);r1=body.slice(cut+2);}}it.title=x.title||t1.trim();it.why=x.why||r1.trim();var dm=line.match(/Default:\s*([^.]+\.?)/i);if(dm)it.dflt=dm[1].trim();it.url=x.url||x.tap||(firstUrl(line)&&!/drive\.google|docs\.google/.test(firstUrl(line))?firstUrl(line):'');src.push(it);});}
-src.forEach(function(it){it.title=String(it.title||'').replace(/^NEW\s+/,'');it.tk=toks(it.title);it.tk2=toks(it.why||it.line||'');it.merged=[];});
+src.forEach(function(it){it.title=String(it.title||'').replace(/^NEW\s+/,'');it.tk=toks(it.title);it.tk2=toks(it.why||'');it.sub=subj(it.title);it.merged=[];});
 var used={};
 for(var i=0;i<src.length;i++){var a=src[i];if(used[a.id])continue;
 for(var j=i+1;j<src.length;j++){var b=src[j];if(used[b.id])continue;
 var idA=a.id.replace(/^[a-z]-/i,''),idB=b.id.replace(/^[a-z]-/i,'');var sameId=idA===idB||idA.indexOf(idB)===0||idB.indexOf(idA)===0;
-var sc=shared(a.tk,b.tk)*2+shared(a.tk,b.tk2)+shared(a.tk2,b.tk);
-if(sameId||sc>=3){used[b.id]=1;a.merged.push(b);if(!a.why&&(b.why||b.line))a.why=b.why||b.line;if(!a.url&&b.url)a.url=b.url;if(!a.paper&&b.paper)a.paper=b.paper;if(b.urgent)a.urgent=true;if(!a.due&&b.due)a.due=b.due;if(!a.amount&&b.amount)a.amount=b.amount;if(!a.dflt&&b.dflt)a.dflt=b.dflt;if(b.options&&!a.options)a.options=b.options;}}
+var sc=shared(a.tk,b.tk);var sameSub=a.sub&&a.sub===b.sub;
+if(sameId||sc>=2||sameSub){used[b.id]=1;a.merged.push(b);if(!a.why&&(b.why||b.line))a.why=b.why||b.line;if(!a.url&&b.url)a.url=b.url;if(!a.paper&&b.paper)a.paper=b.paper;if(b.urgent)a.urgent=true;if(!a.due&&b.due)a.due=b.due;if(!a.amount&&b.amount)a.amount=b.amount;if(!a.dflt&&b.dflt)a.dflt=b.dflt;if(b.options&&!a.options)a.options=b.options;}}
 out.push(a);}
 out.forEach(function(it){it.kind=classify(it);it.hk=it.kind!=='house'&&!!(it.house||HOUSE_RE.test((it.title||'')+' '+(it.why||'')+' '+(it.line||'')))&&!/your hand|yours to/i.test((it.why||'')+' '+(it.line||''));it.ids=[it.id].concat(it.merged.map(function(m){return m.id;}));
 it.dueAt=parseDue(it.due)||parseDueText(it.title)||parseDueText(it.why||it.line||'');
