@@ -550,7 +550,7 @@ body.t-night header{background:linear-gradient(180deg,#10131c 0%,var(--bg) 100%)
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b15.0';
+var BUILD='b15.0.1';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -896,7 +896,7 @@ order.forEach(function(k){var m=members[k];var t=m.last?m.last.t:0;if(m.office){
 m.unread=!!(m.last&&m.last.dir==='out'&&m.last.t>(seen[k]||0));
 if(k==='house'||m.t>cut||m.need)list.push(m);else quiet.push(m);});
 list.sort(function(a,b){if(a.k==='house')return -1;if(b.k==='house')return 1;return (b.need?1:0)-(a.need?1:0)||b.t-a.t;});
-$('staffCnt').textContent=list.length+(quiet.length?' · '+quiet.length+' quiet':'');setBadge('pBadge',list.filter(function(m){return m.unread;}).length);
+$('staffCnt').textContent=list.length+(quiet.length?' · '+quiet.length+' quiet':'');var pb=list.filter(function(m){return m.unread&&m.need;}).length;setBadge('pBadge',pb||(list.some(function(m){return m.unread;})?'·':0));
 function row(m){var d=document.createElement('div');d.className='row';var st=m.office?String(m.office.status||''):'';var z=isZero(st);
 var prev='',pcls='';if(m.last){prev=m.last.kind==='run'?String(m.last.text||'').replace(/^run:\s*/i,''):m.last.text;pcls=m.last.dir==='in'?'me':(m.last.kind==='note'?'live':'');}
 if(m.office&&(!m.last||m.t>m.last.t)){prev=st;pcls=z?'zero':'live';}
@@ -1236,7 +1236,7 @@ return {salute:salute,lead:lead,read:read,body:[hb,cb,wait].filter(Boolean).join
 function renderLetter(s){var el=$('letter');if(!s){el.innerHTML='<div class="k">Today</div><div class="lead disp">The wire waits to be laid, Sir.</div>';return;}
 var b=(s.brief&&typeof s.brief==='object')?s.brief:null;var L=composeLetter(s);
 var lead=b&&b.lead?esc(b.lead):esc(L.lead);var body=b&&b.body?md(b.body):L.body?esc(L.body):'';var read=L.read;
-el.innerHTML='<div class="k">'+esc(new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}))+'</div><div class="lead disp">'+esc(L.salute)+' '+lead+'</div>'+(body?'<div class="body">'+body+'</div>':'')+(read?'<div class="read">'+read+'</div>':(live()?'<div class="read" style="color:var(--mut)">The Keeper does not yet say what it read — the Quiet Law asks it to; the feed shows what the house has seen.</div>':''))+'<div class="sig">— Alfred</div>';}
+el.innerHTML='<div class="k">'+esc(new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}))+'</div><div class="lead disp">'+esc(L.salute)+' '+lead+'</div>'+(body?'<div class="body">'+body+'</div>':'')+(read?'<div class="read">'+read+'</div>':(live()?'<div class="read" style="color:var(--mut)">Your mail and texts are not read from here yet — one paste of the EVENTS DOOR patch into the Actuator and this line will say what came in and what it cost.</div>':''))+'<div class="sig">— Alfred</div>';}
 function renderTri(s){var el=$('tri');el.innerHTML='';if(!s)return;var L=composeLetter(s);
 function blk(title,sub,lines,cls){if(!lines.length)return;var d=document.createElement('div');d.className='blk';d.innerHTML='<div class="k">'+esc(title)+'<span>'+esc(sub||'')+'</span></div>'+lines.map(function(x){return '<div class="ln '+(cls||'')+'"><span class="ic">'+esc(x.ic||'·')+'</span><span class="tx">'+esc(x.tx)+(x.sub?'<small>'+esc(x.sub)+'</small>':'')+'</span>'+(cls==='ok'&&x.t&&x.t>1e12?'<span class="when">'+esc(ago(x.t))+'</span>':'')+'</div>';}).join('');el.appendChild(d);}
 blk('Handled for you','since yesterday',L.handled,'ok');blk('Watching','the house keeps an eye',L.watching,'');blk('Coming up','',L.coming,'');}
