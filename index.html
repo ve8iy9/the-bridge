@@ -550,7 +550,7 @@ body.t-night header{background:linear-gradient(180deg,#10131c 0%,var(--bg) 100%)
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b15.0.2';
+var BUILD='b15.1.0';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -716,7 +716,7 @@ m=(t+' '+r).match(/\b(?:confirm|choose|decide|say|tell (?:me|the house))\b[^.?]{
 if(m){o=[m[1],m[2]].map(function(x){for(var i=0;i<3;i++)x=x.replace(/^(?:this|that|the|a|an|to|be|should|would|it|stand-down)\s+/i,'');return capOne(x);});if(o.every(function(x){return x.length<=24&&x.length>=3;}))return o.map(pretty);}
 return null;
 function pretty(x){var k=String(x).toLowerCase().trim();var M={'keep':'Keep it','cancel':'Cancel it','cut':'Cut it','renew':'Renew it','mend':'Mend it','let lapse':'Let it lapse','mend card':'Mend the card','mend the card':'Mend the card','let go':'Let it go','phone':'Phone follow-up','lifted':'Lift it','continue':'Continue','stand down':'Stand down','book':'Book it','flag for cancellation':'Not mine — cancel it','confirm this is your own sign-up':'Mine — keep it'};return M[k]||x;}}
-function classify(it){var kind=String(it.kind||'').toLowerCase();if(KINDS[kind]&&kind!=='tap'&&kind!=='money')return kind;
+function classify(it){if(it&&it.close)return 'close';var kind=String(it.kind||'').toLowerCase();if(KINDS[kind]&&kind!=='tap'&&kind!=='money')return kind;
 var t=(it.title||'')+' '+(it.why||'')+' '+(it.line||'');
 if(it.options&&it.options.length)return 'choice';
 var opts=extractOptions(it.title||firstLine(it.line||''),(it.why||'')+' '+(it.line||''));if(opts){it.options=opts;return 'choice';}
@@ -736,7 +736,7 @@ else{((s&&s.taps)||[]).forEach(function(x){if(x&&x.id)src.push(Object.assign({sr
 src.forEach(function(it){it.title=String(it.title||'').replace(/^NEW\s+/,'');it.tk=toks(it.title);it.tk2=toks(it.why||'');it.sub=subj(it.title);it.merged=[];});
 var used={};
 for(var i=0;i<src.length;i++){var a=src[i];if(used[a.id])continue;
-for(var j=i+1;j<src.length;j++){var b=src[j];if(used[b.id])continue;
+for(var j=i+1;j<src.length;j++){var b=src[j];if(used[b.id])continue;if(a.close||b.close)continue;
 var idA=a.id.replace(/^[a-z]-/i,''),idB=b.id.replace(/^[a-z]-/i,'');var sameId=idA===idB||idA.indexOf(idB)===0||idB.indexOf(idA)===0;
 var sc=shared(a.tk,b.tk);var sameSub=a.sub&&a.sub===b.sub;
 if(sameId||sc>=2||sameSub){used[b.id]=1;a.merged.push(b);if(!a.why&&(b.why||b.line))a.why=b.why||b.line;if(!a.url&&b.url)a.url=b.url;if(!a.paper&&b.paper)a.paper=b.paper;if(b.urgent)a.urgent=true;if(!a.due&&b.due)a.due=b.due;if(!a.amount&&b.amount)a.amount=b.amount;if(!a.dflt&&b.dflt)a.dflt=b.dflt;if(b.options&&!a.options)a.options=b.options;}}
@@ -769,7 +769,7 @@ case 'house':A.push({l:'Noted ✓',v:'done',n:'noted',s:'ok'});A.push({l:'Fixed 
 case 'decision':A.push({l:'Approve',v:'approve',s:'p'});A.push({l:'Veto',kind:'veto',s:'bad'});A.push({l:'A word',kind:'word'});A.push({l:'Later',kind:'later',s:'q'});break;
 default:if(u)A.push({l:'Open ↗',go:u});A.push({l:'Done ✓',v:'done',n:'done',s:'ok'});A.push({l:'Drop it',kind:'veto',s:'bad'});A.push({l:'Later',kind:'later',s:'q'});}
 return A;}
-var KIND_LABEL={choice:'your call',leak:'money leaving',renewal:'renewal',money:'money',booking:'booking',job:'career',answer:'a written word',docs:'papers wanted',house:'house notice',decision:'your word',tap:'one tap'};
+var KIND_LABEL={close:'monthly close',choice:'your call',leak:'money leaving',renewal:'renewal',money:'money',booking:'booking',job:'career',answer:'a written word',docs:'papers wanted',house:'house notice',decision:'your word',tap:'one tap'};
 /* decided & snoozed matters stay off the screen — 14 days, or until the date you named — unless the house restages them with a real change */
 function decidedFor(it){for(var i=0;i<it.ids.length;i++){var d=decided[it.ids[i]];if(d)return d;}return null;}
 function parseUntil(s){s=String(s||'');var m=s.match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2}))?/);if(!m)return 0;return new Date(+m[1],+m[2]-1,+m[3],m[4]?+m[4]:9,m[5]?+m[5]:0).getTime();}
@@ -798,9 +798,162 @@ function sinceDigest(s){s=s||{};var since=prevLook||0;var ran=[],notes=0,papers=
 return {since:since,ran:ran.length,notes:notes,papers:papers,hi:hi};}
 </script>
 <script>
+/* ===== b15.1 · MONTHLY CLOSE PANEL — inline module, one file as always ===== */
+(function (global) {
+  "use strict";
+
+  var CSS = [
+    ".bc{--bc-you:#fff2cc;--bc-you-ink:#7a5a00;--bc-alf:#dbe9f7;--bc-alf-ink:#1f4e79;--bc-calc:#efeeea;--bc-go:#1f6f43;--bc-go-bg:#dcefe3;--bc-warn:#b3261e;--bc-line:#e3e1db;--bc-mute:#6b6964;--bc-ink:inherit;font-size:15px;line-height:1.4}",
+    "@media(prefers-color-scheme:dark){.bc{--bc-you:#4a3b00;--bc-you-ink:#ffd966;--bc-alf:#1b3350;--bc-alf-ink:#9cc5f0;--bc-calc:#2a2925;--bc-go:#7fd1a0;--bc-go-bg:#163826;--bc-warn:#ff8a80;--bc-line:#33312c;--bc-mute:#a09d95}}",
+    ".bc h3{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--bc-mute);margin:14px 0 6px}",
+    ".bc h3:first-child{margin-top:4px}",
+    ".bc .bc-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--bc-line)}",
+    ".bc .bc-row:first-of-type{border-top:0}",
+    ".bc .bc-lbl{flex:1}.bc .bc-hint{display:block;font-size:12px;color:var(--bc-mute)}",
+    ".bc .bc-tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;margin-left:6px;vertical-align:middle}",
+    ".bc .bc-tag.you{background:var(--bc-you);color:var(--bc-you-ink)}.bc .bc-tag.alf{background:var(--bc-alf);color:var(--bc-alf-ink)}",
+    ".bc input{width:130px;max-width:42%;font:inherit;font-weight:600;text-align:right;padding:7px 9px;border:1px solid var(--bc-line);border-radius:9px;background:var(--bc-you);color:var(--bc-ink)}",
+    ".bc input.alf{background:var(--bc-alf)}",
+    ".bc .bc-val{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}",
+    ".bc .bc-seg{display:flex;gap:5px;flex-wrap:wrap}.bc .bc-seg button{font:inherit;font-size:13px;font-weight:600;padding:6px 10px;border-radius:9px;border:1px solid var(--bc-line);background:transparent;color:inherit}",
+    ".bc .bc-seg button.on{background:var(--bc-you);border-color:var(--bc-you-ink);color:var(--bc-you-ink)}",
+    ".bc .bc-seg button.paid.on{background:var(--bc-go-bg);border-color:var(--bc-go);color:var(--bc-go)}",
+    ".bc .bc-line.paid .bc-lbl,.bc .bc-line.paid .bc-val{text-decoration:line-through;color:var(--bc-mute)}",
+    ".bc .bc-big{display:flex;align-items:baseline;justify-content:space-between;background:var(--bc-go-bg);border-radius:11px;padding:12px;margin:6px 0 8px}",
+    ".bc .bc-big .bc-lbl{font-weight:700;color:var(--bc-go)}.bc .bc-big .bc-val{font-size:28px;color:var(--bc-go)}",
+    ".bc .bc-warn{color:var(--bc-warn);font-weight:600;font-size:13px;min-height:16px}",
+    ".bc .bc-btn{display:block;width:100%;text-align:center;font:inherit;font-weight:700;padding:13px;border-radius:11px;border:0;background:#1c1b18;color:#fff;cursor:pointer;margin-top:8px;text-decoration:none}",
+    "@media(prefers-color-scheme:dark){.bc .bc-btn{background:#f0eee9;color:#141412}}",
+    ".bc .bc-btn.sent{background:var(--bc-go-bg);color:var(--bc-go)}",
+    ".bc .bc-tap{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--bc-calc);border-radius:9px;padding:8px;margin-top:8px;word-break:break-word;color:var(--bc-mute)}"
+  ].join("\n");
+
+  function injectCss() {
+    if (document.getElementById("bc-css")) return;
+    var s = document.createElement("style"); s.id = "bc-css"; s.textContent = CSS; document.head.appendChild(s);
+  }
+  function fmt(n) {
+    n = Math.round(n || 0); var s = String(Math.abs(n)), last3 = s.slice(-3), rest = s.slice(0, -3);
+    if (rest) last3 = "," + last3; rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+    return (n < 0 ? "-" : "") + "\u20b9" + rest + last3;
+  }
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function num(v) { var n = parseFloat(v); return isNaN(n) ? 0 : n; }
+
+  function render(container, item, sendTap) {
+    injectCss();
+    var c = item.close || {};
+    var key = "bc-" + item.id;
+    var saved = {}; try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch (e) {}
+    var state = {
+      bank: saved.bank != null ? saved.bank : c.bank,
+      karthik: saved.karthik != null ? saved.karthik : "",
+      choice: saved.choice || "rec",
+      custom: saved.custom != null ? saved.custom : "",
+      keep: saved.keep != null ? saved.keep : (c.keep != null ? c.keep : 20000),
+      oneoff: saved.oneoff != null ? saved.oneoff : 0,
+      lines: (c.lines || []).map(function (l, i) { return { name: l.name, amount: l.amount, due: saved.lines && saved.lines[i] != null ? saved.lines[i] : (l.status !== "paid"), home: !!l.home }; }),
+      sent: !!saved.sent
+    };
+    var root = el("div", "bc");
+    container.innerHTML = ""; container.appendChild(root);
+
+    root.appendChild(el("h3", null, "Money in"));
+    var rIn = el("div");
+    rIn.appendChild(row("Salary credited", c.salaryNote, inp("salary", c.salary, true)));
+    rIn.appendChild(row("Other money in", c.otherNote, inp("other", c.other, true)));
+    rIn.appendChild(row("Bank balance right now <span class='bc-tag you'>you</span>", "Both accounts, roughly.", inp("bank", state.bank, false)));
+    root.appendChild(rIn);
+
+    root.appendChild(el("h3", null, "Going out this month <span class='bc-tag alf'>Alfred marked paid from your bank alerts; fix any he got wrong</span>"));
+    var rOut = el("div");
+    state.lines.forEach(function (l, i) {
+      var r = el("div", "bc-row bc-line" + (l.due ? "" : " paid"));
+      var lbl = el("span", "bc-lbl", l.name + (l.home ? "<span class='bc-hint' id='bc-homehint'></span>" : ""));
+      var right = el("div", "bc-seg");
+      var v = el("span", "bc-val", fmt(l.amount)); v.style.marginRight = "6px"; v.id = "bc-amt-" + i;
+      var bPaid = el("button", "paid" + (l.due ? "" : " on"), "Paid"); var bDue = el("button", (l.due ? "on" : ""), "Due");
+      bPaid.type = bDue.type = "button";
+      bPaid.onclick = function () { l.due = false; r.classList.add("paid"); bPaid.classList.add("on"); bDue.classList.remove("on"); calc(); };
+      bDue.onclick = function () { l.due = true; r.classList.remove("paid"); bDue.classList.add("on"); bPaid.classList.remove("on"); calc(); };
+      right.appendChild(v); right.appendChild(bPaid); right.appendChild(bDue);
+      r.appendChild(lbl); r.appendChild(right); rOut.appendChild(r);
+    });
+    root.appendChild(rOut);
+
+    root.appendChild(el("h3", null, "Your answers <span class='bc-tag you'>you</span>"));
+    var rYou = el("div");
+    rYou.appendChild(row("Karthik's supplementary spends", "Only what you want netted off the money to home.", inp("karthik", state.karthik, false, "0")));
+    rYou.appendChild(row("Keep aside till next salary", "Day-to-day, Swiggy, Uber, misc. Nothing below this gets touched.", inp("keep", state.keep, false)));
+    rYou.appendChild(row("One-offs this month", "Travel, gifts, anything unusual. 0 if none.", inp("oneoff", state.oneoff, false)));
+    root.appendChild(rYou);
+
+    root.appendChild(el("h3", null, "Diners " + (c.diners && c.diners.last4 ? "XX" + c.diners.last4 : "") + " <span class='bc-tag alf'>statement " + fmt(c.diners.total) + ", due " + (c.diners.dueText || c.diners.due) + "</span>"));
+    var seg = el("div", "bc-seg"); var choices = [["rec", "Alfred's number"], ["full", "Full"], ["min", "Minimum " + fmt(c.diners.min)], ["custom", "Custom"]];
+    var customRow = row("Custom amount", null, inp("custom", state.custom, false)); customRow.style.display = "none";
+    choices.forEach(function (ch) {
+      var b = el("button", state.choice === ch[0] ? "on" : "", ch[1]); b.type = "button";
+      b.onclick = function () { state.choice = ch[0]; Array.prototype.forEach.call(seg.children, function (x) { x.classList.toggle("on", x === b); }); customRow.style.display = ch[0] === "custom" ? "flex" : "none"; calc(); };
+      seg.appendChild(b);
+    });
+    if (state.choice === "custom") customRow.style.display = "flex";
+    root.appendChild(seg); root.appendChild(customRow);
+
+    var big = el("div", "bc-big"); big.appendChild(el("span", "bc-lbl", "Pay on Diners")); var payV = el("span", "bc-val", "\u2014"); big.appendChild(payV); root.appendChild(big);
+    var calcRows = {}; var rCalc = el("div");
+    [["home", "Net to home after Karthik"], ["due", "Still to leave the bank (Due lines)"], ["free", "Cash free for Diners"], ["carried", "Carried on Diners after payment"], ["interest", "Interest next cycle (est. " + Math.round((c.rate || 0.034) * 1000) / 10 + "%)"], ["left", "Cash left after everything"], ["second", "Second Diners payment after salary (approx)"]].forEach(function (p) {
+      var r = el("div", "bc-row"); r.appendChild(el("span", "bc-lbl", p[1])); var v = el("span", "bc-val", "\u2014"); r.appendChild(v); calcRows[p[0]] = v; rCalc.appendChild(r);
+    });
+    root.appendChild(rCalc);
+    var warn = el("div", "bc-warn"); root.appendChild(warn);
+
+    var btn = el("button", "bc-btn" + (state.sent ? " sent" : ""), state.sent ? "Sent to Alfred \u2713 (tap again to resend)" : "Send to Alfred"); btn.type = "button"; root.appendChild(btn);
+    var tapBox = el("div", "bc-tap"); root.appendChild(tapBox);
+
+    function inp(id, val, alfred, ph) { var i = document.createElement("input"); i.type = "number"; i.inputMode = "numeric"; i.id = "bc-" + id; if (alfred) i.className = "alf"; if (val != null && val !== "") i.value = val; if (ph) i.placeholder = ph; i.addEventListener("input", calc); return i; }
+    function row(label, hint, control) { var r = el("div", "bc-row"); r.appendChild(el("span", "bc-lbl", label + (hint ? "<span class='bc-hint'>" + hint + "</span>" : ""))); r.appendChild(control); return r; }
+    function g(id) { return num((root.querySelector("#bc-" + id) || {}).value); }
+
+    function calc() {
+      var total = c.diners.total, min = c.diners.min, bank = g("bank"), karthik = g("karthik"), keep = g("keep"), oneoff = g("oneoff");
+      var due = 0, homeNet = 0;
+      state.lines.forEach(function (l, i) {
+        var amt = l.amount;
+        if (l.home) { amt = Math.max(0, l.amount - karthik); homeNet = amt; var h = root.querySelector("#bc-homehint"); if (h) h.textContent = karthik ? "17,000 less Karthik's " + fmt(karthik) + " = " + fmt(amt) : ""; var av = root.querySelector("#bc-amt-" + i); if (av) av.textContent = fmt(amt); }
+        if (l.due) due += amt;
+      });
+      var free = bank - due - oneoff - keep;
+      var rec = Math.max(min, Math.floor(Math.min(total, Math.max(0, free)) / 1000) * 1000);
+      var pay = state.choice === "full" ? total : state.choice === "min" ? min : state.choice === "custom" ? g("custom") : rec;
+      var carried = total - pay, interest = carried * (c.rate || 0.034), left = bank - due - oneoff - pay;
+      var second = Math.floor(Math.max(0, g("salary") - (c.nextFixed || 0) - keep) / 10000) * 10000;
+      payV.textContent = fmt(pay); calcRows.home.textContent = fmt(homeNet); calcRows.due.textContent = fmt(due); calcRows.free.textContent = fmt(free);
+      calcRows.carried.textContent = fmt(carried); calcRows.interest.textContent = fmt(interest); calcRows.left.textContent = fmt(left); calcRows.second.textContent = fmt(second);
+      var w = ""; if (pay < min) w = "Below the minimum due."; else if (left < keep) w = "This eats " + fmt(keep - left) + " of your keep-aside."; else if (karthik > (c.homeAmount || 17000)) w = "Karthik is over the home amount by " + fmt(karthik - (c.homeAmount || 17000)) + "; he owes you that. Alfred logs it.";
+      warn.textContent = w;
+      var dw = state.choice === "full" ? "full" : state.choice === "min" ? "min" : String(Math.round(pay));
+      var paidNames = state.lines.filter(function (l) { return !l.due; }).map(function (l) { return l.name; }).join("/") || "none";
+      var tap = "on " + item.id + ": karthik " + Math.round(karthik) + ", diners " + dw + " (" + Math.round(pay) + "), keep " + Math.round(keep) + ", oneoff " + Math.round(oneoff) + ", bank " + Math.round(bank) + ", paid " + paidNames;
+      tapBox.textContent = tap; state.tap = tap;
+      state.bank = g("bank"); state.karthik = root.querySelector("#bc-karthik").value; state.custom = root.querySelector("#bc-custom").value; state.keep = g("keep"); state.oneoff = g("oneoff");
+      try { localStorage.setItem(key, JSON.stringify({ bank: state.bank, karthik: state.karthik, choice: state.choice, custom: state.custom, keep: state.keep, oneoff: state.oneoff, lines: state.lines.map(function (l) { return l.due; }), sent: state.sent })); } catch (e) {}
+    }
+    btn.onclick = function () {
+      var t = state.tap;
+      var done = function () { state.sent = true; btn.className = "bc-btn sent"; btn.textContent = "Sent to Alfred \u2713 (tap again to resend)"; calc(); };
+      if (typeof sendTap === "function") { try { var r = sendTap(t); if (r && typeof r.then === "function") r.then(done, function () { alert("The Bridge couldn't file the tap. Try again."); }); else done(); } catch (e) { alert("The Bridge couldn't file the tap. Try again."); } }
+      else { window.location.href = "mailto:" + (c.to || "venkatesh.iyer1989+alfred@gmail.com") + "?subject=" + encodeURIComponent("[Bridge] " + item.id) + "&body=" + encodeURIComponent(t); done(); }
+    };
+    calc();
+    return root;
+  }
+
+  global.BridgeClose = { render: render, version: "b15.0" };
+})(window);
+
 /* ===== CARDS ===== */
 function deskOf(it){return persona(it.desk||it.title||'');}
-function cardEl(it,compact){var p=deskOf(it);var d=document.createElement('div');d.className='card '+(it.kind==='leak'||it.kind==='money'||it.kind==='renewal'?'money ':'')+(it.urgent?'urgent ':'')+(it.kind==='house'?'house':'');
+function cardEl(it,compact){if(it.close&&window.BridgeClose){var dc=document.createElement('div');dc.className='card money '+(it.urgent?'urgent ':'');BridgeClose.render(dc,it,function(t){if(!live()){toast('Specimen — nothing left the house.');throw new Error('demo');}rawSend(t,true);toast('✓ Sent — the Treasurer has it.');});return dc;}var p=deskOf(it);var d=document.createElement('div');d.className='card '+(it.kind==='leak'||it.kind==='money'||it.kind==='renewal'?'money ':'')+(it.urgent?'urgent ':'')+(it.kind==='house'?'house':'');
 var dd=dueDays(it);var tags='';
 if(it.urgent)tags+='<span class="tag urgent">urgent</span>';
 if(it.amount)tags+='<span class="tag money">'+esc(it.amount)+'</span>';
@@ -1167,7 +1320,7 @@ function fetchVoice(){if(!live())return;ringOnce(wireUrl(),'&op=voiceping',15000
 
 /* ===== NAV · SETTINGS · STUDY · SPEECH ===== */
 document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){showView(b.dataset.v);vib(6);if(b.dataset.v==='v-home'){curK='';renderHome();fetchThread();}if(b.dataset.v==='v-people'){curK='';renderRoster();fetchThread();}if(b.dataset.v==='v-life'){renderAreas();}if(b.dataset.v==='v-feed'){renderFeed();fetchEvents();}if(b.dataset.v==='v-study'){renderPapersStudy();renderDecided();}};});
-$('btnGear').onclick=function(){$('setUrl').value=cfg.url;$('setKey').value=cfg.key;$('buildNote').textContent='build '+BUILD+' · 24 Sep 2026 — the letter first · every area of your life · the feed of mail and money · say anything from the front step · one card per matter with its own buttons · decisions stick.';diary();$('mSettings').classList.add('on');};
+$('btnGear').onclick=function(){$('setUrl').value=cfg.url;$('setKey').value=cfg.key;$('buildNote').textContent='build '+BUILD+' · 5 Oct 2026 — the monthly close lives on the Bridge · 24 Sep — the letter first · every area of your life · the feed of mail and money · say anything from the front step · one card per matter with its own buttons · decisions stick.';diary();$('mSettings').classList.add('on');};
 $('btnCloseSet').onclick=function(){$('mSettings').classList.remove('on');};
 $('btnSaveSet').onclick=function(){cfg.url=$('setUrl').value.trim();cfg.key=$('setKey').value.trim();if(cfg.url===CANON)cfg.url='';localStorage.setItem('br_url',cfg.url);localStorage.setItem('br_key',cfg.key);$('mSettings').classList.remove('on');toast('The wire is laid.');fetchState();fetchThread();fetchKitchen();fetchVoice();};
 $('btnTestSet').onclick=function(){var u=$('setUrl').value.trim()||CANON,k=$('setKey').value.trim();if(!k){toast('The key first.');return;}var t0=Date.now();$('diag').textContent='ringing '+u.replace(/\/macros\/s\/([^/]{8})[^/]*\//,'/macros/s/$1…/')+' …';
