@@ -550,7 +550,7 @@ body.t-night header{background:linear-gradient(180deg,#10131c 0%,var(--bg) 100%)
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b15.1.0';
+var BUILD='b15.1.1';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -818,7 +818,8 @@ return {since:since,ran:ran.length,notes:notes,papers:papers,hi:hi};}
     ".bc .bc-seg{display:flex;gap:5px;flex-wrap:wrap}.bc .bc-seg button{font:inherit;font-size:13px;font-weight:600;padding:6px 10px;border-radius:9px;border:1px solid var(--bc-line);background:transparent;color:inherit}",
     ".bc .bc-seg button.on{background:var(--bc-you);border-color:var(--bc-you-ink);color:var(--bc-you-ink)}",
     ".bc .bc-seg button.paid.on{background:var(--bc-go-bg);border-color:var(--bc-go);color:var(--bc-go)}",
-    ".bc .bc-line.paid .bc-lbl,.bc .bc-line.paid .bc-val{text-decoration:line-through;color:var(--bc-mute)}",
+    ".bc .bc-line.paid .bc-lbl,.bc .bc-line.paid .bc-val,.bc .bc-line.notmine .bc-lbl,.bc .bc-line.notmine .bc-val{text-decoration:line-through;color:var(--bc-mute)}",
+    ".bc .bc-seg button.nm.on{background:var(--bc-alf);border-color:var(--bc-alf-ink);color:var(--bc-alf-ink)}",
     ".bc .bc-big{display:flex;align-items:baseline;justify-content:space-between;background:var(--bc-go-bg);border-radius:11px;padding:12px;margin:6px 0 8px}",
     ".bc .bc-big .bc-lbl{font-weight:700;color:var(--bc-go)}.bc .bc-big .bc-val{font-size:28px;color:var(--bc-go)}",
     ".bc .bc-warn{color:var(--bc-warn);font-weight:600;font-size:13px;min-height:16px}",
@@ -852,7 +853,9 @@ return {since:since,ran:ran.length,notes:notes,papers:papers,hi:hi};}
       custom: saved.custom != null ? saved.custom : "",
       keep: saved.keep != null ? saved.keep : (c.keep != null ? c.keep : 20000),
       oneoff: saved.oneoff != null ? saved.oneoff : 0,
-      lines: (c.lines || []).map(function (l, i) { return { name: l.name, amount: l.amount, due: saved.lines && saved.lines[i] != null ? saved.lines[i] : (l.status !== "paid"), home: !!l.home }; }),
+      lines: (c.lines || []).map(function (l, i) { var st = saved.lines && saved.lines[i] != null ? saved.lines[i] : (l.status || "due"); if (st === true) st = "due"; if (st === false) st = "paid"; return { name: l.name, amount: l.amount, st: st, home: !!l.home }; }),
+      spl: saved.spl != null ? saved.spl : ((c.splitwise && c.splitwise.owed) || 0),
+      splCount: saved.splCount || "no",
       sent: !!saved.sent
     };
     var root = el("div", "bc");
@@ -865,18 +868,18 @@ return {since:since,ran:ran.length,notes:notes,papers:papers,hi:hi};}
     rIn.appendChild(row("Bank balance right now <span class='bc-tag you'>you</span>", "Both accounts, roughly.", inp("bank", state.bank, false)));
     root.appendChild(rIn);
 
-    root.appendChild(el("h3", null, "Going out this month <span class='bc-tag alf'>Alfred marked paid from your bank alerts; fix any he got wrong</span>"));
+    root.appendChild(el("h3", null, "Going out this month <span class='bc-tag alf'>Alfred pre-marks from your bank alerts; fix any he got wrong</span><span class='bc-hint'>Due = still leaves your bank. Paid = already gone. Not mine = Archana paid it (nothing to net).</span>"));
     var rOut = el("div");
     state.lines.forEach(function (l, i) {
-      var r = el("div", "bc-row bc-line" + (l.due ? "" : " paid"));
-      var lbl = el("span", "bc-lbl", l.name + (l.home ? "<span class='bc-hint' id='bc-homehint'></span>" : ""));
+      var r = el("div", "bc-row bc-line" + (l.st === "due" ? "" : " " + l.st));
+      var lbl = el("span", "bc-lbl", l.name + (l.home ? "<span class='bc-hint' id='bc-homehint'></span>" : "") + "<span class='bc-hint' id='bc-nm-" + i + "'>" + (l.st === "notmine" ? "Paid by Archana; not your money" : "") + "</span>");
       var right = el("div", "bc-seg");
       var v = el("span", "bc-val", fmt(l.amount)); v.style.marginRight = "6px"; v.id = "bc-amt-" + i;
-      var bPaid = el("button", "paid" + (l.due ? "" : " on"), "Paid"); var bDue = el("button", (l.due ? "on" : ""), "Due");
-      bPaid.type = bDue.type = "button";
-      bPaid.onclick = function () { l.due = false; r.classList.add("paid"); bPaid.classList.add("on"); bDue.classList.remove("on"); calc(); };
-      bDue.onclick = function () { l.due = true; r.classList.remove("paid"); bDue.classList.add("on"); bPaid.classList.remove("on"); calc(); };
-      right.appendChild(v); right.appendChild(bPaid); right.appendChild(bDue);
+      var bDue = el("button", (l.st === "due" ? "on" : ""), "Due"), bPaid = el("button", "paid" + (l.st === "paid" ? " on" : ""), "Paid"), bNm = el("button", "nm" + (l.st === "notmine" ? " on" : ""), "Not mine");
+      bDue.type = bPaid.type = bNm.type = "button";
+      function set(st) { l.st = st; r.className = "bc-row bc-line" + (st === "due" ? "" : " " + st); bDue.classList.toggle("on", st === "due"); bPaid.classList.toggle("on", st === "paid"); bNm.classList.toggle("on", st === "notmine"); var h = root.querySelector("#bc-nm-" + i); if (h) h.textContent = st === "notmine" ? "Paid by Archana; not your money" : ""; calc(); }
+      bDue.onclick = function () { set("due"); }; bPaid.onclick = function () { set("paid"); }; bNm.onclick = function () { set("notmine"); };
+      right.appendChild(v); right.appendChild(bDue); right.appendChild(bPaid); right.appendChild(bNm);
       r.appendChild(lbl); r.appendChild(right); rOut.appendChild(r);
     });
     root.appendChild(rOut);
@@ -886,6 +889,11 @@ return {since:since,ran:ran.length,notes:notes,papers:papers,hi:hi};}
     rYou.appendChild(row("Karthik's supplementary spends", "Only what you want netted off the money to home.", inp("karthik", state.karthik, false, "0")));
     rYou.appendChild(row("Keep aside till next salary", "Day-to-day, Swiggy, Uber, misc. Nothing below this gets touched.", inp("keep", state.keep, false)));
     rYou.appendChild(row("One-offs this month", "Travel, gifts, anything unusual. 0 if none.", inp("oneoff", state.oneoff, false)));
+    rYou.appendChild(row("Owed to you on Splitwise", (c.splitwise && c.splitwise.note) || "Archana and others, after netting. Not counted until it lands.", inp("spl", state.spl, false, "0")));
+    var splRow = el("div", "bc-row"); splRow.appendChild(el("span", "bc-lbl", "Count it toward Diners?<span class='bc-hint'>Yes only if it will land before the due date.</span>"));
+    var splSeg = el("div", "bc-seg"); var bNo = el("button", state.splCount === "no" ? "on" : "", "No"), bYes = el("button", state.splCount === "yes" ? "on" : "", "Yes"); bNo.type = bYes.type = "button";
+    bNo.onclick = function () { state.splCount = "no"; bNo.classList.add("on"); bYes.classList.remove("on"); calc(); }; bYes.onclick = function () { state.splCount = "yes"; bYes.classList.add("on"); bNo.classList.remove("on"); calc(); };
+    splSeg.appendChild(bNo); splSeg.appendChild(bYes); splRow.appendChild(splSeg); rYou.appendChild(splRow);
     root.appendChild(rYou);
 
     root.appendChild(el("h3", null, "Diners " + (c.diners && c.diners.last4 ? "XX" + c.diners.last4 : "") + " <span class='bc-tag alf'>statement " + fmt(c.diners.total) + ", due " + (c.diners.dueText || c.diners.due) + "</span>"));
@@ -920,23 +928,25 @@ return {since:since,ran:ran.length,notes:notes,papers:papers,hi:hi};}
       state.lines.forEach(function (l, i) {
         var amt = l.amount;
         if (l.home) { amt = Math.max(0, l.amount - karthik); homeNet = amt; var h = root.querySelector("#bc-homehint"); if (h) h.textContent = karthik ? "17,000 less Karthik's " + fmt(karthik) + " = " + fmt(amt) : ""; var av = root.querySelector("#bc-amt-" + i); if (av) av.textContent = fmt(amt); }
-        if (l.due) due += amt;
+        if (l.st === "due") due += amt;
       });
-      var free = bank - due - oneoff - keep;
+      var spl = g("spl"), splIn = state.splCount === "yes" ? spl : 0;
+      var free = bank + splIn - due - oneoff - keep;
       var rec = Math.max(min, Math.floor(Math.min(total, Math.max(0, free)) / 1000) * 1000);
       var pay = state.choice === "full" ? total : state.choice === "min" ? min : state.choice === "custom" ? g("custom") : rec;
-      var carried = total - pay, interest = carried * (c.rate || 0.034), left = bank - due - oneoff - pay;
+      var carried = total - pay, interest = carried * (c.rate || 0.034), left = bank + splIn - due - oneoff - pay;
       var second = Math.floor(Math.max(0, g("salary") - (c.nextFixed || 0) - keep) / 10000) * 10000;
-      payV.textContent = fmt(pay); calcRows.home.textContent = fmt(homeNet); calcRows.due.textContent = fmt(due); calcRows.free.textContent = fmt(free);
+      payV.textContent = fmt(pay); calcRows.home.textContent = fmt(homeNet); calcRows.due.textContent = fmt(due); calcRows.free.textContent = fmt(free) + (splIn ? " (incl. Splitwise)" : "");
       calcRows.carried.textContent = fmt(carried); calcRows.interest.textContent = fmt(interest); calcRows.left.textContent = fmt(left); calcRows.second.textContent = fmt(second);
       var w = ""; if (pay < min) w = "Below the minimum due."; else if (left < keep) w = "This eats " + fmt(keep - left) + " of your keep-aside."; else if (karthik > (c.homeAmount || 17000)) w = "Karthik is over the home amount by " + fmt(karthik - (c.homeAmount || 17000)) + "; he owes you that. Alfred logs it.";
       warn.textContent = w;
       var dw = state.choice === "full" ? "full" : state.choice === "min" ? "min" : String(Math.round(pay));
-      var paidNames = state.lines.filter(function (l) { return !l.due; }).map(function (l) { return l.name; }).join("/") || "none";
-      var tap = "on " + item.id + ": karthik " + Math.round(karthik) + ", diners " + dw + " (" + Math.round(pay) + "), keep " + Math.round(keep) + ", oneoff " + Math.round(oneoff) + ", bank " + Math.round(bank) + ", paid " + paidNames;
+      var paidNames = state.lines.filter(function (l) { return l.st === "paid"; }).map(function (l) { return l.name; }).join("/") || "none";
+      var nmNames = state.lines.filter(function (l) { return l.st === "notmine"; }).map(function (l) { return l.name; }).join("/") || "none";
+      var tap = "on " + item.id + ": karthik " + Math.round(karthik) + ", diners " + dw + " (" + Math.round(pay) + "), keep " + Math.round(keep) + ", oneoff " + Math.round(oneoff) + ", bank " + Math.round(bank) + ", splitwise " + Math.round(spl) + " " + (state.splCount === "yes" ? "count" : "hold") + ", paid " + paidNames + ", notmine " + nmNames;
       tapBox.textContent = tap; state.tap = tap;
-      state.bank = g("bank"); state.karthik = root.querySelector("#bc-karthik").value; state.custom = root.querySelector("#bc-custom").value; state.keep = g("keep"); state.oneoff = g("oneoff");
-      try { localStorage.setItem(key, JSON.stringify({ bank: state.bank, karthik: state.karthik, choice: state.choice, custom: state.custom, keep: state.keep, oneoff: state.oneoff, lines: state.lines.map(function (l) { return l.due; }), sent: state.sent })); } catch (e) {}
+      state.bank = g("bank"); state.karthik = root.querySelector("#bc-karthik").value; state.custom = root.querySelector("#bc-custom").value; state.keep = g("keep"); state.oneoff = g("oneoff"); state.spl = g("spl");
+      try { localStorage.setItem(key, JSON.stringify({ bank: state.bank, karthik: state.karthik, choice: state.choice, custom: state.custom, keep: state.keep, oneoff: state.oneoff, spl: state.spl, splCount: state.splCount, lines: state.lines.map(function (l) { return l.st; }), sent: state.sent })); } catch (e) {}
     }
     btn.onclick = function () {
       var t = state.tap;
@@ -948,7 +958,7 @@ return {since:since,ran:ran.length,notes:notes,papers:papers,hi:hi};}
     return root;
   }
 
-  global.BridgeClose = { render: render, version: "b15.0" };
+  global.BridgeClose = { render: render, version: "b15.1.1" };
 })(window);
 
 /* ===== CARDS ===== */
