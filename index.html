@@ -550,7 +550,7 @@ body.t-night header{background:linear-gradient(180deg,#10131c 0%,var(--bg) 100%)
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b15.0.1';
+var BUILD='b15.0.2';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -773,9 +773,9 @@ var KIND_LABEL={choice:'your call',leak:'money leaving',renewal:'renewal',money:
 /* decided & snoozed matters stay off the screen — 14 days, or until the date you named — unless the house restages them with a real change */
 function decidedFor(it){for(var i=0;i<it.ids.length;i++){var d=decided[it.ids[i]];if(d)return d;}return null;}
 function parseUntil(s){s=String(s||'');var m=s.match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2}))?/);if(!m)return 0;return new Date(+m[1],+m[2]-1,+m[3],m[4]?+m[4]:9,m[5]?+m[5]:0).getTime();}
-function hiddenBy(it){if(it.until){var u=parseUntil(it.until);if(u&&Date.now()<u)return 'snoozed';}var d=decidedFor(it);if(!d)return null;if(it.restaged)return null;
+function hiddenBy(it){if(it.until){var u=parseUntil(it.until);if(u&&Date.now()<u)return 'snoozed';}var d=decidedFor(it);if(!d)return null;if(it.restaged&&stateAt()>d.t)return null;
 if(d.until){if(Date.now()<d.until)return 'snoozed';it.back=true;return null;}
-if(d.sig&&it.sig&&d.sig!==it.sig){it.changed=true;return null;}
+if(d.sig&&it.sig&&d.sig!==it.sig&&stateAt()>d.t){it.changed=true;return null;}
 return Date.now()-d.t<14*864e5?'decided':null;}
 function heat(it){var d=dueDays(it),h=0;if(it.urgent)h+=2;if(it.kind==='leak')h+=2;if(it.amount)h+=1;if(d!=null){if(d<0)h+=1;else if(d<=3)h+=2;else if(d<=7)h+=1;}return h;}
 function triage(items){var now=[],week=[],ans=[],house=[],hidden=[];
@@ -974,7 +974,7 @@ var when=!live()?' · specimen':stale&&hh?' · <span class="'+(old?'old':'')+'">
 $('topStat').innerHTML='<b>'+(warn?'A matter wants your eye':'The house is in order')+'</b>'+when+'<span class="sync" id="sync"></span>';
 var wb=$('wireBanner');if(live()&&stale&&wire.lastErr){wb.style.display='block';wb.innerHTML='The wire did not answer — <b>'+esc(wire.lastErr)+'</b>'+(wire.lastMs?' after '+(wire.lastMs/1000).toFixed(1)+'s':'')+'. <a href="#" id="wireAgain">Ring again</a>'+(cfg.url&&cfg.url!==CANON?' · <a href="#" id="wireCanon">use the house\'s own wire</a>':'')+' · ⚙ for the diary.';
 var a=$('wireAgain');if(a)a.onclick=function(e){e.preventDefault();fetchState();};var c=$('wireCanon');if(c)c.onclick=function(e){e.preventDefault();cfg.url='';localStorage.removeItem('br_url');toast('Ringing the canonical wire…');fetchState();};}else wb.style.display='none';
-var sb2=$('schemaBanner');if(live()&&s&&old){sb2.style.display='block';sb2.innerHTML='The Keeper\'s last state is <b>'+ageTxt+' old</b> — the docket may be stale. <a href="#" id="ringAgain">Ring the house ↻</a>';var ra=$('ringAgain');if(ra)ra.onclick=function(e){e.preventDefault();fetchState();};}else sb2.style.display='none';
+var sb2=$('schemaBanner');if(live()&&s&&old){sb2.style.display='block';sb2.innerHTML='The Keeper\'s last state is <b>'+ageTxt+' old</b>'+(age>6*36e5?' — the keeper has not published since '+esc(dayLab(stateAt())+' '+hhmm(stateAt()))+'. Refreshing here cannot help until it publishes again; if this lasts past the next hour, tell Alfred.':' — the docket may be stale.')+' <a href="#" id="ringAgain">Ring the house ↻</a>';var ra=$('ringAgain');if(ra)ra.onclick=function(e){e.preventDefault();fetchState();};}else sb2.style.display='none';
 timeTheme();renderHome();if(curK)renderChat();renderCareer();renderMoney();renderLife();renderAreas();if(curArea)openArea(curArea);renderFeed();renderPapersStudy();renderDecided();}
 function sectHead(el,txt,cnt){var h=document.createElement('h2');h.innerHTML='<span>'+esc(txt)+'</span>'+(cnt!=null?'<span class="cnt">'+esc(String(cnt))+'</span>':'');el.appendChild(h);}
 function chips(el,list){var c=document.createElement('div');c.className='chipsrow';list.forEach(function(x){var b=document.createElement('button');b.textContent=x[0];b.onclick=x[1];c.appendChild(b);});el.appendChild(c);}
