@@ -550,7 +550,7 @@ body.t-night header{background:linear-gradient(180deg,#10131c 0%,var(--bg) 100%)
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b15.1.1';
+var BUILD='b15.2.0';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -716,7 +716,7 @@ m=(t+' '+r).match(/\b(?:confirm|choose|decide|say|tell (?:me|the house))\b[^.?]{
 if(m){o=[m[1],m[2]].map(function(x){for(var i=0;i<3;i++)x=x.replace(/^(?:this|that|the|a|an|to|be|should|would|it|stand-down)\s+/i,'');return capOne(x);});if(o.every(function(x){return x.length<=24&&x.length>=3;}))return o.map(pretty);}
 return null;
 function pretty(x){var k=String(x).toLowerCase().trim();var M={'keep':'Keep it','cancel':'Cancel it','cut':'Cut it','renew':'Renew it','mend':'Mend it','let lapse':'Let it lapse','mend card':'Mend the card','mend the card':'Mend the card','let go':'Let it go','phone':'Phone follow-up','lifted':'Lift it','continue':'Continue','stand down':'Stand down','book':'Book it','flag for cancellation':'Not mine — cancel it','confirm this is your own sign-up':'Mine — keep it'};return M[k]||x;}}
-function classify(it){if(it&&it.close)return 'close';var kind=String(it.kind||'').toLowerCase();if(KINDS[kind]&&kind!=='tap'&&kind!=='money')return kind;
+function classify(it){if(it&&it.close)return 'close';if(it&&it.perks)return 'perks';var kind=String(it.kind||'').toLowerCase();if(KINDS[kind]&&kind!=='tap'&&kind!=='money')return kind;
 var t=(it.title||'')+' '+(it.why||'')+' '+(it.line||'');
 if(it.options&&it.options.length)return 'choice';
 var opts=extractOptions(it.title||firstLine(it.line||''),(it.why||'')+' '+(it.line||''));if(opts){it.options=opts;return 'choice';}
@@ -736,7 +736,7 @@ else{((s&&s.taps)||[]).forEach(function(x){if(x&&x.id)src.push(Object.assign({sr
 src.forEach(function(it){it.title=String(it.title||'').replace(/^NEW\s+/,'');it.tk=toks(it.title);it.tk2=toks(it.why||'');it.sub=subj(it.title);it.merged=[];});
 var used={};
 for(var i=0;i<src.length;i++){var a=src[i];if(used[a.id])continue;
-for(var j=i+1;j<src.length;j++){var b=src[j];if(used[b.id])continue;if(a.close||b.close)continue;
+for(var j=i+1;j<src.length;j++){var b=src[j];if(used[b.id])continue;if(a.close||b.close||a.perks||b.perks)continue;
 var idA=a.id.replace(/^[a-z]-/i,''),idB=b.id.replace(/^[a-z]-/i,'');var sameId=idA===idB||idA.indexOf(idB)===0||idB.indexOf(idA)===0;
 var sc=shared(a.tk,b.tk);var sameSub=a.sub&&a.sub===b.sub;
 if(sameId||sc>=2||sameSub){used[b.id]=1;a.merged.push(b);if(!a.why&&(b.why||b.line))a.why=b.why||b.line;if(!a.url&&b.url)a.url=b.url;if(!a.paper&&b.paper)a.paper=b.paper;if(b.urgent)a.urgent=true;if(!a.due&&b.due)a.due=b.due;if(!a.amount&&b.amount)a.amount=b.amount;if(!a.dflt&&b.dflt)a.dflt=b.dflt;if(b.options&&!a.options)a.options=b.options;}}
@@ -769,7 +769,7 @@ case 'house':A.push({l:'Noted ✓',v:'done',n:'noted',s:'ok'});A.push({l:'Fixed 
 case 'decision':A.push({l:'Approve',v:'approve',s:'p'});A.push({l:'Veto',kind:'veto',s:'bad'});A.push({l:'A word',kind:'word'});A.push({l:'Later',kind:'later',s:'q'});break;
 default:if(u)A.push({l:'Open ↗',go:u});A.push({l:'Done ✓',v:'done',n:'done',s:'ok'});A.push({l:'Drop it',kind:'veto',s:'bad'});A.push({l:'Later',kind:'later',s:'q'});}
 return A;}
-var KIND_LABEL={close:'monthly close',choice:'your call',leak:'money leaving',renewal:'renewal',money:'money',booking:'booking',job:'career',answer:'a written word',docs:'papers wanted',house:'house notice',decision:'your word',tap:'one tap'};
+var KIND_LABEL={close:'monthly close',perks:'card perks',choice:'your call',leak:'money leaving',renewal:'renewal',money:'money',booking:'booking',job:'career',answer:'a written word',docs:'papers wanted',house:'house notice',decision:'your word',tap:'one tap'};
 /* decided & snoozed matters stay off the screen — 14 days, or until the date you named — unless the house restages them with a real change */
 function decidedFor(it){for(var i=0;i<it.ids.length;i++){var d=decided[it.ids[i]];if(d)return d;}return null;}
 function parseUntil(s){s=String(s||'');var m=s.match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2}))?/);if(!m)return 0;return new Date(+m[1],+m[2]-1,+m[3],m[4]?+m[4]:9,m[5]?+m[5]:0).getTime();}
@@ -958,12 +958,58 @@ return {since:since,ran:ran.length,notes:notes,papers:papers,hi:hi};}
     return root;
   }
 
-  global.BridgeClose = { render: render, version: "b15.1.1" };
+  function renderPerks(container, item, sendTap) {
+    injectCss();
+    var p = item.perks || {};
+    var key = "bp-" + item.id;
+    var saved = {}; try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch (e) {}
+    var lines = (p.lines || []).map(function (l, i) { return { id: l.id || String(i), name: l.name, why: l.why, status: (saved.lines && saved.lines[i]) || l.status || "open", paused: !!l.paused, link: l.link }; });
+    var sent = !!saved.sent, note = saved.note || "";
+    var root = el("div", "bc"); container.innerHTML = ""; container.appendChild(root);
+    if (p.banner) root.appendChild(el("div", "bc-warn", p.banner));
+    root.appendChild(el("h3", null, (p.month || "This month") + " <span class='bc-tag alf'>" + (p.progress || "") + "</span>"));
+    var list = el("div");
+    lines.forEach(function (l, i) {
+      var r = el("div", "bc-row bc-line" + (l.status === "done" ? " paid" : l.status === "skip" ? " notmine" : ""));
+      var lbl = el("span", "bc-lbl", l.name + (l.why ? "<span class='bc-hint'>" + l.why + "</span>" : "") + (l.paused ? "<span class='bc-hint'>Paused: Diners is carrying a balance, so this would cost more in interest than it earns.</span>" : ""));
+      var seg = el("div", "bc-seg");
+      var bD = el("button", "paid" + (l.status === "done" ? " on" : ""), "Done"), bS = el("button", "nm" + (l.status === "skip" ? " on" : ""), "Skip"), bO = el("button", (l.status === "open" ? "on" : ""), "Open");
+      bD.type = bS.type = bO.type = "button";
+      function set(st) { l.status = st; r.className = "bc-row bc-line" + (st === "done" ? " paid" : st === "skip" ? " notmine" : ""); bD.classList.toggle("on", st === "done"); bS.classList.toggle("on", st === "skip"); bO.classList.toggle("on", st === "open"); calc(); }
+      bD.onclick = function () { set("done"); }; bS.onclick = function () { set("skip"); }; bO.onclick = function () { set("open"); };
+      if (l.paused) { bD.disabled = true; bD.style.opacity = ".4"; }
+      seg.appendChild(bO); seg.appendChild(bD); seg.appendChild(bS);
+      r.appendChild(lbl); r.appendChild(seg); list.appendChild(r);
+    });
+    root.appendChild(list);
+    var noteRow = el("div", "bc-row"); noteRow.appendChild(el("span", "bc-lbl", "Anything for Alfred<span class='bc-hint'>Upcoming travel, a big purchase, a membership that lapsed.</span>"));
+    var noteIn = document.createElement("input"); noteIn.type = "text"; noteIn.id = "bp-note"; noteIn.value = note; noteIn.style.maxWidth = "55%"; noteIn.style.textAlign = "left"; noteIn.addEventListener("input", calc); noteRow.appendChild(noteIn); root.appendChild(noteRow);
+    var btn = el("button", "bc-btn" + (sent ? " sent" : ""), sent ? "Sent to Alfred \u2713 (tap again to resend)" : "Send to Alfred"); btn.type = "button"; root.appendChild(btn);
+    var tapBox = el("div", "bc-tap"); root.appendChild(tapBox);
+    var tap = "";
+    function calc() {
+      var done = lines.filter(function (l) { return l.status === "done"; }).map(function (l) { return l.id; }).join("/") || "none";
+      var skip = lines.filter(function (l) { return l.status === "skip"; }).map(function (l) { return l.id; }).join("/") || "none";
+      note = noteIn.value.trim();
+      tap = "on " + item.id + ": done " + done + ", skip " + skip + (note ? ", note " + note : "");
+      tapBox.textContent = tap;
+      try { localStorage.setItem(key, JSON.stringify({ lines: lines.map(function (l) { return l.status; }), note: note, sent: sent })); } catch (e) {}
+    }
+    btn.onclick = function () {
+      var finish = function () { sent = true; btn.className = "bc-btn sent"; btn.textContent = "Sent to Alfred \u2713 (tap again to resend)"; calc(); };
+      if (typeof sendTap === "function") { try { var r = sendTap(tap); if (r && typeof r.then === "function") r.then(finish, function () { alert("The Bridge couldn't file the tap. Try again."); }); else finish(); } catch (e) { alert("The Bridge couldn't file the tap. Try again."); } }
+      else { window.location.href = "mailto:" + (p.to || "venkatesh.iyer1989+alfred@gmail.com") + "?subject=" + encodeURIComponent("[Bridge] " + item.id) + "&body=" + encodeURIComponent(tap); finish(); }
+    };
+    calc();
+    return root;
+  }
+
+  global.BridgeClose = { render: render, renderPerks: renderPerks, version: "b15.2.0" };
 })(window);
 
 /* ===== CARDS ===== */
 function deskOf(it){return persona(it.desk||it.title||'');}
-function cardEl(it,compact){if(it.close&&window.BridgeClose){var dc=document.createElement('div');dc.className='card money '+(it.urgent?'urgent ':'');BridgeClose.render(dc,it,function(t){if(!live()){toast('Specimen — nothing left the house.');throw new Error('demo');}rawSend(t,true);toast('✓ Sent — the Treasurer has it.');});return dc;}var p=deskOf(it);var d=document.createElement('div');d.className='card '+(it.kind==='leak'||it.kind==='money'||it.kind==='renewal'?'money ':'')+(it.urgent?'urgent ':'')+(it.kind==='house'?'house':'');
+function cardEl(it,compact){if(it.perks&&window.BridgeClose){var dp=document.createElement('div');dp.className='card money '+(it.urgent?'urgent ':'');dp.innerHTML='<div class="ttl"></div><div></div>';dp.firstChild.textContent=it.title||'Card perks';BridgeClose.renderPerks(dp.lastChild,it,function(t){if(!live()){toast('Specimen — nothing left the house.');throw new Error('demo');}rawSend(t,true);toast('✓ Sent — the Treasurer has it.');});return dp;}if(it.close&&window.BridgeClose){var dc=document.createElement('div');dc.className='card money '+(it.urgent?'urgent ':'');BridgeClose.render(dc,it,function(t){if(!live()){toast('Specimen — nothing left the house.');throw new Error('demo');}rawSend(t,true);toast('✓ Sent — the Treasurer has it.');});return dc;}var p=deskOf(it);var d=document.createElement('div');d.className='card '+(it.kind==='leak'||it.kind==='money'||it.kind==='renewal'?'money ':'')+(it.urgent?'urgent ':'')+(it.kind==='house'?'house':'');
 var dd=dueDays(it);var tags='';
 if(it.urgent)tags+='<span class="tag urgent">urgent</span>';
 if(it.amount)tags+='<span class="tag money">'+esc(it.amount)+'</span>';
