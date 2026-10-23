@@ -1451,15 +1451,16 @@ phPaint(el);}
 var _phLetter=renderLetter;renderLetter=function(s){_phLetter(s);try{phToday();}catch(e){}};
 
 /* Life › Kitchen: a photograph of the day's main dish */
-var DISH=[[/masala dosa|\bdosa\b/,'Masala dosa'],[/neer dosa/,'Neer dosa'],[/pesarattu/,'Pesarattu'],[/uttapam/,'Uttapam'],[/\bidli/,'Idli'],[/vada pav/,'Vada pav'],[/sabudana vada/,'Sabudana vada'],[/medu vada|\bvada\b/,'Medu vada'],
-[/\bupma/,'Upma'],[/sheera|suji (ka )?halwa/,'Suji ka halwa'],[/gajar/,'Gajar ka halwa'],[/\bhalwa|\bhalva/,'Halva'],[/ragi/,'Ragi mudde'],[/curd rice/,'Curd rice'],[/khichdi|khichadi/,'Khichdi'],[/pongal/,'Pongal (dish)'],[/biryani/,'Biryani'],[/pulao|pilaf/,'Pilaf'],[/rajma/,'Rajma'],[/chole|chana masala|\bchana\b/,'Chana masala'],
-[/palak paneer/,'Palak paneer'],[/matar paneer|mutter paneer/,'Matar paneer'],[/paneer/,'Paneer'],[/dal makhani/,'Dal makhani'],[/kadhi/,'Kadhi'],[/sambar|sambhar/,'Sambar (dish)'],[/rasam/,'Rasam (dish)'],[/aloo gobi|aloo gobhi/,'Aloo gobhi'],
-[/bhindi|okra/,'Okra'],[/dhokla/,'Dhokla'],[/misal/,'Misal pav'],[/pav bhaji/,'Pav bhaji'],[/appam/,'Appam'],[/puttu/,'Puttu'],[/kheer|payasam/,'Kheer'],[/raita/,'Raita'],[/kofta/,'Kofta'],[/\bmoong|\bmung/,'Mung bean'],
-[/oats|oatmeal|porridge/,'Oatmeal'],[/thepla/,'Thepla'],[/paratha/,'Paratha'],[/akki rotti/,'Akki rotti'],[/bhakri/,'Bhakri'],[/chapati|chapatti|phulka|\broti\b/,'Chapati'],[/sandwich/,'Sandwich'],[/soup/,'Soup'],[/salad/,'Salad']];
-function dishOf(s){s=String(s||'').toLowerCase();for(var i=0;i<DISH.length;i++)if(DISH[i][0].test(s))return DISH[i][1];return '';}
-var _phK=kcard;kcard=function(k,label,tom){var d=_phK(k,label,tom);try{if(k){var meal=[['lunch',k.lunch],['dinner',k.dinner],['nashta',k.breakfast]],t='',w='';
+var DISH=[[/masala dosa|\bdosa\b/,'File:Masala dosa 2.jpg','Masala dosa'],[/neer dosa/,'w:Neer dosa'],[/pesarattu/,'w:Pesarattu'],[/uttapam/,'w:Uttapam'],[/\bidli/,'w:Idli'],[/vada pav/,'w:Vada pav'],[/sabudana vada/,'w:Sabudana vada'],[/medu vada|\bvada\b/,'w:Medu vada'],
+[/\bpoha/,'File:Kanda Poha-Diu-DSC003.jpg','Kanda poha'],[/\bupma/,'w:Upma'],[/sheera|suji (ka )?halwa/,'w:Suji ka halwa'],[/gajar/,'w:Gajar ka halwa'],[/\bhalwa|\bhalva/,'w:Halva'],
+[/ragi/,'w:Ragi mudde'],[/curd rice/,'w:Curd rice'],[/khichdi|khichadi/,'File:Masala Khichadi.jpg','Khichdi'],[/pongal/,'w:Pongal (dish)'],[/biryani/,'w:Biryani'],[/pulao|pilaf/,'File:Veg Pulao with onion Raitha 02.jpg','Veg pulao'],[/rajma/,'w:Rajma'],[/chole|chana masala|\bchana\b/,'w:Chana masala'],
+[/palak paneer/,'w:Palak paneer'],[/matar paneer|mutter paneer/,'w:Matar paneer'],[/paneer/,'w:Paneer'],[/dal makhani/,'w:Dal makhani'],[/kadhi/,'w:Kadhi'],[/sambar|sambhar/,'w:Sambar (dish)'],[/rasam/,'File:Tomato Rasam - Home Made.JPG','Rasam'],[/\bdal\b|\bdaal\b|tadka/,'File:Dal Tadka-Delhi.jpg','Dal tadka'],[/aloo gobi|aloo gobhi/,'w:Aloo gobhi'],
+[/bhindi|okra/,'File:Bhindi Masala.jpg','Bhindi masala'],[/dhokla/,'w:Dhokla'],[/misal/,'w:Misal pav'],[/pav bhaji/,'w:Pav bhaji'],[/appam/,'w:Appam'],[/puttu/,'w:Puttu'],[/kheer|payasam/,'w:Kheer'],[/raita/,'w:Raita'],[/kofta/,'w:Kofta'],[/\bmoong|\bmung/,'w:Mung bean'],
+[/oats|oatmeal|porridge/,'w:Oatmeal'],[/sabzi|sabji|subzi/,'File:A thali with daal roti bhindi ki sabzi and mango pickle.jpg','Sabzi and roti'],[/thepla/,'w:Thepla'],[/paratha/,'w:Paratha'],[/akki rotti/,'w:Akki rotti'],[/bhakri/,'w:Bhakri'],[/chapati|chapatti|phulka|\broti\b/,'w:Chapati'],[/sandwich/,'w:Sandwich'],[/soup/,'w:Soup'],[/salad/,'w:Salad']];
+function dishOf(s){s=String(s||'').toLowerCase();for(var i=0;i<DISH.length;i++)if(DISH[i][0].test(s))return {ref:DISH[i][1],label:DISH[i][2]||DISH[i][1].replace(/^w:/,'').replace(/ \(.*\)$/,'')};return null;}
+var _phK=kcard;kcard=function(k,label,tom){var d=_phK(k,label,tom);try{if(k){var meal=[['lunch',k.lunch],['dinner',k.dinner],['nashta',k.breakfast]],t=null,w='';
 for(var i=0;i<meal.length&&!t;i++){t=dishOf(meal[i][1]);w=meal[i][0];}
-if(t){d.insertAdjacentHTML('afterbegin',phEl('w:'+t,'k-hero shade',500,'<b>'+esc(w)+'</b>'+esc(t.replace(/ \(.*\)$/,'')),false));phPaint(d);}}}catch(e){}return d;};
+if(t){d.insertAdjacentHTML('afterbegin',phEl(t.ref,'k-hero shade',500,'<b>'+esc(w)+'</b>'+esc(t.label),false));phPaint(d);}}}catch(e){}return d;};
 
 /* Life › Travel: a photograph of each journey's destination (guarded search; companions' names never sent) */
 function tripPlace(n){var s=String(n||'').split(/\s+(?:with|for|via)\s+|[(|:·—–-]\s/i)[0];
