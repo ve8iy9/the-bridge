@@ -1049,7 +1049,7 @@ else toast('Refused — '+(j.err==='key'?'the key was not honoured':j.err||'unkn
 /* ===== HEADER & RENDER ===== */
 function greet(){var h=new Date().getHours(),g;if(h<5)g='The small hours, Sir';else if(h<12)g='Good morning, Sir';else if(h<16)g='Good afternoon, Sir';else if(h<21)g='Good evening, Sir';else g='A quiet night, Sir';$('greet').textContent=g;}
 function render(){greet();$('demoBanner').style.display=live()?'none':'block';var s=stateNow();var warn=s&&s.glyph==='warn';
-var age=stateAge();var hh=stateAt()?hhmm(stateAt()):'';var ageTxt=age?(age>36e5?Math.floor(age/36e5)+'h':Math.max(1,Math.round(age/6e4))+'m'):'';var old=age>14*36e5;
+var age=stateAge();var hh=stateAt()?hhmm(stateAt()):'';var ageTxt=age?(age>36e5?Math.floor(age/36e5)+'h':Math.max(1,Math.round(age/6e4))+'m'):'';var old=age>27*36e5;
 var when=!live()?' · specimen':stale&&hh?' · <span class="'+(old?'old':'')+'">showing '+hh+' ('+ageTxt+' old) · wire down</span>':hh?' · state '+hh+(old?' <span class="old">('+ageTxt+' old)</span>':'')+'':' · awaiting the first answer';
 $('topStat').innerHTML='<b>'+(warn?'A matter wants your eye':'The house is in order')+'</b>'+when+'<span class="sync" id="sync"></span>';
 var wb=$('wireBanner');if(live()&&stale&&wire.lastErr){wb.style.display='block';wb.innerHTML='The wire did not answer — <b>'+esc(wire.lastErr)+'</b>'+(wire.lastMs?' after '+(wire.lastMs/1000).toFixed(1)+'s':'')+'. <a href="#" id="wireAgain">Ring again</a>'+(cfg.url&&cfg.url!==CANON?' · <a href="#" id="wireCanon">use the house\'s own wire</a>':'')+' · ⚙ for the diary.';
