@@ -428,7 +428,7 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
 .trip .tr-hero{margin:-11px -12px 10px;aspect-ratio:21/9}
 .card.potd .why{font-size:13px}
 
-/* b16.3 — stunning photographs, Us, the Kitchen */
+/* b16.5 — cards clear when answered; the Duty Desk answers in the chat */
 .ph.gm-hero:after,.ph.lt-hero:after{background:linear-gradient(180deg,rgba(0,0,0,.08) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,0) 48%,rgba(0,0,0,.62) 100%)}
 .ph .cap{font-family:"Fraunces",Georgia,serif;font-size:19px;font-weight:500;letter-spacing:-.01em;line-height:1.25;bottom:12px}
 .ph .cap b{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Inter,system-ui,sans-serif;font-size:10px;letter-spacing:1px;margin-bottom:4px;opacity:.9}
@@ -614,7 +614,7 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b16.3';
+var BUILD='b16.5';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -879,10 +879,13 @@ d.innerHTML='<div class="top"><span class="desk"><span class="av">'+p.av+'</span
 var bt=d.querySelector('.btns');actionsFor(it).forEach(function(a){var b=document.createElement('button');b.className='b '+(a.s||'');b.textContent=a.l;
 b.onclick=function(){vib(8);if(a.go){window.open(door(a.go),'_blank');return;}
 if(a.kind==='later'){openLater(it,d);return;}if(a.kind==='word'){openWord(it);return;}if(a.kind==='veto'){openVeto(it,d);return;}
-if(a.kind==='answer'){openChat(p.k,'on '+it.id+' — ');toast('Say it in your own words — it rides to '+p.title.replace(/^The /,'the ')+'.');return;}
-if(a.kind==='docs'){openChat(p.k,'on '+it.id+' — the papers: ');setTimeout(function(){$('fileIn').click();},350);return;}
+if(a.kind==='answer'){cardCtx={it:it,kind:'answer',title:p.title};openChat(p.k,'on '+it.id+' — ');toast('Say it in your own words — it rides to '+p.title.replace(/^The /,'the ')+' and the card clears.');return;}
+if(a.kind==='docs'){cardCtx={it:it,kind:'docs',title:p.title};openChat(p.k,'on '+it.id+' — the papers: ');setTimeout(function(){$('fileIn').click();},350);return;}
 decideItem(it,d,a.v,a.n,p.title+' is told: '+a.l.replace(/\s*[✓↗…]$/,''));};bt.appendChild(b);});
 return d;}
+/* b16.5 — a card answered in the chat, or whose papers were sent, clears itself: the house is told 'done <id>' with the gist */
+var cardCtx=null,hotUntil=0;
+function cardAnswered(text,attName){if(!cardCtx)return;var cc=cardCtx;var re=new RegExp('^on\\s+'+String(cc.it.id).replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&')+'\\s*[—-]\\s*([\\s\\S]*)$','i');var m=String(text||'').match(re);if(!m)return;var rest=(m[1]||'').replace(/^the papers:\s*/i,'').trim();if(cc.kind==='answer'&&!rest)return;if(cc.kind==='docs'&&!attName)return;cardCtx=null;if(!cc.it.ids)cc.it.ids=[cc.it.id];decideItem(cc.it,null,'done',cc.kind==='docs'?('papers sent — '+attName):('answered in chat — '+clamp(rest,80)),(cc.kind==='docs'?'papers sent to ':'answered — ')+cc.title.replace(/^The /,'the '));}
 function decideItem(it,el,verb,note,label,until){vib(12);if(el)el.classList.add('done');var rec={t:Date.now(),verb:verb,until:until||0,sig:it.sig||''};it.ids.forEach(function(id){decided[id]=rec;});LSset('br_decided3',decided);
 var cmds=cmdFor(it,verb,note);if(live()){cmds.forEach(function(c){rawSend(c,true);});toast('✓ '+label);}else toast('Specimen — nothing left the house.');
 setTimeout(render,420);}
@@ -996,7 +999,7 @@ else if(x.kind==='run'){d.className='msg run'+(x.zero?' zero':'');var txt=String
 else{d.className='msg house'+(x.meta?' answered':'');d.innerHTML=(k==='house'&&x.who&&x.who!=='Alfred'?'<span class="who">'+esc(x.av||'')+' '+esc(x.who)+'</span>':'')+md(x.text)+(x.url&&x.url!=='#'?'<br><a class="open" href="'+esc(x.url)+'" target="_blank" rel="noopener">Open ↗</a>':'')+'<span class="t">'+hhmm(x.t)+(x.meta?' · read '+esc(x.meta):'')+'</span>';}}
 el.appendChild(d);});
 setTimeout(function(){window.scrollTo(0,document.body.scrollHeight);},30);}
-$('btnBack').onclick=function(){showView('v-people');curK='';renderRoster();};
+$('btnBack').onclick=function(){showView('v-people');curK='';cardCtx=null;renderRoster();};
 $('btnChPapers').onclick=function(){var k=curK,o=(stateNow()||{}).offices||[];var off=o.filter(function(x){return persona(x.name).k===k;})[0];openPapers(off||{name:member(k).title},member(k));};
 
 /* Sir speaks — to the member on screen; the Actuator files SIR'S WORD and answers */
@@ -1007,15 +1010,15 @@ function askDoor(text,k,m,mine){var thinking={t:Date.now()+1,dir:'out',k:k,who:'
 var ctl=('AbortController' in window)?new AbortController():null;var tm=setTimeout(function(){if(ctl)ctl.abort();},75000);var opts={method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({key:cfg.key,op:'ask',q:text,to:m.title})};if(ctl)opts.signal=ctl.signal;
 function drop(){var i=said.indexOf(thinking);if(i>=0)said.splice(i,1);}
 fetch(wireUrl(),opts).then(function(r){return r.json();}).then(function(j){clearTimeout(tm);mine.pending=0;drop();
-if(j&&j.ok&&j.answer){said.push({t:Date.now()+2,dir:'out',k:k,who:'Alfred',av:'🦇',kind:'note',text:j.answer,meta:(j.used?(j.used.mails!=null?j.used.mails+' mails · '+(j.used.sms||0)+' texts · ':'')+(j.used.dues!=null?j.used.dues+' bills · ':'')+Math.round((j.ms||0)/1000)+'s':'')});saveSaid();renderChat();return;}
+if(j&&j.ok&&j.answer){if(j.duty)said.push({t:Date.now()+3,dir:'out',k:k,who:'Alfred',av:'🦇',kind:'reply',text:'✓ Taken up — the Duty Desk is on it; the answer lands here, usually within minutes.'});said.push({t:Date.now()+2,dir:'out',k:k,who:'Alfred',av:'🦇',kind:'note',text:j.answer,meta:(j.used?(j.used.mails!=null?j.used.mails+' mails · '+(j.used.sms||0)+' texts · ':'')+(j.used.dues!=null?j.used.dues+' bills · ':'')+Math.round((j.ms||0)/1000)+'s':'')});saveSaid();renderChat();return;}
 var why=j&&j.err==='nokey'?'The Answer Door has no API key yet — Project Settings → Script properties → ANTHROPIC_API_KEY.':j&&j.err==='op'?'The Actuator has no Answer Door yet — paste "ACTUATOR PATCH — THE ANSWER DOOR" once.':'The Answer Door failed ('+((j&&j.err)||'no reply')+').';
 toast(why);sayOld(text,k,m,mine);}).catch(function(){clearTimeout(tm);drop();toast('The Answer Door did not reply in time — sent by the old door.');sayOld(text,k,m,mine);});}
 function sayOld(text,k,m,mine){fetch(wireUrl(),{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({key:cfg.key,op:'say',to:k,text:text})}).then(function(r){return r.json();}).then(function(j){mine.pending=0;
-if(j&&j.ok){if(j.reply)said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:j.reply});if(j.answer)said.push({t:Date.now()+2,dir:'out',k:k,who:m.title,av:m.av,kind:'note',text:j.answer});saveSaid();renderChat();setTimeout(fetchThread,4000);}
+if(j&&j.ok){if(j.reply)said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:j.reply});if(j.answer)said.push({t:Date.now()+2,dir:'out',k:k,who:m.title,av:m.av,kind:'note',text:j.answer});saveSaid();renderChat();setTimeout(fetchThread,4000);try{cardAnswered(text,'');}catch(eC){}}
 else if(j&&j.err==='op'){rawSend((k==='house'?'':'to '+m.title+': ')+text,true);said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:'✓ Heard — filed by the old door; the house reads it on the next round.'});saveSaid();renderChat();}
 else{toast('Refused — '+(j&&j.err==='key'?'the key was not honoured':(j&&j.err)||'unknown'));}
 }).catch(function(){mine.pending=0;said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:'The wire is down — say it on Telegram and it lands on the same desk.'});saveSaid();renderChat();});}
-function say(text){text=String(text||'').trim();if(!text&&!att)return;
+function say(text){text=String(text||'').trim();if(!text&&!att)return;hotUntil=Date.now()+8*60e3;
 var rt=routeByName(text);if(rt&&rt.k!==(curK||'house')){openChat(rt.k);text=rt.rest.trim();toast('→ '+member(rt.k).title);}else if(rt){text=rt.rest.trim();}
 var k=curK||'house',m=member(k);vib(10);
 if(att){var a=att;att=null;showAtt();if(!text)text='For your eyes, '+m.title.replace(/^The /,'the ')+' — '+a.name;
@@ -1024,7 +1027,7 @@ if(!live()){mineA.pending=0;said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,
 toast('Carrying '+a.name+'…');
 fetch(wireUrl(),{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({key:cfg.key,op:'attach',to:k,toName:m.title,text:text,name:a.name,mime:a.mime,data:a.data})}).then(function(r){return r.json();}).then(function(j){
 mineA.pending=0;
-if(j&&j.ok){if(j.url)mineA.url=j.url;said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:j.reply||('✓ Filed in the Inbox — '+m.title+' opens it on the next round.')});saveSaid();renderChat();setTimeout(fetchThread,4000);}
+if(j&&j.ok){if(j.url)mineA.url=j.url;said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:j.reply||('✓ Filed in the Inbox — '+m.title+' opens it on the next round.')});saveSaid();renderChat();setTimeout(fetchThread,4000);try{cardAnswered(text,a.name);}catch(eC){}}
 else if(j&&j.err==='op'){said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:'The Actuator has no attachment door yet — paste "ACTUATOR PATCH — THE ATTACHMENT DOOR" into Apps Script once and this works. Your words went through; the file did not.'});rawSend('to '+m.title+': '+text+' (an attachment, '+a.name+', could not be carried — Actuator not yet patched)',true);saveSaid();renderChat();}
 else{toast('Refused — '+(j&&j.err==='key'?'the key was not honoured':(j&&j.err)||'unknown'));}
 }).catch(function(){mineA.pending=0;said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:'The wire dropped the file — too heavy or no signal. Send it on Telegram, or try a smaller one.'});saveSaid();renderChat();});
@@ -1034,7 +1037,7 @@ if(!live()){mine.pending=0;said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,a
 if(isQuestion(text)){askDoor(text,k,m,mine);return;}
 fetch(wireUrl(),{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({key:cfg.key,op:'say',to:k,text:text})}).then(function(r){return r.json();}).then(function(j){
 mine.pending=0;
-if(j&&j.ok){if(j.reply)said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:j.reply});if(j.answer)said.push({t:Date.now()+2,dir:'out',k:k,who:m.title,av:m.av,kind:'note',text:j.answer});saveSaid();renderChat();setTimeout(fetchThread,4000);}
+if(j&&j.ok){if(j.reply)said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:j.reply});if(j.answer)said.push({t:Date.now()+2,dir:'out',k:k,who:m.title,av:m.av,kind:'note',text:j.answer});saveSaid();renderChat();setTimeout(fetchThread,4000);try{cardAnswered(text,'');}catch(eC){}}
 else if(j&&j.err==='op'){rawSend((k==='house'?'':'to '+m.title+': ')+text,true);said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:'✓ Heard — filed by the old door; the house reads it on the next round.'});saveSaid();renderChat();}
 else{toast('Refused — '+(j&&j.err==='key'?'the key was not honoured':(j&&j.err)||'unknown'));}
 }).catch(function(){mine.pending=0;said.push({t:Date.now()+1,dir:'out',k:k,who:m.title,av:m.av,kind:'reply',text:'The wire is down — say it on Telegram and it lands on the same desk.'});saveSaid();renderChat();});}
@@ -1237,8 +1240,8 @@ if(wire.tries<2){setTimeout(function(){attempt(url);},3000);return;}
 stale=true;wire.failStreak++;toast('The wire did not answer — '+wire.lastErr);done();});}
 attempt(wireUrl());}
 var thBusy=false;
-function fetchThread(){if(!live()||thBusy)return;thBusy=true;
-ringOnce(wireUrl(),'&op=thread',40000).then(function(j){thBusy=false;if(!j||!j.ok)return;
+function fetchThread(fresh){if(!live()||thBusy)return;thBusy=true;
+ringOnce(wireUrl(),'&op=thread'+(fresh===1?'&fresh=1':''),40000).then(function(j){thBusy=false;if(!j||!j.ok)return;
 thread=j;wire.threadAt=Date.now();LSset('br_thread',j);
 said=said.filter(function(x){return x.kind==='reply'||!(j.items||[]).some(function(y){return y.dir===x.dir&&String(y.text||'').slice(0,60)===String(x.text||'').slice(0,60);});});saveSaid();
 renderRoster();if(curK)renderChat();renderCareer();renderMoney();renderLife();renderFeed();renderLetter(stateNow());diary();}).catch(function(){thBusy=false;});}
@@ -1404,6 +1407,8 @@ document.addEventListener('visibilitychange',function(){if(document.hidden){mark
 window.addEventListener('pagehide',markLook);
 setInterval(function(){if(!document.hidden&&live())fetchState();},300000);
 setInterval(function(){if(!document.hidden&&live()&&(document.getElementById('v-home').classList.contains('on')||document.getElementById('v-chat').classList.contains('on')))fetchThread();},90000);
+/* b16.5 — after Sir speaks, the thread is read fresh every 30 s for 8 minutes so the Duty Desk's answer lands as it is filed */
+setInterval(function(){if(Date.now()<hotUntil&&!document.hidden&&live())fetchThread(1);},30000);
 if('serviceWorker' in navigator){try{navigator.serviceWorker.register('sw.js').catch(function(){});}catch(e){}}
 /* ===== b16.3 · REAL PHOTOGRAPHS · 24 Oct 2026 (b16.2 base) =====
    Openly licensed photographs from Wikimedia Commons and Wikipedia, credited and cached on this phone.
