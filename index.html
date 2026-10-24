@@ -72,6 +72,9 @@ h2 .cnt{font-weight:500;letter-spacing:0;text-transform:none;font-size:12px}
 .card .top .desk .av{width:20px;height:20px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:12px}
 .tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--ink2);white-space:nowrap}
 .tag.money{background:var(--moneybg);color:var(--money)}
+.tag.fu-ok{background:var(--okbg);color:var(--ok)}
+.fu-pend{font-size:12.5px;color:var(--mut);align-self:center}
+.fu-card .ttl{font-size:14.5px}
 .tag.due{background:var(--warnbg);color:var(--warn)}
 .tag.urgent{background:var(--badbg);color:var(--bad)}
 .tag.age{background:transparent;border:1px solid var(--line2);color:var(--mut);font-weight:500}
@@ -428,7 +431,7 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
 .trip .tr-hero{margin:-11px -12px 10px;aspect-ratio:21/9}
 .card.potd .why{font-size:13px}
 
-/* b16.6 — answers on the main screen; gifting in Us */
+/* b16.7 — awaiting a reply: follow-ups and the outbox on Today */
 .ph.gm-hero:after,.ph.lt-hero:after{background:linear-gradient(180deg,rgba(0,0,0,.08) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,0) 48%,rgba(0,0,0,.62) 100%)}
 .ph .cap{font-family:"Fraunces",Georgia,serif;font-size:19px;font-weight:500;letter-spacing:-.01em;line-height:1.25;bottom:12px}
 .ph .cap b{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Inter,system-ui,sans-serif;font-size:10px;letter-spacing:1px;margin-bottom:4px;opacity:.9}
@@ -464,6 +467,7 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
 <div id="schemaBanner" class="banner" style="display:none"></div>
 <div class="letter" id="letter"></div>
 <div id="answers" style="display:none;margin-bottom:12px"></div>
+<div id="fups" style="display:none;margin-bottom:12px"></div>
 <h2><span>Needs you</span><span class="cnt" id="needCnt"></span></h2>
 <div id="needList"></div>
 <div id="sections"></div>
@@ -615,7 +619,7 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b16.6';
+var BUILD='b16.7';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -927,11 +931,35 @@ var pl='';if(pulse&&(pulse.mails!=null||pulse.txns!=null)){pl='<div class="pulse
 else if(live()&&s){pl='<div class="pulse" style="color:var(--mut)">The Keeper does not yet publish what it read — the Quiet Law (AMD-055) asks it to.</div>';}
 el.innerHTML='<div class="k">'+when+'</div>'+line+(dg.hi.length?' <span class="tog">'+(el.classList.contains('open')?'less':'what happened ›')+'</span>':'')+hi+pl;
 var tg=el.querySelector('.tog');if(tg)tg.onclick=function(){el.classList.toggle('open');tg.textContent=el.classList.contains('open')?'less':'what happened ›';};}
+/* b16.7 — AWAITING A REPLY: every ask Sir sent that the house is watching (the Follow-ups Ledger, served by the Actuator's op=followups).
+   Follow up → the Duty Desk drafts the chase into To Send within minutes · Got it → closed · Later → back in 3 days · the outbox shows what is ready to send and what to discard. */
+var fu=LS('br_fu_data',null),fuAct=LS('br_fu',null);if(!fuAct||typeof fuAct!=='object')fuAct={};var fuBusy=false,fuAt=0;
+function fetchFollowups(fresh){if(!live()||fuBusy)return;fuBusy=true;ringOnce(wireUrl(),'&op=followups'+(fresh?'&fresh=1':''),40000).then(function(j){fuBusy=false;if(!j||!j.ok)return;fu=j;fuAt=Date.now();LSset('br_fu_data',j);renderFollowups();}).catch(function(){fuBusy=false;});}
+function fuSay(text){if(!live())return;fetch(wireUrl(),{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({key:cfg.key,op:'say',to:'house',text:text})}).then(function(r){return r.json();}).then(function(j){if(j&&j.ok){said.push({t:Date.now(),dir:'in',k:'house',who:'Alfred',av:'🦇',kind:'word',text:text});if(j.reply)said.push({t:Date.now()+1,dir:'out',k:'house',who:'Alfred',av:'🦇',kind:'reply',text:j.reply});saveSaid();}else toast('The house did not take it — tap Follow up again.');}).catch(function(){toast('The wire dropped it — tap Follow up again.');});}
+var FU_IC={insurer:'🛡️',bank:'🏦',telecom:'📶',airline:'✈️',govt:'🏛️',vendor:'📦',employer:'💼',recruiter:'💼',person:'👤'};
+function fuVisible(r){var a=fuAct[r.id];if(!a)return true;if(a.a==='later'&&Date.now()<a.until)return false;if((a.a==='got'||a.a==='sent')&&a.s===r.state)return false;return true;}
+function fuRowHtml(r){var a=fuAct[r.id]||{};var pend=a.a==='follow'&&(r.state==='ask'||r.state==='replied')&&a.s===r.state&&Date.now()-a.t<2*36e5;
+var lead=pend?'drafting…':r.state==='drafted'?'ready to send':r.state==='replied'?'they answered':r.state==='sir'?'your hand':('no reply · '+r.days+' day'+(r.days===1?'':'s'));
+var cls=pend?'kind':r.state==='drafted'?'fu-ok':r.state==='replied'?'kind':r.state==='sir'?'age':(r.days>14?'urgent':'due');
+var btns='';
+if(pend)btns='<span class="fu-pend">The Duty Desk is drafting it — it lands in To Send in a few minutes.</span>';
+else if(r.state==='ask')btns='<button class="b acc" data-fu="follow">Follow up</button><button class="b" data-fu="got">Got it ✓</button><button class="b q" data-fu="later">Later</button>';
+else if(r.state==='drafted')btns=(r.draftUrl?'<a class="b acc" href="'+esc(r.draftUrl)+'" target="_blank" rel="noopener">Open the draft ↗</a>':'')+'<button class="b" data-fu="sent">Sent ✓</button><button class="b q" data-fu="got">Not needed</button>';
+else if(r.state==='replied')btns='<button class="b acc" data-fu="got">Sufficient — close ✓</button><button class="b" data-fu="follow">Follow up</button><button class="b q" data-fu="later">Later</button>';
+else if(r.state==='sir')btns=(r.url?'<a class="b acc" href="'+esc(r.url)+'" target="_blank" rel="noopener">Open ↗</a>':'')+'<button class="b" data-fu="got">Done ✓</button><button class="b q" data-fu="later">Later</button>';
+return '<div class="card fu-card" data-fuid="'+esc(r.id)+'"><div class="top"><span class="desk"><span class="av">'+(FU_IC[r.kind]||'✉️')+'</span>'+esc(r.who)+'</span><span class="tag '+cls+'">'+esc(lead)+'</span></div><div class="ttl">'+esc(r.matter)+'</div><div class="why">'+esc(r.q)+'</div><div class="btns">'+btns+(r.url&&r.state!=='sir'?'<a class="b q" href="'+esc(r.url)+'" target="_blank" rel="noopener">Thread ↗</a>':'')+'</div></div>';}
+function renderFollowups(){var el=$('fups');if(!el)return;if(!fu||!fu.ok){el.style.display='none';return;}
+var rows=(fu.rows||[]).filter(fuVisible);var ob=fu.outbox||{n:0,items:[],held:[]};var held=ob.held||[];
+if(!rows.length&&!ob.n&&!held.length){el.style.display='none';el.innerHTML='';return;}
+el.style.display='block';var order={ask:0,replied:1,drafted:2,sir:3};rows.sort(function(a,b){return ((order[a.state]||0)-(order[b.state]||0))||((b.days||0)-(a.days||0));});
+var h='<h2><span>Awaiting a reply</span><span class="cnt">'+(rows.length?rows.length+' for you':'')+(fu.waiting&&fu.waiting.length?' · '+fu.waiting.length+' watched':'')+'</span></h2>';
+if(ob.n||held.length)h+='<div class="blk" style="margin-bottom:10px"><div class="k">📤 To send<span>'+ob.n+' ready</span></div>'+(ob.items||[]).map(function(i){return '<div class="ln"><span class="ic">✉️</span><span class="tx">'+esc(clamp(i.subject,90))+'<small>to '+esc(clamp(i.to,60))+'</small></span><a class="when" href="'+esc(i.url)+'" target="_blank" rel="noopener">Open ↗</a></div>';}).join('')+(held.length?'<div class="ln"><span class="ic">🗑</span><span class="tx">'+held.length+' wrong draft'+(held.length===1?'':'s')+' held out of To Send — discard in Gmail Drafts<small>'+held.map(function(x){return esc(clamp(x.subject,60))+(x.why?' — '+esc(clamp(x.why,90)):'');}).join('<br>')+'</small></span><a class="when" href="https://mail.google.com/mail/u/0/#drafts" target="_blank" rel="noopener">Drafts ↗</a></div>':'')+'<div class="ln" style="border:0"><span class="ic"></span><span class="tx"><a href="'+esc(ob.url||'https://mail.google.com/mail/u/0/')+'" target="_blank" rel="noopener">Open To Send in Gmail ↗</a></span></div></div>';
+h+=rows.map(fuRowHtml).join('');el.innerHTML=h;}
 /* b16.6 — ANSWERED FOR YOU: every TO SIR note of the last 24 h, straight from the thread, so an answer given in the chat also stands on the main screen the moment it is filed */
 function renderAnswers(){var el=$('answers');if(!el)return;var it=(thread&&thread.items)||[];var cut=Date.now()-24*36e5;var rows=it.filter(function(x){return x&&x.dir==='out'&&x.kind==='note'&&x.t>cut;}).slice(0,6);if(!rows.length){el.innerHTML='';el.style.display='none';return;}el.style.display='block';
 el.innerHTML='<div class="blk"><div class="k">Answered for you<span>from the chat · '+rows.length+'</span></div>'+rows.map(function(x){var head=String(x.text||'').split(/\n/)[0];return '<div class="ln ok ans-ln" data-k="'+esc(x.k||'house')+'" style="cursor:pointer"><span class="ic">'+esc(x.av||'📜')+'</span><span class="tx">'+esc(clamp(head,140))+'<small>'+esc(x.who||'Alfred')+' · '+esc(hhmm(x.t))+' · tap to read in the chat</small></span>'+(x.url&&x.url!=='#'?'<a class="when" href="'+esc(x.url)+'" target="_blank" rel="noopener">Open ↗</a>':'<span class="when">'+esc(ago(x.t))+'</span>')+'</div>';}).join('')+'</div>';
 el.querySelectorAll('.ans-ln').forEach(function(r){r.onclick=function(e){if(e.target&&e.target.closest&&e.target.closest('a'))return;openChat(r.getAttribute('data-k')||'house');};});}
-function renderHome(){var s=stateNow()||null;renderLetter(s);try{renderAnswers();}catch(eA){}s=s||{};
+function renderHome(){var s=stateNow()||null;renderLetter(s);try{renderAnswers();}catch(eA){}try{renderFollowups();if(Date.now()-fuAt>5*60e3)fetchFollowups();}catch(eF){}s=s||{};
 var items=buildItems(s);var tr=triage(items);
 var nl=$('needList');nl.innerHTML='';$('needCnt').textContent=tr.now.length?(tr.now.length+' now'):'';
 if(!tr.now.length){nl.innerHTML='<div class="empty"><div class="big">☕</div>'+(tr.week.length||tr.ans.length?'Nothing urgent, Sir. The rest is folded below.':'Nothing waits on your hand, Sir.')+'</div>';}
@@ -1414,6 +1442,12 @@ setInterval(function(){if(!document.hidden&&live())fetchState();},300000);
 setInterval(function(){if(!document.hidden&&live()&&(document.getElementById('v-home').classList.contains('on')||document.getElementById('v-chat').classList.contains('on')))fetchThread();},90000);
 /* b16.5 — after Sir speaks, the thread is read fresh every 30 s for 8 minutes so the Duty Desk's answer lands as it is filed */
 setInterval(function(){if(Date.now()<hotUntil&&!document.hidden&&live())fetchThread(1);},30000);
+setInterval(function(){if(Date.now()<hotUntil&&!document.hidden&&live())fetchFollowups(true);},60000);
+(function(){var el=$('fups');if(!el)return;el.addEventListener('click',function(e){var b=e.target&&e.target.closest?e.target.closest('[data-fu]'):null;if(!b)return;e.preventDefault();var card=b.closest('[data-fuid]');if(!card)return;var id=card.getAttribute('data-fuid');var r=((fu&&fu.rows)||[]).filter(function(x){return x.id===id;})[0];if(!r)return;var act=b.getAttribute('data-fu');vib(10);
+if(act==='follow'){fuAct[id]={a:'follow',s:r.state,t:Date.now()};LSset('br_fu',fuAct);renderFollowups();fuSay('Follow up '+id+' — '+r.who+': '+r.matter+'. Draft the chase in the thread and put it in To Send.');hotUntil=Date.now()+15*60e3;toast('Taken up — the draft lands in To Send in a few minutes.');return;}
+if(act==='got'){fuAct[id]={a:'got',s:r.state,t:Date.now()};LSset('br_fu',fuAct);if(live())rawSend('done '+id+' — '+(r.state==='drafted'?'follow-up not needed':r.state==='sir'?'done by my own hand':'answer sufficient')+' (Bridge)',true);toast('Closed. The house stops watching it.');renderFollowups();return;}
+if(act==='sent'){fuAct[id]={a:'sent',s:r.state,t:Date.now()};LSset('br_fu',fuAct);if(live())rawSend('on '+id+' — follow-up sent; watch for their reply (Bridge)',true);toast('Noted. The house watches for their reply.');renderFollowups();return;}
+if(act==='later'){var until=Date.now()+3*864e5;var d=new Date(until);var iso=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);fuAct[id]={a:'later',s:r.state,t:Date.now(),until:until};LSset('br_fu',fuAct);if(live())rawSend('defer '+id+' — until '+iso+' (Bridge)',true);toast('Back in 3 days.');renderFollowups();return;}});})();
 if('serviceWorker' in navigator){try{navigator.serviceWorker.register('sw.js').catch(function(){});}catch(e){}}
 /* ===== b16.3 · REAL PHOTOGRAPHS · 24 Oct 2026 (b16.2 base) =====
    Openly licensed photographs from Wikimedia Commons and Wikipedia, credited and cached on this phone.
