@@ -428,7 +428,7 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
 .trip .tr-hero{margin:-11px -12px 10px;aspect-ratio:21/9}
 .card.potd .why{font-size:13px}
 
-/* b16.5 — cards clear when answered; the Duty Desk answers in the chat */
+/* b16.6 — answers on the main screen; gifting in Us */
 .ph.gm-hero:after,.ph.lt-hero:after{background:linear-gradient(180deg,rgba(0,0,0,.08) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,0) 48%,rgba(0,0,0,.62) 100%)}
 .ph .cap{font-family:"Fraunces",Georgia,serif;font-size:19px;font-weight:500;letter-spacing:-.01em;line-height:1.25;bottom:12px}
 .ph .cap b{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Inter,system-ui,sans-serif;font-size:10px;letter-spacing:1px;margin-bottom:4px;opacity:.9}
@@ -463,6 +463,7 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
 <div id="wireBanner" class="banner red" style="display:none"></div>
 <div id="schemaBanner" class="banner" style="display:none"></div>
 <div class="letter" id="letter"></div>
+<div id="answers" style="display:none;margin-bottom:12px"></div>
 <h2><span>Needs you</span><span class="cnt" id="needCnt"></span></h2>
 <div id="needList"></div>
 <div id="sections"></div>
@@ -614,7 +615,7 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b16.5';
+var BUILD='b16.6';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -926,7 +927,11 @@ var pl='';if(pulse&&(pulse.mails!=null||pulse.txns!=null)){pl='<div class="pulse
 else if(live()&&s){pl='<div class="pulse" style="color:var(--mut)">The Keeper does not yet publish what it read — the Quiet Law (AMD-055) asks it to.</div>';}
 el.innerHTML='<div class="k">'+when+'</div>'+line+(dg.hi.length?' <span class="tog">'+(el.classList.contains('open')?'less':'what happened ›')+'</span>':'')+hi+pl;
 var tg=el.querySelector('.tog');if(tg)tg.onclick=function(){el.classList.toggle('open');tg.textContent=el.classList.contains('open')?'less':'what happened ›';};}
-function renderHome(){var s=stateNow()||null;renderLetter(s);s=s||{};
+/* b16.6 — ANSWERED FOR YOU: every TO SIR note of the last 24 h, straight from the thread, so an answer given in the chat also stands on the main screen the moment it is filed */
+function renderAnswers(){var el=$('answers');if(!el)return;var it=(thread&&thread.items)||[];var cut=Date.now()-24*36e5;var rows=it.filter(function(x){return x&&x.dir==='out'&&x.kind==='note'&&x.t>cut;}).slice(0,6);if(!rows.length){el.innerHTML='';el.style.display='none';return;}el.style.display='block';
+el.innerHTML='<div class="blk"><div class="k">Answered for you<span>from the chat · '+rows.length+'</span></div>'+rows.map(function(x){var head=String(x.text||'').split(/\n/)[0];return '<div class="ln ok ans-ln" data-k="'+esc(x.k||'house')+'" style="cursor:pointer"><span class="ic">'+esc(x.av||'📜')+'</span><span class="tx">'+esc(clamp(head,140))+'<small>'+esc(x.who||'Alfred')+' · '+esc(hhmm(x.t))+' · tap to read in the chat</small></span>'+(x.url&&x.url!=='#'?'<a class="when" href="'+esc(x.url)+'" target="_blank" rel="noopener">Open ↗</a>':'<span class="when">'+esc(ago(x.t))+'</span>')+'</div>';}).join('')+'</div>';
+el.querySelectorAll('.ans-ln').forEach(function(r){r.onclick=function(e){if(e.target&&e.target.closest&&e.target.closest('a'))return;openChat(r.getAttribute('data-k')||'house');};});}
+function renderHome(){var s=stateNow()||null;renderLetter(s);try{renderAnswers();}catch(eA){}s=s||{};
 var items=buildItems(s);var tr=triage(items);
 var nl=$('needList');nl.innerHTML='';$('needCnt').textContent=tr.now.length?(tr.now.length+' now'):'';
 if(!tr.now.length){nl.innerHTML='<div class="empty"><div class="big">☕</div>'+(tr.week.length||tr.ans.length?'Nothing urgent, Sir. The rest is folded below.':'Nothing waits on your hand, Sir.')+'</div>';}
@@ -1244,7 +1249,7 @@ function fetchThread(fresh){if(!live()||thBusy)return;thBusy=true;
 ringOnce(wireUrl(),'&op=thread'+(fresh===1?'&fresh=1':''),40000).then(function(j){thBusy=false;if(!j||!j.ok)return;
 thread=j;wire.threadAt=Date.now();LSset('br_thread',j);
 said=said.filter(function(x){return x.kind==='reply'||!(j.items||[]).some(function(y){return y.dir===x.dir&&String(y.text||'').slice(0,60)===String(x.text||'').slice(0,60);});});saveSaid();
-renderRoster();if(curK)renderChat();renderCareer();renderMoney();renderLife();renderFeed();renderLetter(stateNow());diary();}).catch(function(){thBusy=false;});}
+renderRoster();if(curK)renderChat();renderCareer();renderMoney();renderLife();renderFeed();renderLetter(stateNow());try{renderAnswers();}catch(eA){}diary();}).catch(function(){thBusy=false;});}
 function fetchKitchen(){if(!live())return;ringOnce(wireUrl(),'&op=kitchen',40000).then(function(j){if(j&&j.ok&&j.tomorrow){kitchen=j;LSset('br_kitchen',j);renderKitchen();renderHealth();}}).catch(function(){});}
 function fetchVoice(){if(!live())return;ringOnce(wireUrl(),'&op=voiceping',15000).then(function(j){if(j&&j.ok&&j.v){wire.voice=j.v;diary();}}).catch(function(){});}
 
@@ -1728,6 +1733,15 @@ return '<div class="card'+(ref?' gm-photo':'')+'">'+(ref?phEl(ref,'gm-hero',1280
 function usIdeaRow(i){var ref=gPhotoRef(i);
 return '<div class="row'+(usDone[i.id]?' quiet':'')+'" data-uidea="'+esc(i.id)+'"><div class="av'+(ref?' gm-av':'')+'">'+esc(i.icon||'💞')+(ref?phEl(ref,'',330,'',false):'')+'</div><div class="bd"><div class="n">'+esc(i.title)+'<small>'+esc(i.place||'')+'</small></div><div class="p">'+esc(clamp((i.when?i.when+' — ':'')+(i.why||''),140))+'</div></div><div class="rt"><span class="t">'+esc(i.cost||'')+'</span>'+(i.list?'<span class="t" style="color:var(--acc)">📍</span>':'')+'</div></div>';}
 
+/* b16.6 — GIFTING: the strategy, three rules, and each occasion with its order-by date; the Scout refreshes it weekly and inside 30 days of a date */
+var usGift=LS('br_us_gift',null);if(!usGift||typeof usGift!=='object')usGift={};
+function usGiftingHtml(U){var G=U&&U.gifting;if(!G||typeof G!=='object')return '';var occ=Array.isArray(G.occasions)?G.occasions:[];var now=new Date(),t0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+var h='<h2><span>🎁 Gifting</span><span class="cnt">'+(G.updated?'strategy · '+esc(gDay(G.updated)):'the strategy')+'</span></h2>';
+h+='<div class="card"><div class="lead" style="font-size:15px">'+esc(G.strategy||'')+'</div>'+(Array.isArray(G.rules)&&G.rules.length?'<div class="why" style="margin-top:8px">'+G.rules.map(function(r){return '· '+esc(r);}).join('<br>')+'</div>':'')+'</div>';
+occ.forEach(function(o){var by=gParse(o.by),dd=by?Math.round((by-t0)/864e5):null,chosen=usGift[o.id];
+h+='<div class="card'+(chosen?' quiet':'')+'"><div class="top"><span class="desk"><span class="av">🎁</span>'+esc(o.for||'')+(o.when?' · '+esc(o.when):'')+'</span>'+(chosen?'<span class="tag age">chosen · '+esc(dayLab(chosen))+'</span>':dd!=null?'<span class="tag '+(dd<0?'urgent':dd<=7?'due':'age')+'">'+(dd<0?'order-by passed':dd===0?'decide today':'decide by '+esc(gDate(o.by))+' · '+dd+'d')+'</span>':'')+'</div>'+(o.budget?'<div class="gm-tags"><span class="tag money">'+esc(o.budget)+'</span></div>':'')+'<div class="why">'+esc(o.idea||'')+'</div>'+(o.where?'<div class="hand">Where: '+esc(o.where)+'</div>':'')+(o.why?'<div class="why" style="opacity:.8">'+esc(o.why)+'</div>':'')+
+'<div class="btns"><button class="b acc" data-uact="gift-ask" data-gid="'+esc(o.id)+'" data-gfor="'+esc(o.for||'')+'">Ask the Concierge</button>'+(chosen?'<button class="b q" data-uact="gift-undo" data-gid="'+esc(o.id)+'">Undo</button>':'<button class="b" data-uact="gift-chosen" data-gid="'+esc(o.id)+'" data-gfor="'+esc(o.for||'')+'">Chosen ✓</button>')+(o.src&&gSafe(o.src)?'<a class="b q" href="'+esc(o.src)+'" target="_blank" rel="noopener">Open ↗</a>':'')+'</div></div>';});
+return h;}
 function renderUs(){var el=$('usList');if(!el)return;var U=usNow();
 if(!U){el.innerHTML='<div class="empty"><div class="big">💞</div>'+(live()?'The Scout writes this section each morning. It will be here after the next sitting.':'Enter the key in ⚙ to see the living house.')+'</div>';return;}
 var h='',w=usWeek(U),line=usLine(U),nx=usNext(U),open=usOpen(U);
@@ -1736,6 +1750,7 @@ if(U.today&&U.today.gesture)h+='<h2><span>A small thing today</span></h2><div cl
 if(line)h+='<h2><span>A line for '+esc(U.her||'her')+'</span><span class="cnt">tap ↻ for another</span></h2><div class="card"><div class="lead disp us-line">“'+esc(line)+'”</div><div class="btns"><a class="b acc" href="'+esc(waLink(line))+'" target="_blank" rel="noopener">WhatsApp</a><button class="b" data-uact="copy">Copy</button><button class="b q" data-uact="line">↻ Another</button></div></div>';
 if(nx.length)h+='<h2><span>Dates that matter</span></h2><div class="box">'+nx.map(function(x){return '<div class="kv us-date"><div class="n"><span class="us-ic">'+esc(x.d.icon||'·')+'</span>'+esc(x.d.name)+'<small>'+esc(usDateLab(x.when))+(x.d.note?' · '+esc(x.d.note):'')+(x.d.lead?'<br>'+esc(x.d.lead):'')+'</small></div><span class="a'+(x.n<=14?' soon':'')+'">'+esc(usIn(x.n))+'</span></div>';}).join('')+'</div>';
 var tr=(U.tracks||[]);if(tr.length)h+='<h2><span>In motion</span><span class="cnt">'+tr.length+'</span></h2>'+tr.map(function(t){var n=t.due?gDaysTo(t.due):null;return '<div class="card"><div class="top"><span class="desk"><span class="av">'+esc(t.icon||'◆')+'</span>'+esc(t.title)+'</span>'+(n!=null?'<span class="tag '+(n<0?'urgent':n<=7?'due':'age')+'">'+(n<0?'overdue':n===0?'today':'by '+esc(gDate(t.due)))+'</span>':'')+'</div><div class="why">'+esc(t.status||'')+'</div>'+(t.next?'<div class="hand">Next: '+esc(t.next)+'</div>':'')+(t.src&&gSafe(t.src)?'<div class="btns"><a class="b q" href="'+esc(t.src)+'" target="_blank" rel="noopener">Open ↗</a></div>':'')+'</div>';}).join('');
+h+=usGiftingHtml(U);
 var more=open.filter(function(i){return !w||i.id!==w.id;});if(more.length)h+='<h2><span>More ideas</span><span class="cnt">in the city and near it</span></h2>'+more.map(usIdeaRow).join('');
 var done=usIdeas(U).filter(function(i){return usDone[i.id];});if(done.length)h+='<p class="src">'+done.length+' done · <a href="#" data-uact="undone">bring them back</a></p>';
 h+='<div class="chipsrow"><button data-uact="concierge">🎁 The Concierge</button><button data-uact="family">❤ The Family Desk</button><button data-uact="travel">✈️ Plan the trip</button></div>';
@@ -1758,6 +1773,9 @@ if(act==='done'){var id=a.getAttribute('data-uid');usDone[id]=Date.now();LSset('
 if(act==='undone'){usDone={};LSset('br_us_done',usDone);renderUs();return;}
 if(act==='copy'){try{navigator.clipboard.writeText(usLine(U));toast('Copied.');}catch(x){toast('Could not copy.');}return;}
 if(act==='line'){usLineIx++;try{localStorage.setItem('br_us_line',String(usLineIx));}catch(x){}vib(6);renderUs();return;}
+if(act==='gift-ask'){openChat('concierge','Concierge, '+(a.getAttribute('data-gfor')||'the gift')+' — ');return;}
+if(act==='gift-chosen'){var gid=a.getAttribute('data-gid');usGift[gid]=Date.now();LSset('br_us_gift',usGift);if(live())rawSend('done '+gid+' — gift chosen for '+(a.getAttribute('data-gfor')||''),true);vib(8);toast('Chosen. The Concierge stands down on this one.');renderUs();return;}
+if(act==='gift-undo'){delete usGift[a.getAttribute('data-gid')];LSset('br_us_gift',usGift);renderUs();return;}
 if(act==='concierge'){openChat('concierge');return;}if(act==='family'){openChat('family');return;}if(act==='travel'){openChat('travel','Travel Office, our Nov–Dec trip: ');return;}}
 var r=t.closest('[data-uidea]');if(r){var id2=r.getAttribute('data-uidea'),U2=usNow(),it=usIdeas(U2).filter(function(i){return i.id===id2;})[0];if(!it)return;
 var ref=gPhotoRef(it);$('gemSheet').innerHTML=(ref?phEl(ref,'gm-hero',1280,it.photoOf?'<small>'+esc(it.photoOf)+'</small>':'',true):'')+'<h3>'+esc(it.icon||'')+' '+esc(it.title)+'</h3><p class="note">'+esc(it.place||'')+'</p><div class="gm-tags">'+(it.when?'<span class="tag age">'+esc(it.when)+'</span>':'')+(it.cost?'<span class="tag money">'+esc(it.cost)+'</span>':'')+(it.list?'<span class="tag gm-list">📍 your '+esc(it.list)+'</span>':'')+'</div><p class="gm-why">'+esc(it.why||'')+'</p>'+
