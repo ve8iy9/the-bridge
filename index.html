@@ -446,6 +446,20 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
 .khi{display:block;font-size:12.5px;color:var(--mut);margin-top:1px;line-height:1.35}
 .kyt{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--chip);color:var(--ink2);display:inline-flex;align-items:center;justify-content:center;font-size:11px;text-decoration:none;margin-top:1px}
 .kw .m small{display:block;color:var(--mut);font-size:11.5px;margin-top:2px}
+/* b16.8 — "From Alfred" and the To-send block get their own styles: they sat outside .tri, so .blk/.ln rendered bare (Sir's screenshot, 24 Oct) */
+#answers .blk,#fups .blk{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px 6px;box-shadow:var(--sh)}
+#answers .blk .k,#fups .blk .k{font-size:11px;letter-spacing:.9px;text-transform:uppercase;color:var(--mut);font-weight:600;display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:2px}
+#answers .blk .k span,#fups .blk .k span{font-weight:500;letter-spacing:0;text-transform:none;font-size:12px}
+#answers .ln,#fups .ln{display:flex;gap:11px;align-items:flex-start;font-size:13.5px;line-height:1.42;padding:10px 0;border-bottom:1px solid var(--line);color:var(--ink2)}
+#answers .ln:last-of-type,#fups .ln:last-child{border-bottom:0}
+#answers .ln .ic,#fups .ln .ic{width:30px;height:30px;border-radius:10px;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;flex-shrink:0;margin-top:1px}
+#answers .ln .tx,#fups .ln .tx{flex:1;min-width:0;color:var(--ink);font-weight:500;padding-top:0}
+#answers .ln .tx .hd{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#answers .ln .tx small,#fups .ln .tx small{display:block;color:var(--mut);font-size:12px;font-weight:400;margin-top:3px}
+#answers .ln .when,#fups .ln .when{font-size:12px;color:var(--mut);white-space:nowrap;flex-shrink:0;padding-top:6px}
+#answers .ln a.when,#fups .ln a.when{color:var(--acc);font-weight:600;text-decoration:none;background:var(--accbg);border-radius:14px;padding:5px 11px;margin-top:2px}
+#answers .ln span.when{font-size:20px;line-height:1;padding-top:4px;color:var(--line2)}
+#answers .more{display:block;width:100%;margin:2px 0 4px;padding:8px 0 6px;border:0;border-top:1px solid var(--line);background:transparent;color:var(--acc);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
 </style>
 </head>
 <body>
@@ -619,7 +633,7 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b16.7';
+var BUILD='b16.8';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -927,7 +941,7 @@ var when=prevLook?('Since '+dayLab(prevLook)+' '+hhmm(prevLook)):'Since the hous
 var bits=[];if(dg.ran)bits.push('<b>'+dg.ran+'</b> desk'+(dg.ran===1?'':'s')+' ran');if(dg.papers)bits.push('<b>'+dg.papers+'</b> paper'+(dg.papers===1?'':'s')+' filed');if(dg.notes)bits.push('<b>'+dg.notes+'</b> note'+(dg.notes===1?'':'s')+' to you');
 var line=bits.length?bits.join(' · '):'nothing new — the house is quiet';
 var hi=dg.hi.length?'<div class="more">'+dg.hi.map(function(x){return '· '+esc(x);}).join('<br>')+'</div>':'';
-var pl='';if(pulse&&(pulse.mails!=null||pulse.txns!=null)){pl='<div class="pulse">Read '+(pulse.mails!=null?'<b>'+pulse.mails+'</b> mails':'')+(pulse.txns!=null?(pulse.mails!=null?' · ':'')+'<b>'+pulse.txns+'</b> transactions':'')+(pulse.since?' since '+esc(pulse.since):'')+(pulse.mattered&&pulse.mattered.length?' — '+esc(pulse.mattered.length)+' mattered: '+esc(pulse.mattered.slice(0,2).join('; ')):' — nothing needed you')+'</div>';}
+var pl='';if(pulse&&(pulse.mails!=null||pulse.txns!=null)){pl='<div class="pulse">Read '+(pulse.mails!=null?'<b>'+pulse.mails+'</b> mail'+(pulse.mails===1?'':'s'):'')+(pulse.txns!=null?(pulse.mails!=null?' · ':'')+'<b>'+pulse.txns+'</b> transaction'+(pulse.txns===1?'':'s'):'')+(pulse.since?' since '+esc(pulse.since):'')+(pulse.mattered&&pulse.mattered.length?' — '+esc(pulse.mattered.length)+' mattered: '+esc(pulse.mattered.slice(0,2).join('; ')):' — nothing needed you')+'</div>';}
 else if(live()&&s){pl='<div class="pulse" style="color:var(--mut)">The Keeper does not yet publish what it read — the Quiet Law (AMD-055) asks it to.</div>';}
 el.innerHTML='<div class="k">'+when+'</div>'+line+(dg.hi.length?' <span class="tog">'+(el.classList.contains('open')?'less':'what happened ›')+'</span>':'')+hi+pl;
 var tg=el.querySelector('.tog');if(tg)tg.onclick=function(){el.classList.toggle('open');tg.textContent=el.classList.contains('open')?'less':'what happened ›';};}
@@ -956,9 +970,15 @@ var h='<h2><span>Awaiting a reply</span><span class="cnt">'+(rows.length?rows.le
 if(ob.n||held.length)h+='<div class="blk" style="margin-bottom:10px"><div class="k">📤 To send<span>'+ob.n+' ready</span></div>'+(ob.items||[]).map(function(i){return '<div class="ln"><span class="ic">✉️</span><span class="tx">'+esc(clamp(i.subject,90))+'<small>to '+esc(clamp(i.to,60))+'</small></span><a class="when" href="'+esc(i.url)+'" target="_blank" rel="noopener">Open ↗</a></div>';}).join('')+(held.length?'<div class="ln"><span class="ic">🗑</span><span class="tx">'+held.length+' wrong draft'+(held.length===1?'':'s')+' held out of To Send — discard in Gmail Drafts<small>'+held.map(function(x){return esc(clamp(x.subject,60))+(x.why?' — '+esc(clamp(x.why,90)):'');}).join('<br>')+'</small></span><a class="when" href="https://mail.google.com/mail/u/0/#drafts" target="_blank" rel="noopener">Drafts ↗</a></div>':'')+'<div class="ln" style="border:0"><span class="ic"></span><span class="tx"><a href="'+esc(ob.url||'https://mail.google.com/mail/u/0/')+'" target="_blank" rel="noopener">Open To Send in Gmail ↗</a></span></div></div>';
 h+=rows.map(fuRowHtml).join('');el.innerHTML=h;}
 /* b16.6 — ANSWERED FOR YOU: every TO SIR note of the last 24 h, straight from the thread, so an answer given in the chat also stands on the main screen the moment it is filed */
-function renderAnswers(){var el=$('answers');if(!el)return;var it=(thread&&thread.items)||[];var cut=Date.now()-24*36e5;var rows=it.filter(function(x){return x&&x.dir==='out'&&x.kind==='note'&&x.t>cut;}).slice(0,6);if(!rows.length){el.innerHTML='';el.style.display='none';return;}el.style.display='block';
-el.innerHTML='<div class="blk"><div class="k">Answered for you<span>from the chat · '+rows.length+'</span></div>'+rows.map(function(x){var head=String(x.text||'').split(/\n/)[0];return '<div class="ln ok ans-ln" data-k="'+esc(x.k||'house')+'" style="cursor:pointer"><span class="ic">'+esc(x.av||'📜')+'</span><span class="tx">'+esc(clamp(head,140))+'<small>'+esc(x.who||'Alfred')+' · '+esc(hhmm(x.t))+' · tap to read in the chat</small></span>'+(x.url&&x.url!=='#'?'<a class="when" href="'+esc(x.url)+'" target="_blank" rel="noopener">Open ↗</a>':'<span class="when">'+esc(ago(x.t))+'</span>')+'</div>';}).join('')+'</div>';
-el.querySelectorAll('.ans-ln').forEach(function(r){r.onclick=function(e){if(e.target&&e.target.closest&&e.target.closest('a'))return;openChat(r.getAttribute('data-k')||'house');};});}
+function renderAnswers(){var el=$('answers');if(!el)return;var it=(thread&&thread.items)||[];var cut=Date.now()-24*36e5;var seen={};
+/* b16.8 — "From Alfred": the notes the house sent you in the last 24 h, as tidy rows (dedupe by first line; 4 shown, the rest behind "Show all") */
+var rows=it.filter(function(x){if(!(x&&x.dir==='out'&&x.kind==='note'&&x.t>cut))return false;var h=firstLine(x.text).replace(/\s+/g,' ').trim().slice(0,70).toLowerCase();if(!h||seen[h])return false;seen[h]=1;return true;}).sort(function(a,b){return b.t-a.t;});
+if(!rows.length){el.innerHTML='';el.style.display='none';return;}el.style.display='block';
+var all=el.getAttribute('data-all')==='1';var shown=all?rows.slice(0,12):rows.slice(0,4);
+el.innerHTML='<div class="blk"><div class="k">From Alfred<span>last 24 h · '+rows.length+'</span></div>'+shown.map(function(x){var head=firstLine(x.text).replace(/^\s*TO SIR\s*[—–-]\s*/i,'').replace(/^\s*Alfred\s*\([^)]*\)\s*:\s*/i,'');var ag=ago(x.t);var link=x.url&&x.url!=='#';
+return '<div class="ln ok ans-ln" data-k="'+esc(x.k||'house')+'" style="cursor:pointer"><span class="ic">'+esc(x.av||'📜')+'</span><span class="tx"><span class="hd">'+esc(clamp(head,200))+'</span><small>'+esc(x.who||'Alfred')+' · '+esc(hhmm(x.t))+' · '+(ag==='now'?'just now':esc(ag)+' ago')+'</small></span>'+(link?'<a class="when" href="'+esc(x.url)+'" target="_blank" rel="noopener">Open</a>':'<span class="when">›</span>')+'</div>';}).join('')+(rows.length>4?'<button class="more" id="ansMore">'+(all?'Show fewer':'Show all '+rows.length)+'</button>':'')+'</div>';
+el.querySelectorAll('.ans-ln').forEach(function(r){r.onclick=function(e){if(e.target&&e.target.closest&&e.target.closest('a'))return;openChat(r.getAttribute('data-k')||'house');};});
+var mb=$('ansMore');if(mb)mb.onclick=function(e){e.stopPropagation();el.setAttribute('data-all',all?'0':'1');renderAnswers();};}
 function renderHome(){var s=stateNow()||null;renderLetter(s);try{renderAnswers();}catch(eA){}try{renderFollowups();if(Date.now()-fuAt>5*60e3)fetchFollowups();}catch(eF){}s=s||{};
 var items=buildItems(s);var tr=triage(items);
 var nl=$('needList');nl.innerHTML='';$('needCnt').textContent=tr.now.length?(tr.now.length+' now'):'';
@@ -1341,7 +1361,7 @@ if(tr.now.length){var names=tr.now.map(function(it){var t=shortTitle(it);var d=d
 else if(tr.week.length)lead='Nothing needs you tonight. '+tr.week.length+' matter'+(tr.week.length===1?'':'s')+' can wait for the week.';
 else lead='Nothing waits on you. The house is in order.';
 var read='';
-if(p&&(p.mails!=null||p.txns!=null)){read='Since '+esc(p.since||'the last round')+' I read '+(p.mails!=null?'<b>'+p.mails+'</b> mails':'')+(p.txns!=null?(p.mails!=null?' and ':'')+'<b>'+p.txns+'</b> transactions':'')+'.'+(p.mattered&&p.mattered.length?' '+p.mattered.length+' mattered — '+esc(p.mattered.slice(0,2).join('; '))+'.':' Nothing in them needed you.');}
+if(p&&(p.mails!=null||p.txns!=null)){read='Since '+esc(p.since||'the last round')+' I read '+(p.mails!=null?'<b>'+p.mails+'</b> mail'+(p.mails===1?'':'s'):'')+(p.txns!=null?(p.mails!=null?' and ':'')+'<b>'+p.txns+'</b> transaction'+(p.txns===1?'':'s'):'')+'.'+(p.mattered&&p.mattered.length?' '+p.mattered.length+' mattered — '+esc(p.mattered.slice(0,2).join('; '))+'.':' Nothing in them needed you.');}
 var ev=(typeof events!=='undefined'&&events&&events.ok&&events.counts)?events:null;
 if(!read&&ev){var c=ev.counts;read='In the last '+(ev.hours||48)+'h I read <b>'+((c.mails||0)+(c.jobs||0)+(c.bills||0))+'</b> mails and <b>'+((c.sms||0)+(c.txns||0))+'</b> texts'+(ev.left?' — '+inr(ev.left)+' left the accounts':'')+'.'+(ev.mattered&&ev.mattered.length?' '+ev.mattered.length+' mattered — '+esc(ev.mattered.slice(0,2).join('; '))+'.':' Nothing in them needed you.');}
 if(!read&&(dg.ran||dg.papers||dg.notes)){read='Since you last looked'+(prevLook?' ('+dayLab(prevLook)+' '+hhmm(prevLook)+')':'')+': '+[dg.ran?dg.ran+' desk'+(dg.ran===1?'':'s')+' ran':'',dg.papers?dg.papers+' paper'+(dg.papers===1?'':'s')+' filed':'',dg.notes?dg.notes+' note'+(dg.notes===1?'':'s')+' to you':''].filter(Boolean).join(', ')+'.';}
