@@ -549,6 +549,9 @@ details.li-wk>summary{cursor:pointer;list-style:none}
 details.li-wk>summary::-webkit-details-marker{display:none}
 .li-wk .li-row{padding:9px 0}
 .li-wk-go{display:inline-flex;align-items:center;padding:9px 12px;border-radius:10px;border:1px solid var(--line2);font-size:13px;font-weight:600;color:var(--acc);text-decoration:none}
+/* b16.13 the mail sheet */
+.ml-act{display:flex;flex-direction:column;gap:8px;margin:0 0 6px}
+.ml-act .b2{text-align:center}
 </style>
 </head>
 <body>
@@ -722,7 +725,7 @@ details.li-wk>summary::-webkit-details-marker{display:none}
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b16.12';
+var BUILD='b16.13';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -2138,7 +2141,7 @@ return '<div class="ln ts-ln"><span class="ic">✉️</span><span class="tx">'+e
 '<div class="ln" style="border:0"><span class="ic"></span><span class="tx"><a href="'+esc(ob.url||'https://mail.google.com/mail/u/0/')+'" target="_blank" rel="noopener">Open To Send in Gmail ↗</a></span></div></div>';}
 h+=rows.map(fuRowHtml).join('');el.innerHTML=h;};
 function sheet(){var m=$('mTs');if(m)return m;m=document.createElement('div');m.className='modal';m.id='mTs';
-m.innerHTML='<div class="sheet ts-sheet"><h3 id="tsH">Review</h3><div id="tsMeta" class="ts-meta"></div><div id="tsIss"></div><pre id="tsBody" class="ts-body"></pre><div class="ts-btns"><button class="b2 send" id="tsGo">Send</button><a class="b2 ghost" id="tsEdit" target="_blank" rel="noopener">Edit in Gmail ↗</a><button class="b2 ghost" id="tsX">Not now</button></div></div>';
+m.innerHTML='<div class="sheet ts-sheet"><h3 id="tsH">Review</h3><div id="tsMeta" class="ts-meta"></div><div id="tsIss"></div><pre id="tsBody" class="ts-body"></pre><div class="ts-btns"><button class="b2 send" id="tsGo">Send</button><a class="b2 ghost" id="tsEdit" data-raw="1" target="_blank" rel="noopener">Edit in Gmail ↗</a><button class="b2 ghost" id="tsX">Not now</button></div></div>';
 document.body.appendChild(m);
 m.addEventListener('click',function(e){if(e.target===m||e.target.id==='tsX')close();});
 $('tsGo').addEventListener('click',go);return m;}
@@ -2149,7 +2152,7 @@ function issuesHtml(is){return (is||[]).map(function(x){return '<div class="ts-i
 function open(msg){if(!live()){toast('Enter the key in ⚙ first — then the house can send.');return;}
 var m=sheet();cur=null;disarm();$('tsH').textContent='Opening the draft…';$('tsMeta').innerHTML='';$('tsIss').innerHTML='';$('tsBody').textContent='';
 var g=$('tsGo');g.disabled=true;g.textContent='Checking…';$('tsEdit').removeAttribute('href');m.classList.add('on');
-ringOnce(wireUrl(),'&op=draft&msg='+encodeURIComponent(msg),40000).then(function(j){
+ringOnce(wireUrl(),'&op=draft&'+(/^r-?\d+$/.test(String(msg))?'draft=':'msg=')+encodeURIComponent(msg),40000).then(function(j){
 if(!j||!j.ok){$('tsH').textContent='Could not open it';$('tsIss').innerHTML=issuesHtml([{level:'block',text:(j&&(j.why||j.err))||'The wire dropped — try again.'}]);g.textContent='—';if(j&&j.err==='gone')setTimeout(function(){fetchFollowups(true);},800);return;}
 cur=j;cur.blocked=(j.issues||[]).some(function(x){return x.level==='block';});
 $('tsH').textContent=j.subject||'(no subject)';
@@ -2169,7 +2172,53 @@ $('tsIss').innerHTML=issuesHtml([{level:'block',text:(j&&(j.why||j.err))||'Not s
 if(j&&(j.err==='gone'||j.err==='changed'))setTimeout(function(){fetchFollowups(true);},800);
 }).catch(function(){busy=false;g.disabled=false;arm=0;g.classList.remove('arm');g.textContent='Send to '+firstTo(c.to);toast('The wire dropped — check Gmail Sent before you tap again.');});}
 document.addEventListener('click',function(e){var b=e.target.closest('.ts-rv');if(!b)return;e.preventDefault();open(b.getAttribute('data-msg'));});
+window.tsReview=open; /* b16.13: any Gmail draft link anywhere on the Bridge opens this same review */
 try{renderFollowups();}catch(e){}
+})();
+/* ===== b16.13 EVERY "OPEN" GOES SOMEWHERE CONCRETE (25 Oct 2026) — SIR'S WORD: "if I click that, it opens a generic page … it's not leading me somewhere concrete. It should go to the HDFC app."
+   On the phone a Gmail link lands on Gmail's inbox, never on the email. So, anywhere on the Bridge:
+   · a Gmail DRAFT link opens Review & send for that very draft;
+   · a Gmail EMAIL / THREAD link opens that very email here (the Actuator's op=mail door), with any reply waiting in it one tap away;
+   · an HDFC link on Android goes to the HDFC Bank app; an email from HDFC carries an "Open the HDFC Bank app" button.
+   Links marked data-raw="1" (Edit in Gmail / Open in Gmail) pass straight through. ===== */
+(function(){
+var ANDROID=/Android/i.test(navigator.userAgent||'');
+var HDFC_PKG='com.hdfcbank.android.now';
+function big16(d){try{return BigInt(d).toString(16);}catch(e){return '';}}
+function gmailTarget(u){try{var x=new URL(u,location.href);if(!/(^|\.)mail\.google\.com$/i.test(x.hostname))return null;
+var s=decodeURIComponent(x.hash+' '+x.search);var m;
+if((m=s.match(/msg-a:(r-?\d+)/)))return {draft:m[1]};
+if((m=s.match(/compose=(r-?\d+)/)))return {draft:m[1]};
+if((m=s.match(/msg-f:(\d{6,})/))){var h=big16(m[1]);if(h)return {msg:h};}
+if((m=s.match(/thread-f:(\d{6,})/))){var h2=big16(m[1]);if(h2)return {thread:h2};}
+if((m=x.hash.match(/#(?:all|inbox|sent|starred|imp|drafts|label\/[^\/]+|search\/[^\/]+|category\/[^\/]+)\/([0-9a-f]{12,20})\b/i)))return {thread:m[1]};
+return null;}catch(e){return null;}}
+function isHdfc(u){try{return /(^|\.)(hdfcbank\.com|hdfc\.bank\.in|hdfcbank\.net)$/i.test(new URL(u,location.href).hostname);}catch(e){return false;}}
+/* Android: open the HDFC Bank app itself. If HDFC's app will not take a web hand-off, Android shows its Play Store page with an Open button — still the app, never a generic web page. */
+function hdfcApp(web){if(!ANDROID){window.open(web||'https://www.hdfc.bank.in/','_blank');return;}vib(8);location.href='intent://#Intent;package='+HDFC_PKG+';end';}
+window.openHdfcApp=hdfcApp;
+function when(iso){try{return new Date(iso).toLocaleString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return String(iso||'');}}
+function sheet(){var m=$('mMail');if(m)return m;m=document.createElement('div');m.className='modal';m.id='mMail';
+m.innerHTML='<div class="sheet ts-sheet"><h3 id="mlH">Opening…</h3><div id="mlMeta" class="ts-meta"></div><div id="mlAct" class="ml-act"></div><pre id="mlBody" class="ts-body"></pre><div class="ts-btns"><a class="b2 ghost" id="mlGmail" data-raw="1" target="_blank" rel="noopener">Open in Gmail ↗</a><button class="b2 ghost" id="mlX">Close</button></div></div>';
+document.body.appendChild(m);
+m.addEventListener('click',function(e){if(e.target===m||e.target.id==='mlX'){m.classList.remove('on');return;}
+var rv=e.target.closest('.ml-rv');if(rv){m.classList.remove('on');if(window.tsReview)window.tsReview(rv.getAttribute('data-msg'));return;}
+if(e.target.closest('.ml-hdfc')){hdfcApp();}});return m;}
+function openMail(t,href){if(!live()){window.open(href,'_blank');return;}
+var m=sheet();$('mlH').textContent='Opening the email…';$('mlMeta').innerHTML='';$('mlAct').innerHTML='';$('mlBody').textContent='';$('mlGmail').href=href||'https://mail.google.com/mail/u/0/';m.classList.add('on');
+ringOnce(wireUrl(),'&op=mail'+(t.thread?'&thread='+encodeURIComponent(t.thread):'')+(t.msg?'&msg='+encodeURIComponent(t.msg):''),40000).then(function(j){
+if(!j||!j.ok){$('mlH').textContent='Could not open it here';$('mlAct').innerHTML='<div class="ts-iss warn">'+esc((j&&(j.why||j.err))||'The wire dropped — try again.')+'</div>';return;}
+$('mlH').textContent=j.subject||'(no subject)';
+$('mlMeta').innerHTML='<div><b>From</b> '+esc(j.from||'')+'</div><div><b>To</b> '+esc(j.to||'')+'</div><div><b>When</b> '+esc(when(j.date))+(j.count>1?' · '+j.count+' in this thread':'')+'</div>'+((j.atts&&j.atts.length)?'<div><b>Attached</b> '+esc(j.atts.join(', '))+'</div>':'');
+var act='';(j.drafts||[]).forEach(function(d){act+='<button class="b2 send ml-rv" data-msg="'+esc(d.msg)+'">Review &amp; send your reply'+(d.to?' → '+esc(clamp(d.to,34)):'')+'</button>';});
+if(/hdfc/i.test(String(j.from||'')+' '+String(j.subject||'')+' '+String(j.body||'').slice(0,600)))act+='<button class="b2 ghost ml-hdfc">Open the HDFC Bank app</button>';
+$('mlAct').innerHTML=act;$('mlBody').textContent=String(j.body||'')+(j.more?'\n\n…(longer — open in Gmail for the rest)':'');if(j.url)$('mlGmail').href=j.url;
+}).catch(function(){$('mlH').textContent='Could not open it here';$('mlAct').innerHTML='<div class="ts-iss warn">The wire dropped — try again, or open it in Gmail.</div>';});}
+window.openMailHere=openMail;
+document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('a[href]'):null;if(!a||a.getAttribute('data-raw')==='1')return;var href=a.getAttribute('href')||'';if(!/^https?:/i.test(href))return;
+var g=gmailTarget(href);
+if(g){e.preventDefault();e.stopPropagation();if(g.draft){if(window.tsReview)window.tsReview(g.draft);else window.open(href,'_blank');}else openMail(g,href);return;}
+if(ANDROID&&isHdfc(href)){e.preventDefault();e.stopPropagation();hdfcApp(href);}},true);
 })();
 
 render();if(live()){fetchState();fetchThread();fetchKitchen();fetchVoice();fetchEvents();fetchGems();}renderPotd();
