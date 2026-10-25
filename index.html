@@ -677,7 +677,7 @@ a.gc-b{display:flex;align-items:center;justify-content:center;text-decoration:no
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b16.9';
+var BUILD='b16.10';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -1881,15 +1881,16 @@ var ref=gPhotoRef(it);$('gemSheet').innerHTML=(ref?phEl(ref,'gm-hero',1280,it.ph
 $('mGem').classList.add('on');phPaint($('gemSheet'));vib(6);}});
 })();
 
-/* ===== b16.9 GROCERIES (25 Oct 2026) — SIR'S WORD: "an area on the Bridge where I attach the WhatsApp screenshot or the voice note; default quantities; Blinkit first, Instamart if not; Food as an option." The Pantry Door reads the list; the Pantry Desk fills the cart; Sir pays. The house never orders or pays. ===== */
+/* ===== b16.10 GROCERIES (25 Oct 2026) — Instamart default, built in the cloud by the Duty Desk through the Swiggy connector (SIR'S WORD: no laptop, no Chrome). b16.9: — SIR'S WORD: "an area on the Bridge where I attach the WhatsApp screenshot or the voice note; default quantities; Blinkit first, Instamart if not; Food as an option." The Pantry Door reads the list; the Pantry Desk fills the cart; Sir pays. The house never orders or pays. ===== */
 (function(){
 var AG={k:'groceries',ic:'🛒',n:'Groceries',re:/grocer|blinkit|instamart|pantry door|pantry desk/i,desks:['pantry']};
 if(!AREAS.some(function(a){return a.k==='groceries';}))AREAS.push(AG);
-var STORES={blinkit:'Blinkit',instamart:'Instamart',food:'Swiggy Food'};
-var gro={store:localStorage.getItem('br_gro_store')||'blinkit',att:[],draft:LS('br_gro_draft',null),busy:0,list:LS('br_gro_list',[]),voice:null};
+var STORES={instamart:'Instamart',food:'Swiggy Food',blinkit:'Blinkit'};
+var st0=localStorage.getItem('br_gro_store');if(st0!=='food')st0='instamart';
+var gro={store:st0,att:[],draft:LS('br_gro_draft',null),busy:0,list:LS('br_gro_list',[]),voice:null};
 var box=document.createElement('div');box.id='a-groceries';box.style.display='none';
 box.innerHTML='<div class="gro-card">'+
-'<div class="gro-seg" id="groSeg"><button data-st="blinkit">Blinkit</button><button data-st="instamart">Instamart</button><button data-st="food">Food</button></div>'+
+'<div class="gro-seg" id="groSeg"><button data-st="instamart">Instamart</button><button data-st="food">Food</button></div>'+
 '<div class="gro-in"><button id="groShot">📷 Screenshot</button><button id="groVoice">🎙 Voice note</button><button id="groSpeak">🎤 Speak</button></div>'+
 '<input type="file" id="groFileImg" accept="image/*" multiple style="display:none"><input type="file" id="groFileAud" accept="audio/*,.opus,.ogg,.oga,.m4a,.mp3,.aac,.wav,.amr" style="display:none">'+
 '<div class="gro-att" id="groAtt"></div>'+
@@ -1901,7 +1902,7 @@ box.innerHTML='<div class="gro-card">'+
 $('areaDetail').appendChild(box);
 
 function groWhen(iso){var t=Date.parse(iso||'');if(!t)return '';var m=Math.round((Date.now()-t)/6e4);if(m<1)return 'just now';if(m<60)return m+' min ago';if(m<1440)return Math.round(m/60)+'h ago';return new Date(t).toLocaleDateString('en-IN',{day:'numeric',month:'short'});}
-function groStatus(r){var R=r.result||{},st=R.status||'open';var M={open:['⏳','waiting for the laptop desk'],building:['🛠','filling the cart'],cart_ready:['🛒','cart ready — pay in '+(STORES[r.store]||'the app')],partial:['🛒','cart ready, some items missing'],needs_login:['🔑','sign in to '+(STORES[r.store]||'the store')+' on the laptop'],needs_connector:['🔌','add the Swiggy connector'],failed:['⚠','could not build'],done:['✓','done'],test:['·','test']};return M[st]||['·',String(st)];}
+function groStatus(r){var R=r.result||{},st=R.status||'open';var M={open:['⏳',r.store==='blinkit'?'waiting for the laptop desk':'with the Duty Desk — usually a few minutes'],building:['🛠','filling the cart'],cart_ready:['🛒','cart ready — pay in the '+(r.store==='blinkit'?'Blinkit':'Swiggy')+' app'],partial:['🛒','cart ready, some items missing'],needs_login:['🔑','sign in to '+(STORES[r.store]||'the store')+' on the laptop'],needs_connector:['🔌','add the Swiggy connector'],failed:['⚠','could not build — see the note'],done:['✓','done'],test:['·','test']};return M[st]||['·',String(st)];}
 function groLine(){var L=(gro.list||[]).filter(function(r){return r&&r.from!=='test';});var r=L[0];if(!r)return 'send the list — screenshot, voice note or words';var s=groStatus(r);return s[1]+(r.result&&r.result.total?' · '+inr(r.result.total):'');}
 var _al3=areaLine;areaLine=function(s,a){if(a&&a.k==='groceries')return groLine();return _al3(s,a);};
 var _oa3=openArea;openArea=function(k){var g=$('a-groceries');if(k!=='groceries'){if(g)g.style.display='none';_oa3(k);return;}
@@ -1952,7 +1953,7 @@ if(d.unclear&&d.unclear.length)h+='<p class="src gro-warn">Not added: '+d.unclea
 if(d.needKey)h+='<p class="src gro-warn">The voice note is saved but not heard — voice needs a one-time Gemini key in the Actuator. Meanwhile: in WhatsApp, long-press the voice note → Transcribe, and screenshot that.</p>';
 if(d.audioErr)h+='<p class="src gro-warn">Voice: '+esc(d.audioErr)+'</p>';
 h+='<button class="b2 send" id="groGo"'+(on?'':' disabled')+'>Build my '+esc(STORES[gro.store])+' cart · '+on+' item'+(on===1?'':'s')+'</button><button class="b2 ghost" id="groDiscard">Start over</button>';
-h+='<p class="src">'+(gro.store==='blinkit'?'Alfred fills the Blinkit cart in Chrome on the laptop (the desk runs every 30 min, 7 am–10 pm) and shows it here with prices and fees.':'Alfred fills the cart through the Swiggy connector and shows it here.')+' You place the order and pay — the house never does.</p>';
+h+='<p class="src">Alfred builds the '+(gro.store==='food'?'Swiggy Food':'Instamart')+' cart in the cloud through the Swiggy connector — usually within minutes — and shows it here with prices and fees. Keep the Swiggy app closed until it is ready, then open it and pay. The house never places the order.</p>';
 el.innerHTML=h;}
 $('groDraft').addEventListener('click',function(e){var t=e.target,d=gro.draft;if(!d)return;
 if(t.id==='groGo'){groBuild();return;}
@@ -1983,7 +1984,7 @@ else h+='<div class="gc-l gc-ask">'+(r.lines||[]).slice(0,40).map(function(x){re
 if(R.missing&&R.missing.length)h+='<p class="src gro-warn">Missing: '+R.missing.map(function(m){return esc(m.item||m.asked||String(m))+(m.why?' ('+esc(m.why)+')':'');}).join(' · ')+'</p>';
 if((R.fees&&R.fees.length)||R.itemTotal)h+='<p class="src">'+(R.itemTotal?'Items '+inr(R.itemTotal):'')+(R.fees||[]).map(function(f){return ' · '+esc(f.name)+' '+inr(f.amt||0);}).join('')+'</p>';
 if(R.msg)h+='<p class="src">'+esc(R.msg)+'</p>';
-if(/cart_ready|partial/.test(R.status||'')){if(r.store==='blinkit')h+='<a class="b2 send gc-b" href="https://blinkit.com/" target="_blank" rel="noopener">Open Blinkit to pay</a>';else h+='<a class="b2 send gc-b" href="https://www.swiggy.com/instamart" target="_blank" rel="noopener">Open Swiggy to pay</a>';}
+if(/cart_ready|partial/.test(R.status||'')){if(r.store==='blinkit')h+='<a class="b2 send gc-b" href="https://blinkit.com/" target="_blank" rel="noopener">Open Blinkit to pay</a>';else if(r.store==='food')h+='<a class="b2 send gc-b" href="https://www.swiggy.com/" target="_blank" rel="noopener">Open Swiggy to pay</a>';else h+='<a class="b2 send gc-b" href="https://www.swiggy.com/instamart" target="_blank" rel="noopener">Open Instamart to pay</a>';}
 if(R.missing&&R.missing.length&&r.store==='blinkit')h+='<button class="b2 ghost" data-miss="'+esc(r.id)+'">Put the missing on Instamart</button>';
 h+='</div>';});
 el.innerHTML=h;}
