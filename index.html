@@ -460,6 +460,50 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
 #answers .ln a.when,#fups .ln a.when{color:var(--acc);font-weight:600;text-decoration:none;background:var(--accbg);border-radius:14px;padding:5px 11px;margin-top:2px}
 #answers .ln span.when{font-size:20px;line-height:1;padding-top:4px;color:var(--line2)}
 #answers .more{display:block;width:100%;margin:2px 0 4px;padding:8px 0 6px;border:0;border-top:1px solid var(--line);background:transparent;color:var(--acc);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+/* b16.9 groceries */
+.gro-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 12px 4px;box-shadow:var(--sh);margin-bottom:6px}
+.gro-seg{display:flex;background:var(--card2);border-radius:12px;padding:3px;gap:3px;margin-bottom:10px}
+.gro-seg button{flex:1;padding:8px 0;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--mut)}
+.gro-seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.gro-in{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.gro-in button{padding:12px 4px;border-radius:12px;border:1px solid var(--line2);background:var(--card);font-size:13px;font-weight:600;color:var(--ink2)}
+.gro-in button.live{background:var(--badbg);color:var(--bad);border-color:var(--bad)}
+.gro-att{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.gro-att:empty{display:none}
+.gro-chip{display:flex;align-items:center;gap:6px;background:var(--chip);border-radius:10px;padding:4px 6px 4px 4px;max-width:100%}
+.gro-chip img{width:34px;height:34px;object-fit:cover;border-radius:7px}
+.gro-chip .gi{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.gro-chip .gn{font-size:12px;color:var(--ink2);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gro-chip button{font-size:17px;color:var(--mut);padding:0 4px}
+#groText{width:100%;border:1px solid var(--line2);border-radius:12px;padding:10px 12px;font:inherit;font-size:14.5px;background:var(--bg);color:var(--ink);resize:vertical;min-height:70px}
+.gro-lines{padding:0 10px}
+.gro-line{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.gro-line.off{opacity:.45}
+.gro-line.off .gro-n b{text-decoration:line-through}
+.gro-tick{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line2);font-size:14px;font-weight:700;color:var(--ok);flex-shrink:0}
+.gro-n{flex:1;min-width:0;font-size:14px;line-height:1.3}
+.gro-n small{color:var(--mut);font-size:12px}
+.gro-n .gro-w{display:block;margin-top:2px}
+.gro-q{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.gro-q button{width:30px;height:30px;border-radius:9px;background:var(--chip);font-size:17px;font-weight:600}
+.gro-q span{min-width:22px;text-align:center;font-weight:650}
+.gro-add{display:flex;gap:6px;padding:9px 0}
+.gro-add input{flex:1;min-width:0;border:1px solid var(--line2);border-radius:10px;padding:8px 10px;font:inherit;font-size:14px;background:var(--bg);color:var(--ink)}
+.gro-add button{padding:0 14px;border-radius:10px;background:var(--ink);color:var(--bg);font-weight:600;font-size:13.5px}
+.gro-warn{color:var(--warn)}
+#groDraft .b2[disabled]{opacity:.5}
+.gro-cart{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px 6px;box-shadow:var(--sh);margin-bottom:8px}
+.gc-h{display:flex;align-items:center;gap:10px}
+.gc-i{width:36px;height:36px;border-radius:11px;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.gc-t{flex:1;min-width:0}
+.gc-t b{display:block;font-size:14.5px}
+.gc-t small{color:var(--mut);font-size:12px}
+.gc-tot{font-weight:700;font-size:15px}
+.gc-l{margin-top:8px;font-size:13px}
+.gc-l>div{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-bottom:1px dashed var(--line)}
+.gc-l small{display:block;color:var(--mut);font-size:11.5px;margin:-1px 0 3px}
+.gc-ask{color:var(--ink2);line-height:1.6}
+a.gc-b{display:flex;align-items:center;justify-content:center;text-decoration:none}
 </style>
 </head>
 <body>
@@ -633,7 +677,7 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b16.8';
+var BUILD='b16.9';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -1835,6 +1879,132 @@ var r=t.closest('[data-uidea]');if(r){var id2=r.getAttribute('data-uidea'),U2=us
 var ref=gPhotoRef(it);$('gemSheet').innerHTML=(ref?phEl(ref,'gm-hero',1280,it.photoOf?'<small>'+esc(it.photoOf)+'</small>':'',true):'')+'<h3>'+esc(it.icon||'')+' '+esc(it.title)+'</h3><p class="note">'+esc(it.place||'')+'</p><div class="gm-tags">'+(it.when?'<span class="tag age">'+esc(it.when)+'</span>':'')+(it.cost?'<span class="tag money">'+esc(it.cost)+'</span>':'')+(it.list?'<span class="tag gm-list">📍 your '+esc(it.list)+'</span>':'')+'</div><p class="gm-why">'+esc(it.why||'')+'</p>'+
 '<a class="b2 send" href="'+esc(waLink(it.title+(it.place?' — '+it.place:'')+'. '+(it.when?it.when+'. ':'')+'Shall we?'))+'" target="_blank" rel="noopener">Tell her on WhatsApp</a><a class="b2 ghost" href="'+esc(usMaps(it))+'" target="_blank" rel="noopener">Open in Google Maps ↗</a><button class="b2 ghost" data-gact="close">Close</button>';
 $('mGem').classList.add('on');phPaint($('gemSheet'));vib(6);}});
+})();
+
+/* ===== b16.9 GROCERIES (25 Oct 2026) — SIR'S WORD: "an area on the Bridge where I attach the WhatsApp screenshot or the voice note; default quantities; Blinkit first, Instamart if not; Food as an option." The Pantry Door reads the list; the Pantry Desk fills the cart; Sir pays. The house never orders or pays. ===== */
+(function(){
+var AG={k:'groceries',ic:'🛒',n:'Groceries',re:/grocer|blinkit|instamart|pantry door|pantry desk/i,desks:['pantry']};
+if(!AREAS.some(function(a){return a.k==='groceries';}))AREAS.push(AG);
+var STORES={blinkit:'Blinkit',instamart:'Instamart',food:'Swiggy Food'};
+var gro={store:localStorage.getItem('br_gro_store')||'blinkit',att:[],draft:LS('br_gro_draft',null),busy:0,list:LS('br_gro_list',[]),voice:null};
+var box=document.createElement('div');box.id='a-groceries';box.style.display='none';
+box.innerHTML='<div class="gro-card">'+
+'<div class="gro-seg" id="groSeg"><button data-st="blinkit">Blinkit</button><button data-st="instamart">Instamart</button><button data-st="food">Food</button></div>'+
+'<div class="gro-in"><button id="groShot">📷 Screenshot</button><button id="groVoice">🎙 Voice note</button><button id="groSpeak">🎤 Speak</button></div>'+
+'<input type="file" id="groFileImg" accept="image/*" multiple style="display:none"><input type="file" id="groFileAud" accept="audio/*,.opus,.ogg,.oga,.m4a,.mp3,.aac,.wav,.amr" style="display:none">'+
+'<div class="gro-att" id="groAtt"></div>'+
+'<textarea id="groText" rows="3" placeholder="…or type or paste the list, one item a line"></textarea>'+
+'<button class="b2 send" id="groRead">Read the list</button>'+
+'<p class="src">Unless the list says otherwise: vegetables ½ kg (onion, potato, tomato 1 kg) · staples 1 kg · oil 1 L · dry fruit 250 g · Amul milk 1 L tetra × 2. Change any line before you build.</p>'+
+'<p class="src" id="groTip">Tip: in WhatsApp, share the screenshot or voice note straight to <b>The Bridge</b>.</p>'+
+'</div><div id="groDraft"></div><div id="groRecent"></div>';
+$('areaDetail').appendChild(box);
+
+function groWhen(iso){var t=Date.parse(iso||'');if(!t)return '';var m=Math.round((Date.now()-t)/6e4);if(m<1)return 'just now';if(m<60)return m+' min ago';if(m<1440)return Math.round(m/60)+'h ago';return new Date(t).toLocaleDateString('en-IN',{day:'numeric',month:'short'});}
+function groStatus(r){var R=r.result||{},st=R.status||'open';var M={open:['⏳','waiting for the laptop desk'],building:['🛠','filling the cart'],cart_ready:['🛒','cart ready — pay in '+(STORES[r.store]||'the app')],partial:['🛒','cart ready, some items missing'],needs_login:['🔑','sign in to '+(STORES[r.store]||'the store')+' on the laptop'],needs_connector:['🔌','add the Swiggy connector'],failed:['⚠','could not build'],done:['✓','done'],test:['·','test']};return M[st]||['·',String(st)];}
+function groLine(){var L=(gro.list||[]).filter(function(r){return r&&r.from!=='test';});var r=L[0];if(!r)return 'send the list — screenshot, voice note or words';var s=groStatus(r);return s[1]+(r.result&&r.result.total?' · '+inr(r.result.total):'');}
+var _al3=areaLine;areaLine=function(s,a){if(a&&a.k==='groceries')return groLine();return _al3(s,a);};
+var _oa3=openArea;openArea=function(k){var g=$('a-groceries');if(k!=='groceries'){if(g)g.style.display='none';_oa3(k);return;}
+curArea=k;$('lifeGrid').style.display='none';$('areaDetail').style.display='block';$('areaName').textContent=AG.n;$('areaSub').textContent=groLine();
+['career','money','health','kitchen','travel','admin','family','ventures','us'].forEach(function(x){var e=$('a-'+x);if(e)e.style.display='none';});
+g.style.display='block';groRender();groFetch();window.scrollTo(0,0);vib(6);};
+
+function groSeg(){var b=$('groSeg').querySelectorAll('button');for(var i=0;i<b.length;i++)b[i].classList.toggle('on',b[i].getAttribute('data-st')===gro.store);}
+$('groSeg').onclick=function(e){var b=e.target.closest('button');if(!b)return;gro.store=b.getAttribute('data-st');localStorage.setItem('br_gro_store',gro.store);groSeg();groRenderDraft();vib(6);};
+$('groShot').onclick=function(){$('groFileImg').click();};
+$('groVoice').onclick=function(){$('groFileAud').click();};
+$('groFileImg').onchange=function(){var fs=[].slice.call(this.files||[]);this.value='';fs.forEach(groTake);};
+$('groFileAud').onchange=function(){var fs=[].slice.call(this.files||[]);this.value='';fs.forEach(groTake);};
+function groTake(f){if(!f)return;if(gro.att.length>=4){toast('Four at a time, Sir.');return;}
+if(/^image\//i.test(f.type||'')){shrink(f,function(big,thumb){gro.att.push({name:String(f.name||'list').replace(/\.[^.]+$/,'')+'.jpg',mime:'image/jpeg',data:big.split(',')[1],thumb:thumb,kind:'img'});groRenderAtt();},function(){groRaw(f);});}else groRaw(f);}
+function groRaw(f){if(f.size>10*1024*1024){toast('Too heavy for the wire — under 10 MB, please.');return;}var r=new FileReader();r.onload=function(){var u=String(r.result);var isA=/^audio\//i.test(f.type||'')||/\.(opus|ogg|oga|m4a|mp3|aac|wav|amr)$/i.test(f.name||'');gro.att.push({name:f.name||'file',mime:f.type||(isA?'audio/ogg':'application/octet-stream'),data:u.split(',')[1],thumb:'',kind:isA?'aud':'file'});groRenderAtt();};r.onerror=function(){toast('Could not read that file.');};r.readAsDataURL(f);}
+function groRenderAtt(){var el=$('groAtt');if(!el)return;el.innerHTML='';gro.att.forEach(function(a,i){var d=document.createElement('div');d.className='gro-chip';d.innerHTML=(a.thumb?'<img src="'+a.thumb+'" alt="">':'<span class="gi">'+(a.kind==='aud'?'🎙':'📄')+'</span>')+'<span class="gn">'+esc(a.name)+'</span><button data-i="'+i+'" aria-label="remove">×</button>';el.appendChild(d);});}
+$('groAtt').onclick=function(e){var b=e.target.closest('button[data-i]');if(!b)return;gro.att.splice(+b.getAttribute('data-i'),1);groRenderAtt();};
+
+var gRec=null,gOn=false;
+function gStop(){gOn=false;var b=$('groSpeak');b.classList.remove('live');b.textContent='🎤 Speak';}
+$('groSpeak').onclick=function(){var SRx=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SRx){toast('This browser has no ear — type it.');return;}if(gOn&&gRec){gRec.stop();return;}
+gRec=new SRx();gRec.lang=lang;gRec.interimResults=true;gRec.continuous=true;var tx=$('groText'),base=tx.value?tx.value.replace(/\s*$/,'\n'):'';
+gRec.onresult=function(ev){var t='';for(var i=0;i<ev.results.length;i++)t+=ev.results[i][0].transcript+(ev.results[i].isFinal?'\n':'');tx.value=base+t;};
+gRec.onend=gStop;gRec.onerror=gStop;gOn=true;var b=$('groSpeak');b.classList.add('live');b.textContent='■ Stop';vib(10);try{gRec.start();}catch(e){gStop();}};
+
+function groReadBtn(){var b=$('groRead');b.disabled=false;b.textContent='Read the list';}
+$('groRead').onclick=function(){if(gro.busy)return;var text=$('groText').value.trim();if(!text&&!gro.att.length){toast('A screenshot, a voice note or a few words first.');return;}
+if(!live()){toast('Specimen — enter the key in ⚙.');return;}
+gro.busy=1;var b=$('groRead');b.disabled=true;b.textContent=gro.att.length?'Reading the list… (up to a minute)':'Reading…';
+var ctl=('AbortController' in window)?new AbortController():null;var tm=setTimeout(function(){if(ctl)ctl.abort();},150000);
+var opts={method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({key:cfg.key,op:'pantry',act:'read',text:text,files:gro.att.map(function(a){return {name:a.name,mime:a.mime,data:a.data};})})};if(ctl)opts.signal=ctl.signal;
+fetch(wireUrl(),opts).then(function(r){return r.json();}).then(function(j){clearTimeout(tm);gro.busy=0;groReadBtn();
+if(!j||!j.ok){toast(j&&j.err==='key'?'Refused — check the key in ⚙.':j&&j.err==='op'?'The Actuator has no pantry door yet.':'Could not read it — '+((j&&j.err)||'no reply'));return;}
+gro.draft={lines:(j.lines||[]).map(function(l){l.on=1;return l;}),unclear:j.unclear||[],heard:j.heard||'',saved:j.saved||[],needKey:!!j.needKey,audioErr:j.audioErr||'',text:text};
+LSset('br_gro_draft',gro.draft);groRenderDraft();if(!gro.draft.lines.length)toast(j.needKey?'The voice note needs the one-time key — see below.':'No items found — check the screenshot.');
+setTimeout(function(){var d=$('groDraft');if(d)d.scrollIntoView({behavior:'smooth',block:'start'});},60);vib(8);})
+.catch(function(){clearTimeout(tm);gro.busy=0;groReadBtn();toast('The wire dropped it — try again.');});};
+
+function groRenderDraft(){var el=$('groDraft');if(!el)return;el.innerHTML='';var d=gro.draft;if(!d)return;
+var on=d.lines.filter(function(l){return l.on;}).length;
+var h='<h2><span>The list — check it</span><span class="cnt">'+on+' of '+d.lines.length+'</span></h2>';
+if(d.heard)h+='<p class="src">Heard: '+esc(clamp(d.heard.replace(/\n+/g,' · '),240))+'</p>';
+h+='<div class="box gro-lines">';
+d.lines.forEach(function(l,i){h+='<div class="gro-line'+(l.on?'':' off')+'" data-i="'+i+'"><button class="gro-tick" data-a="tick" aria-label="keep or drop">'+(l.on?'✓':'')+'</button><div class="gro-n"><b>'+esc(l.item)+'</b>'+(l.brand?' <small>'+esc(l.brand)+'</small>':'')+'<small class="gro-w">'+esc(l.pack||'usual pack')+(l.why==='default'?' · default':l.why==='usual'?' · your usual':'')+(l.note?' · '+esc(l.note):'')+'</small></div><div class="gro-q"><button data-a="dn" aria-label="less">−</button><span>'+(l.qty||1)+'</span><button data-a="up" aria-label="more">+</button></div></div>';});
+h+='<div class="gro-add"><input id="groAddIn" placeholder="Add an item (e.g. paneer 200 g)"><button id="groAddGo">Add</button></div></div>';
+if(d.unclear&&d.unclear.length)h+='<p class="src gro-warn">Not added: '+d.unclear.map(esc).join(' · ')+'</p>';
+if(d.needKey)h+='<p class="src gro-warn">The voice note is saved but not heard — voice needs a one-time Gemini key in the Actuator. Meanwhile: in WhatsApp, long-press the voice note → Transcribe, and screenshot that.</p>';
+if(d.audioErr)h+='<p class="src gro-warn">Voice: '+esc(d.audioErr)+'</p>';
+h+='<button class="b2 send" id="groGo"'+(on?'':' disabled')+'>Build my '+esc(STORES[gro.store])+' cart · '+on+' item'+(on===1?'':'s')+'</button><button class="b2 ghost" id="groDiscard">Start over</button>';
+h+='<p class="src">'+(gro.store==='blinkit'?'Alfred fills the Blinkit cart in Chrome on the laptop (the desk runs every 30 min, 7 am–10 pm) and shows it here with prices and fees.':'Alfred fills the cart through the Swiggy connector and shows it here.')+' You place the order and pay — the house never does.</p>';
+el.innerHTML=h;}
+$('groDraft').addEventListener('click',function(e){var t=e.target,d=gro.draft;if(!d)return;
+if(t.id==='groGo'){groBuild();return;}
+if(t.id==='groDiscard'){gro.draft=null;LSset('br_gro_draft',null);gro.att=[];groRenderAtt();$('groText').value='';groRenderDraft();return;}
+if(t.id==='groAddGo'){var v=$('groAddIn').value.trim();if(!v)return;var m=v.match(/^(.*?)\s+(\d+(?:\.\d+)?\s*(?:kg|kgs|g|gm|gms|l|ltr|litre|ml|pcs|pc|dozen|bunch|pack|packs))$/i);var it=(m?m[1]:v);d.lines.push({item:it.charAt(0).toUpperCase()+it.slice(1),pack:m?m[2]:'',qty:1,brand:'',search:it,why:'list',note:'added by you',on:1});LSset('br_gro_draft',d);groRenderDraft();return;}
+var row=t.closest('.gro-line');if(!row)return;var l=d.lines[+row.getAttribute('data-i')];var a=t.getAttribute('data-a');if(!l||!a)return;
+if(a==='tick')l.on=l.on?0:1;else if(a==='up'){l.qty=Math.min(50,(l.qty||1)+1);l.on=1;}else if(a==='dn'){if((l.qty||1)>1)l.qty--;else l.on=0;}
+LSset('br_gro_draft',d);groRenderDraft();vib(5);});
+$('groDraft').addEventListener('keydown',function(e){if(e.target&&e.target.id==='groAddIn'&&e.key==='Enter'){e.preventDefault();$('groAddGo').click();}});
+
+function groBuild(){var d=gro.draft;if(!d||gro.busy)return;var lines=d.lines.filter(function(l){return l.on;}).map(function(l){return {item:l.item,pack:l.pack,qty:l.qty||1,brand:l.brand,search:l.search,why:l.why,note:l.note};});if(!lines.length)return;
+if(!live()){toast('Specimen — enter the key in ⚙.');return;}
+gro.busy=1;var b=$('groGo');if(b){b.disabled=true;b.textContent='Sending…';}
+fetch(wireUrl(),{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({key:cfg.key,op:'pantry',act:'go',store:gro.store,lines:lines,text:d.text||'',saved:d.saved||[]})}).then(function(r){return r.json();}).then(function(j){gro.busy=0;
+if(!j||!j.ok){toast('Not filed — '+((j&&j.err)||'no reply'));groRenderDraft();return;}
+gro.list=[{id:j.id,at:new Date().toISOString(),store:gro.store,n:lines.length,lines:lines,result:null}].concat(gro.list||[]).slice(0,6);LSset('br_gro_list',gro.list);
+gro.draft=null;LSset('br_gro_draft',null);gro.att=[];groRenderAtt();$('groText').value='';groRenderDraft();groRenderRecent();
+toast('✓ '+j.id+' — the Pantry Desk fills the '+STORES[gro.store]+' cart');vib(12);setTimeout(groFetch,5000);})
+.catch(function(){gro.busy=0;toast('The wire dropped it — tap Build again.');groRenderDraft();});}
+
+function groFetch(){if(!live())return;ringOnce(wireUrl(),'&op=pantry',40000).then(function(j){if(j&&j.ok){gro.list=(j.list||[]).filter(function(x){return x&&x.id;});gro.voice=!!j.voice;LSset('br_gro_list',gro.list);groRenderRecent();var s=$('areaSub');if(curArea==='groceries'&&s)s.textContent=groLine();}}).catch(function(){});}
+function groRenderRecent(){var el=$('groRecent');if(!el)return;var L=(gro.list||[]).filter(function(r){return r&&r.from!=='test'&&!(r.result&&r.result.from==='test');});el.innerHTML='';if(!L.length)return;
+var h='<h2><span>Recent carts</span><span class="cnt">'+L.length+'</span></h2>';
+L.forEach(function(r){var s=groStatus(r),R=r.result||{};
+h+='<div class="gro-cart"><div class="gc-h"><span class="gc-i">'+s[0]+'</span><div class="gc-t"><b>'+esc(STORES[r.store]||r.store||'')+' · '+(r.n||0)+' item'+(r.n===1?'':'s')+'</b><small>'+esc(s[1])+' · '+esc(groWhen(R.at||r.at))+'</small></div>'+(R.total?'<span class="gc-tot">'+inr(R.total)+'</span>':'')+'</div>';
+if(R.lines&&R.lines.length){h+='<div class="gc-l">'+R.lines.map(function(x){return '<div><span>'+esc(x.got||x.item||'')+(x.qty>1?' × '+x.qty:'')+'</span><span>'+(x.price!=null&&x.price!==''?inr(x.price):'')+'</span></div>'+(x.note?'<small>'+esc(x.note)+'</small>':'');}).join('')+'</div>';}
+else h+='<div class="gc-l gc-ask">'+(r.lines||[]).slice(0,40).map(function(x){return esc(x.item)+(x.pack?' '+esc(x.pack):'')+((x.qty||1)>1?' × '+x.qty:'');}).join(' · ')+'</div>';
+if(R.missing&&R.missing.length)h+='<p class="src gro-warn">Missing: '+R.missing.map(function(m){return esc(m.item||m.asked||String(m))+(m.why?' ('+esc(m.why)+')':'');}).join(' · ')+'</p>';
+if((R.fees&&R.fees.length)||R.itemTotal)h+='<p class="src">'+(R.itemTotal?'Items '+inr(R.itemTotal):'')+(R.fees||[]).map(function(f){return ' · '+esc(f.name)+' '+inr(f.amt||0);}).join('')+'</p>';
+if(R.msg)h+='<p class="src">'+esc(R.msg)+'</p>';
+if(/cart_ready|partial/.test(R.status||'')){if(r.store==='blinkit')h+='<a class="b2 send gc-b" href="https://blinkit.com/" target="_blank" rel="noopener">Open Blinkit to pay</a>';else h+='<a class="b2 send gc-b" href="https://www.swiggy.com/instamart" target="_blank" rel="noopener">Open Swiggy to pay</a>';}
+if(R.missing&&R.missing.length&&r.store==='blinkit')h+='<button class="b2 ghost" data-miss="'+esc(r.id)+'">Put the missing on Instamart</button>';
+h+='</div>';});
+el.innerHTML=h;}
+$('groRecent').addEventListener('click',function(e){var b=e.target.closest('[data-miss]');if(!b)return;var id=b.getAttribute('data-miss');var r=(gro.list||[]).filter(function(x){return x.id===id;})[0];if(!r||!r.result)return;
+var lines=(r.result.missing||[]).map(function(m){var nm=m.item||m.asked||String(m);var src=(r.lines||[]).filter(function(x){return x.item===nm;})[0];var o=src?JSON.parse(JSON.stringify(src)):{item:nm,pack:m.pack||'',qty:m.qty||1,brand:'',search:nm,why:'list',note:''};o.note='missing on Blinkit';o.on=1;return o;});
+if(!lines.length)return;gro.draft={lines:lines,unclear:[],heard:'',saved:[],text:'Missing from '+id};LSset('br_gro_draft',gro.draft);gro.store='instamart';localStorage.setItem('br_gro_store','instamart');groSeg();groRenderDraft();toast('The missing items are on the list — check, then Build.');setTimeout(function(){var d=$('groDraft');if(d)d.scrollIntoView({behavior:'smooth'});},60);});
+
+function groRender(){groSeg();groRenderAtt();groRenderDraft();groRenderRecent();}
+
+/* WhatsApp → Share → The Bridge (Android): the service worker parks the shared files; this picks them up. */
+function groShared(){var q=/[?&]share=1/.test(location.search);if(!q&&location.hash!=='#groceries')return;
+try{if(q)history.replaceState(null,'',location.pathname+'#groceries');}catch(e0){}
+showView('v-life');openArea('groceries');if(!q||!('caches' in window))return;
+var base=new URL('./',location.href).href;
+caches.open('bridge-share').then(function(c){return c.match(base+'__share/meta').then(function(mr){if(!mr)return null;return mr.json().then(function(meta){
+var jobs=(meta.files||[]).map(function(f,i){return c.match(base+'__share/'+i).then(function(r){return r?r.blob().then(function(bl){return new File([bl],f.name||('shared-'+i),{type:f.type||bl.type||''});}):null;});});
+return Promise.all(jobs).then(function(fs){var dels=[c.delete(base+'__share/meta')];(meta.files||[]).forEach(function(f,i){dels.push(c.delete(base+'__share/'+i));});return Promise.all(dels).then(function(){return {meta:meta,files:fs.filter(Boolean)};});});});});})
+.then(function(x){if(!x)return;var t=String(x.meta.text||'').trim();if(t){var tx=$('groText');tx.value=(tx.value?tx.value+'\n':'')+t;}
+x.files.forEach(groTake);if(!x.files.length){toast('Shared in — check it, then Read the list.');return;}
+toast('Shared in — reading in a moment…');var n=0,want=Math.min(4,x.files.length);(function wait(){n++;if(gro.att.length>=want||n>20){$('groRead').click();return;}setTimeout(wait,250);})();}).catch(function(){});}
+setTimeout(groShared,400);
 })();
 
 render();if(live()){fetchState();fetchThread();fetchKitchen();fetchVoice();fetchEvents();fetchGems();}renderPotd();
