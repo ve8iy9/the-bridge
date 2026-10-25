@@ -526,6 +526,29 @@ a.gc-b{display:flex;align-items:center;justify-content:center;text-decoration:no
 .li-tip{font-size:12px;color:var(--mut);margin:6px 2px 2px;line-height:1.45}
 #liNoteT{width:100%;font:inherit;font-size:14px;border:1px solid var(--line2);border-radius:12px;padding:10px;background:var(--bg);color:var(--ink);margin:6px 0}
 #liNoteGo{display:flex;align-items:center;justify-content:center;text-decoration:none}
+/* b16.12 the send rail + weekend list */
+.ts-ln{align-items:center}
+.ts-rv{flex-shrink:0;margin-left:8px;padding:8px 11px;border-radius:10px;border:1px solid var(--acc);background:var(--card);color:var(--acc);font-weight:700;font-size:12.5px;white-space:nowrap}
+.ts-tag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:700;vertical-align:1px}
+.ts-tag.bad{background:#fde2e1;color:#b42318}
+.ts-tag.warn{background:#fff4d6;color:#8a5a00}
+.ts-sheet{max-height:92vh;display:flex;flex-direction:column}
+.ts-sheet h3{word-break:break-word}
+.ts-meta{font-size:12.5px;color:var(--mut);line-height:1.55;margin:2px 0 8px;word-break:break-word}
+.ts-meta b{color:var(--ink2);font-weight:600;margin-right:4px}
+.ts-iss{border-radius:10px;padding:8px 10px;font-size:12.5px;line-height:1.45;margin:0 0 6px}
+.ts-iss.block{background:#fde2e1;color:#7a1d16}
+.ts-iss.warn{background:#fff4d6;color:#6b4700}
+.ts-iss.ok{background:#e3f4ea;color:#14532d}
+.ts-body{white-space:pre-wrap;word-break:break-word;font:inherit;font-size:13.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:4px 0 10px;overflow:auto;flex:1 1 auto;min-height:110px;max-height:44vh;color:var(--ink)}
+.ts-btns{display:flex;flex-direction:column;gap:8px}
+.ts-btns .b2{text-align:center;text-decoration:none}
+#tsGo[disabled]{opacity:.5}
+#tsGo.arm{background:#b42318;border-color:#b42318;color:#fff}
+details.li-wk>summary{cursor:pointer;list-style:none}
+details.li-wk>summary::-webkit-details-marker{display:none}
+.li-wk .li-row{padding:9px 0}
+.li-wk-go{display:inline-flex;align-items:center;padding:9px 12px;border-radius:10px;border:1px solid var(--line2);font-size:13px;font-weight:600;color:var(--acc);text-decoration:none}
 </style>
 </head>
 <body>
@@ -699,7 +722,7 @@ a.gc-b{display:flex;align-items:center;justify-content:center;text-decoration:no
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b16.11';
+var BUILD='b16.12';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -2030,7 +2053,8 @@ toast('Shared in — reading in a moment…');var n=0,want=Math.min(4,x.files.le
 setTimeout(groShared,400);
 })();
 
-/* ===== b16.11 THE PHONE RAIL (25 Oct 2026) — SIR'S WORD: "LinkedIn notes don't belong in To Send; make them one tap from my phone — on the main page and in Career. Easy-apply roles the same way; the rest wait for the Saturday/Sunday sitting." The Actuator's op=linkedin door feeds this; nothing here sends anything. ===== */
+/* ===== b16.11 THE PHONE RAIL (25 Oct 2026) — SIR'S WORD: "LinkedIn notes don't belong in To Send; make them one tap from my phone — on the main page and in Career. Easy-apply roles the same way; the rest wait for the Saturday/Sunday sitting." The Actuator's op=linkedin door feeds this; nothing here sends anything.
+   b16.12 (same evening): on Android the blue button opens the LinkedIn APP itself (not a browser tab) with the note already copied; the weekend roles are listed, not just counted. ===== */
 (function(){
 var li={d:LS('br_li',null),busy:0,at:0,done:LS('br_li_done',{})};
 var home=document.createElement('div');home.id='liHome';home.style.display='none';
@@ -2040,34 +2064,42 @@ var ch=$('a-career');if(ch)ch.insertBefore(car,ch.firstChild);
 function norm(s){return String(s||'').replace(/\r\n/g,'\n');}
 function notes(){return ((li.d&&li.d.notes)||[]).filter(function(n){return n&&!li.done[n.id];});}
 function apps(){return ((li.d&&li.d.apply)||[]).filter(function(a){return a&&!li.done['a:'+(a.id||a.url)];});}
-function html(){var N=notes(),A=apps(),W=(li.d&&li.d.weekend)||0;if(!N.length&&!A.length&&!W)return '';
+function wk(){return ((li.d&&li.d.weekendList)||[]).filter(function(a){return a&&!li.done['a:'+(a.id||a.url)];});}
+var ANDROID=/Android/i.test(navigator.userAgent||'');
+function html(){var N=notes(),A=apps(),WL=wk(),W=WL.length||((li.d&&li.d.weekend)||0);if(!N.length&&!A.length&&!W)return '';
 var h='';
 if(N.length){h+='<div class="blk li-blk"><div class="k">LinkedIn — tap to send<span>'+N.length+'</span></div>';
 N.forEach(function(n){h+='<div class="li-row" data-id="'+esc(n.id)+'"><div class="li-h"><span class="li-ic">in</span><div class="li-t"><b>'+esc(n.name)+'</b><small>'+esc(n.company)+(n.role?' · '+esc(n.role):'')+'</small></div></div>'+
 '<div class="li-note">'+esc(clamp(norm(n.note).replace(/\s+/g,' '),150))+'</div>'+
 '<div class="li-b"><button class="li-go" data-a="go">Copy note & open LinkedIn</button><button data-a="sent">Sent ✓</button><button data-a="skip">Skip</button></div>'+
 (n.job?'<a class="li-job" href="'+esc(n.job)+'" target="_blank" rel="noopener">The role ↗</a>':'')+'</div>';});
-h+='<p class="li-tip">The blue button copies the note and opens '+(N.length===1?'their':'each person\'s')+' LinkedIn profile. Tap Message, paste, send — then Sent ✓.</p></div>';}
+h+='<p class="li-tip">'+(ANDROID?'The blue button copies the note and opens '+(N.length===1?'their':'each person\'s')+' profile in the LinkedIn app. Tap <b>Message</b>, tap the copied text on your keyboard (or press and hold → Paste), send — then <b>Sent ✓</b> here.':'The blue button copies the note and opens '+(N.length===1?'their':'each person\'s')+' LinkedIn profile. Tap Message, paste, send — then Sent ✓.')+' LinkedIn does not let any app pre-fill a message, so the paste is the one step left to you.</p></div>';}
 if(A.length){h+='<div class="blk li-blk"><div class="k">Apply from your phone<span>'+A.length+'</span></div>';
 A.forEach(function(a){var aid='a:'+(a.id||a.url);h+='<div class="li-row" data-aid="'+esc(aid)+'"><div class="li-h"><span class="li-ic ap">↗</span><div class="li-t"><b>'+esc(a.company||'')+'</b><small>'+esc(a.role||'')+(a.site?' · '+esc(a.site):'')+(a.fit?' · fit '+esc(a.fit):'')+'</small></div></div>'+
 (a.why?'<div class="li-note">'+esc(clamp(a.why,140))+'</div>':'')+
 '<div class="li-b"><button class="li-go" data-a="open">Open & apply</button><button data-a="applied">Applied ✓</button><button data-a="askip">Skip</button></div>'+
 (a.cv?'<a class="li-job" href="'+esc(door(a.cv))+'" target="_blank" rel="noopener">Your CV for this role ↗</a>':'')+'</div>';});
 h+='</div>';}
-if(W)h+='<p class="li-tip">'+W+' role'+(W===1?' needs':'s need')+' a portal or a long form — kept for the Saturday/Sunday sitting (say "Envoy, sit").</p>';
+if(W){if(WL.length){h+='<details class="blk li-blk li-wk"><summary class="k">Saturday/Sunday sitting<span>'+WL.length+' role'+(WL.length===1?'':'s')+' ›</span></summary>'+
+WL.map(function(a){var aid='a:'+(a.id||a.url);return '<div class="li-row" data-aid="'+esc(aid)+'"><div class="li-t"><b>'+esc(a.company||'')+'</b><small>'+esc(a.role||'')+(a.fit?' · fit '+esc(a.fit):'')+'</small></div>'+(a.why?'<div class="li-note">'+esc(clamp(a.why,140))+'</div>':'')+'<div class="li-b">'+(a.url?'<a class="li-wk-go" href="'+esc(a.url)+'" target="_blank" rel="noopener">The posting ↗</a>':'')+'<button data-a="applied">Applied ✓</button></div></div>';}).join('')+
+'<p class="li-tip">These need a company portal or a long form — kept for the sitting. Say "Envoy, sit" and the Envoy fills each one with you.</p></details>';}
+else h+='<p class="li-tip">'+W+' role'+(W===1?' needs':'s need')+' a portal or a long form — kept for the Saturday/Sunday sitting (say "Envoy, sit").</p>';}
 return h;}
-function render(){var h=html();[home,car].forEach(function(el){if(!el)return;el.innerHTML=h;el.style.display=h?'block':'none';});}
+function render(){var h=html();[home,car].forEach(function(el){if(!el)return;var open=el.querySelector('details.li-wk[open]');el.innerHTML=h;if(open){var d=el.querySelector('details.li-wk');if(d)d.open=true;}el.style.display=h?'block':'none';});}
 function fetchLi(force){if(!live()||li.busy)return;if(!force&&Date.now()-li.at<120000)return;li.busy=1;
 ringOnce(wireUrl(),'&op=linkedin',40000).then(function(j){li.busy=0;if(j&&j.ok){li.d=j;li.at=Date.now();LSset('br_li',j);render();}}).catch(function(){li.busy=0;});}
 function mark(id,a,who){li.done[id]={a:a,t:Date.now()};var ks=Object.keys(li.done);if(ks.length>150)ks.sort(function(x,y){return li.done[x].t-li.done[y].t;}).slice(0,ks.length-150).forEach(function(k){delete li.done[k];});LSset('br_li_done',li.done);render();
 if(live())ringOnce(wireUrl(),'&op=lidone&id='+encodeURIComponent(id)+'&a='+a+'&who='+encodeURIComponent(who||''),30000).catch(function(){});}
 function find(id){return ((li.d&&li.d.notes)||[]).filter(function(n){return n.id===id;})[0];}
-function findA(aid){return ((li.d&&li.d.apply)||[]).filter(function(a){return 'a:'+(a.id||a.url)===aid;})[0];}
-function openUrl(u){try{var w=window.open(u,'_blank','noopener');if(!w)location.href=u;}catch(e){location.href=u;}}
+function findA(aid){return ((li.d&&li.d.apply)||[]).concat((li.d&&li.d.weekendList)||[]).filter(function(a){return 'a:'+(a.id||a.url)===aid;})[0];}
+/* Android: a LinkedIn link goes straight into the LinkedIn app (intent), falling back to the browser if the app is missing */
+function appUrl(u){try{var x=new URL(u);if(ANDROID&&/(^|\.)linkedin\.com$/i.test(x.hostname))return 'intent://'+x.host+x.pathname+x.search+'#Intent;scheme=https;package=com.linkedin.android;S.browser_fallback_url='+encodeURIComponent(u)+';end';}catch(e){}return u;}
+function openUrl(u){var a=appUrl(u);if(a!==u){location.href=a;return;}var w=null;try{w=window.open(u,'_blank');}catch(e){}if(w){try{w.opener=null;}catch(e2){}}else location.href=u;}
 function showNote(n){var m=$('mLiNote');
 if(!m){m=document.createElement('div');m.className='modal';m.id='mLiNote';m.innerHTML='<div class="sheet"><h3 id="liNoteH"></h3><p class="note">Press and hold in the box → Select all → Copy. Then open LinkedIn, tap Message and paste.</p><textarea id="liNoteT" rows="10" readonly></textarea><a class="b2 send" id="liNoteGo" target="_blank" rel="noopener">Open LinkedIn</a><button class="b2 ghost" id="liNoteX">Close</button></div>';document.body.appendChild(m);
-m.addEventListener('click',function(e){if(e.target===m||e.target.id==='liNoteX')m.classList.remove('on');});}
-$('liNoteH').textContent='Note to '+n.name;$('liNoteT').value=norm(n.note);$('liNoteGo').href=n.profile||n.search;m.classList.add('on');setTimeout(function(){try{$('liNoteT').select();}catch(e){}},60);}
+m.addEventListener('click',function(e){if(e.target===m||e.target.id==='liNoteX')m.classList.remove('on');});
+$('liNoteGo').addEventListener('click',function(e){var u=this.getAttribute('data-u');if(u&&appUrl(u)!==u){e.preventDefault();openUrl(u);}});}
+var u=n.profile||n.search;$('liNoteH').textContent='Note to '+n.name;$('liNoteT').value=norm(n.note);$('liNoteGo').href=u;$('liNoteGo').setAttribute('data-u',u);m.classList.add('on');setTimeout(function(){try{$('liNoteT').select();}catch(e){}},60);}
 function onClick(e){var b=e.target.closest('button[data-a]');if(!b)return;var row=b.closest('.li-row');if(!row)return;var a=b.getAttribute('data-a');
 if(row.hasAttribute('data-id')){var id=row.getAttribute('data-id'),n=find(id);if(!n)return;
 if(a==='go'){var url=n.profile||n.search,txt=norm(n.note);vib(8);
@@ -2082,6 +2114,62 @@ if(a==='askip'){mark(aid,'skip',r.company||'');return;}}}
 var _rh2=renderHome;renderHome=function(){_rh2.apply(this,arguments);try{render();fetchLi(false);}catch(e){}};
 var _rc2=renderCareer;renderCareer=function(){_rc2.apply(this,arguments);try{render();fetchLi(false);}catch(e){}};
 render();setTimeout(function(){fetchLi(true);},900);
+})();
+/* ===== b16.12 THE SEND RAIL (25 Oct 2026) — SIR'S WORD: "The emails themselves — seek my approval, and then you can send it across."
+   Every row in To Send gets "Review & send": the sheet shows To / Cc / attachments / the whole email and Alfred's pre-flight
+   (placeholders, a note meant for Sir left inside, a weekday that does not match its date, no real recipient, a missing attachment).
+   Send goes only on Sir's tap — and a second tap to confirm. The Actuator re-checks everything before it sends, and logs it. ===== */
+(function(){
+var tsSent=LS('br_ts_sent',{});if(!tsSent||typeof tsSent!=='object')tsSent={};
+var cur=null,arm=0,armT=null,busy=false;
+function prune(){var now=Date.now();Object.keys(tsSent).forEach(function(k){if(now-tsSent[k]>3*864e5)delete tsSent[k];});LSset('br_ts_sent',tsSent);}
+prune();
+renderFollowups=function(){var el=$('fups');if(!el)return;if(!fu||!fu.ok){el.style.display='none';return;}
+var rows=(fu.rows||[]).filter(fuVisible);var ob=fu.outbox||{n:0,items:[],held:[]};var held=ob.held||[];
+var items=(ob.items||[]).filter(function(i){return !(i.msg&&tsSent[i.msg]);});
+if(!rows.length&&!items.length&&!held.length){el.style.display='none';el.innerHTML='';return;}
+el.style.display='block';var order={ask:0,replied:1,drafted:2,sir:3};rows.sort(function(a,b){return ((order[a.state]||0)-(order[b.state]||0))||((b.days||0)-(a.days||0));});
+var h='<h2><span>Awaiting a reply</span><span class="cnt">'+(rows.length?rows.length+' for you':'')+(fu.waiting&&fu.waiting.length?' · '+fu.waiting.length+' watched':'')+'</span></h2>';
+if(items.length||held.length){h+='<div class="blk ts-blk" style="margin-bottom:10px"><div class="k">📤 To send<span>'+items.length+' ready</span></div>'+
+items.map(function(i){var pf=i.pf||{};var tag=pf.b?'<span class="ts-tag bad">fix first</span>':pf.w?'<span class="ts-tag warn">check</span>':'';
+return '<div class="ln ts-ln"><span class="ic">✉️</span><span class="tx">'+esc(clamp(i.subject,90))+tag+'<small>to '+esc(clamp(i.to,60))+'</small></span>'+
+(i.msg?'<button class="ts-rv" data-msg="'+esc(i.msg)+'">Review &amp; send</button>':'<a class="when" href="'+esc(i.url)+'" target="_blank" rel="noopener">Open ↗</a>')+'</div>';}).join('')+
+(held.length?'<div class="ln"><span class="ic">🗑</span><span class="tx">'+held.length+' wrong draft'+(held.length===1?'':'s')+' held out of To Send — discard in Gmail Drafts<small>'+held.map(function(x){return esc(clamp(x.subject,60))+(x.why?' — '+esc(clamp(x.why,90)):'');}).join('<br>')+'</small></span><a class="when" href="https://mail.google.com/mail/u/0/#drafts" target="_blank" rel="noopener">Drafts ↗</a></div>':'')+
+'<div class="ln" style="border:0"><span class="ic"></span><span class="tx"><a href="'+esc(ob.url||'https://mail.google.com/mail/u/0/')+'" target="_blank" rel="noopener">Open To Send in Gmail ↗</a></span></div></div>';}
+h+=rows.map(fuRowHtml).join('');el.innerHTML=h;};
+function sheet(){var m=$('mTs');if(m)return m;m=document.createElement('div');m.className='modal';m.id='mTs';
+m.innerHTML='<div class="sheet ts-sheet"><h3 id="tsH">Review</h3><div id="tsMeta" class="ts-meta"></div><div id="tsIss"></div><pre id="tsBody" class="ts-body"></pre><div class="ts-btns"><button class="b2 send" id="tsGo">Send</button><a class="b2 ghost" id="tsEdit" target="_blank" rel="noopener">Edit in Gmail ↗</a><button class="b2 ghost" id="tsX">Not now</button></div></div>';
+document.body.appendChild(m);
+m.addEventListener('click',function(e){if(e.target===m||e.target.id==='tsX')close();});
+$('tsGo').addEventListener('click',go);return m;}
+function close(){var m=$('mTs');if(m)m.classList.remove('on');cur=null;disarm();}
+function disarm(){arm=0;if(armT){clearTimeout(armT);armT=null;}var g=$('tsGo');if(g){g.classList.remove('arm');if(cur&&!cur.blocked)g.textContent='Send to '+firstTo(cur.to);}}
+function firstTo(s){var a=String(s||'').split(',')[0]||'';var m=a.match(/<([^>]+)>/);a=(m?m[1]:a).trim();var n=String(s||'').split(',').length;return clamp(a,34)+(n>1?' +'+(n-1):'');}
+function issuesHtml(is){return (is||[]).map(function(x){return '<div class="ts-iss '+(x.level==='block'?'block':'warn')+'">'+(x.level==='block'?'⛔ ':'⚠️ ')+esc(x.text)+'</div>';}).join('');}
+function open(msg){if(!live()){toast('Enter the key in ⚙ first — then the house can send.');return;}
+var m=sheet();cur=null;disarm();$('tsH').textContent='Opening the draft…';$('tsMeta').innerHTML='';$('tsIss').innerHTML='';$('tsBody').textContent='';
+var g=$('tsGo');g.disabled=true;g.textContent='Checking…';$('tsEdit').removeAttribute('href');m.classList.add('on');
+ringOnce(wireUrl(),'&op=draft&msg='+encodeURIComponent(msg),40000).then(function(j){
+if(!j||!j.ok){$('tsH').textContent='Could not open it';$('tsIss').innerHTML=issuesHtml([{level:'block',text:(j&&(j.why||j.err))||'The wire dropped — try again.'}]);g.textContent='—';if(j&&j.err==='gone')setTimeout(function(){fetchFollowups(true);},800);return;}
+cur=j;cur.blocked=(j.issues||[]).some(function(x){return x.level==='block';});
+$('tsH').textContent=j.subject||'(no subject)';
+$('tsMeta').innerHTML='<div><b>To</b> '+esc(j.to||'—')+'</div>'+(j.cc?'<div><b>Cc</b> '+esc(j.cc)+'</div>':'')+(j.bcc?'<div><b>Bcc</b> '+esc(j.bcc)+'</div>':'')+'<div><b>Attached</b> '+((j.atts&&j.atts.length)?esc(j.atts.join(', ')):'nothing')+'</div>';
+$('tsIss').innerHTML=(j.issues&&j.issues.length)?issuesHtml(j.issues):'<div class="ts-iss ok">✓ Alfred checked it: recipients, dates and weekdays, no placeholders, no notes to you left inside.</div>';
+$('tsBody').textContent=(j.body||'')+(j.more?'\n\n…(longer — open in Gmail for the rest)':'');
+$('tsEdit').href=j.url||'https://mail.google.com/mail/u/0/#drafts';
+if(cur.blocked){g.disabled=true;g.textContent='Fix it in Gmail first';}else{g.disabled=false;g.textContent='Send to '+firstTo(j.to);}
+}).catch(function(){$('tsH').textContent='Could not open it';$('tsIss').innerHTML=issuesHtml([{level:'block',text:'The wire dropped — try again.'}]);g.textContent='—';});}
+function go(){if(!cur||cur.blocked||busy)return;var g=$('tsGo');
+if(!arm){arm=1;g.classList.add('arm');g.textContent='Tap again to send';vib(8);armT=setTimeout(disarm,4000);return;}
+if(armT){clearTimeout(armT);armT=null;}busy=true;g.disabled=true;g.textContent='Sending…';var c=cur;
+fetch(wireUrl(),{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({key:cfg.key,op:'send',msg:c.msg,sig:c.sig})}).then(function(r){return r.json();}).then(function(j){busy=false;
+if(j&&j.ok){tsSent[c.msg]=Date.now();LSset('br_ts_sent',tsSent);vib(15);toast('✓ Sent — '+firstTo(c.to));close();renderFollowups();setTimeout(function(){fetchFollowups(true);},1500);return;}
+g.disabled=false;g.classList.remove('arm');arm=0;g.textContent='Send to '+firstTo(c.to);
+$('tsIss').innerHTML=issuesHtml([{level:'block',text:(j&&(j.why||j.err))||'Not sent — try again.'}])+$('tsIss').innerHTML;
+if(j&&(j.err==='gone'||j.err==='changed'))setTimeout(function(){fetchFollowups(true);},800);
+}).catch(function(){busy=false;g.disabled=false;arm=0;g.classList.remove('arm');g.textContent='Send to '+firstTo(c.to);toast('The wire dropped — check Gmail Sent before you tap again.');});}
+document.addEventListener('click',function(e){var b=e.target.closest('.ts-rv');if(!b)return;e.preventDefault();open(b.getAttribute('data-msg'));});
+try{renderFollowups();}catch(e){}
 })();
 
 render();if(live()){fetchState();fetchThread();fetchKitchen();fetchVoice();fetchEvents();fetchGems();}renderPotd();
