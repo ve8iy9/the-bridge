@@ -504,6 +504,28 @@ a.b2{display:flex;align-items:center;justify-content:center;text-decoration:none
 .gc-l small{display:block;color:var(--mut);font-size:11.5px;margin:-1px 0 3px}
 .gc-ask{color:var(--ink2);line-height:1.6}
 a.gc-b{display:flex;align-items:center;justify-content:center;text-decoration:none}
+/* b16.11 phone rail */
+#liHome .blk,#liCar .blk{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px 8px;box-shadow:var(--sh);margin-bottom:10px}
+#liHome .blk .k,#liCar .blk .k{font-size:11px;letter-spacing:.9px;text-transform:uppercase;color:var(--mut);font-weight:600;display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+#liHome .blk .k span,#liCar .blk .k span{font-weight:500;letter-spacing:0;text-transform:none;font-size:12px}
+#liHome,#liCar{margin-bottom:12px}
+.li-row{padding:10px 0;border-bottom:1px solid var(--line)}
+.li-row:last-of-type{border-bottom:0}
+.li-h{display:flex;align-items:center;gap:10px}
+.li-ic{width:34px;height:34px;border-radius:9px;background:#0a66c2;color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Arial,Helvetica,sans-serif}
+.li-ic.ap{background:var(--ok)}
+.li-t{min-width:0;flex:1}
+.li-t b{display:block;font-size:14.5px}
+.li-t small{color:var(--mut);font-size:12px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.li-note{font-size:13px;color:var(--ink2);margin:7px 0 0;line-height:1.45}
+.li-b{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.li-b button{padding:9px 12px;border-radius:10px;border:1px solid var(--line2);background:var(--card);font-size:13px;font-weight:600;color:var(--ink2)}
+.li-b button.li-go{flex:1 1 100%;background:#0a66c2;border-color:#0a66c2;color:#fff;font-size:14px;padding:11px 12px}
+.li-b button[data-a="sent"],.li-b button[data-a="applied"]{flex:1}
+.li-job{display:inline-block;margin-top:7px;font-size:12.5px;color:var(--acc);text-decoration:none}
+.li-tip{font-size:12px;color:var(--mut);margin:6px 2px 2px;line-height:1.45}
+#liNoteT{width:100%;font:inherit;font-size:14px;border:1px solid var(--line2);border-radius:12px;padding:10px;background:var(--bg);color:var(--ink);margin:6px 0}
+#liNoteGo{display:flex;align-items:center;justify-content:center;text-decoration:none}
 </style>
 </head>
 <body>
@@ -677,7 +699,7 @@ a.gc-b{display:flex;align-items:center;justify-content:center;text-decoration:no
    One matter = one card. Every card carries its own buttons. Three cards on the home screen, never twenty-two.
    Decisions stick (14 days, or until the date you named). The house shows what it read since you last looked. */
 var CANON='https://script.google.com/macros/s/AKfycbwNhpkPeTzy7WFyl6Q_fwxRwOnOjodSmFmF6ConHNh9E3D1MhLu8tkorc_iwVVaL3Lp0g/exec';
-var BUILD='b16.10';
+var BUILD='b16.11';
 var cfg={url:localStorage.getItem('br_url')||'',key:localStorage.getItem('br_key')||''};
 function wireUrl(){return (cfg.url||CANON);}
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v;}catch(e){return d;}}
@@ -2006,6 +2028,60 @@ return Promise.all(jobs).then(function(fs){var dels=[c.delete(base+'__share/meta
 x.files.forEach(groTake);if(!x.files.length){toast('Shared in — check it, then Read the list.');return;}
 toast('Shared in — reading in a moment…');var n=0,want=Math.min(4,x.files.length);(function wait(){n++;if(gro.att.length>=want||n>20){$('groRead').click();return;}setTimeout(wait,250);})();}).catch(function(){});}
 setTimeout(groShared,400);
+})();
+
+/* ===== b16.11 THE PHONE RAIL (25 Oct 2026) — SIR'S WORD: "LinkedIn notes don't belong in To Send; make them one tap from my phone — on the main page and in Career. Easy-apply roles the same way; the rest wait for the Saturday/Sunday sitting." The Actuator's op=linkedin door feeds this; nothing here sends anything. ===== */
+(function(){
+var li={d:LS('br_li',null),busy:0,at:0,done:LS('br_li_done',{})};
+var home=document.createElement('div');home.id='liHome';home.style.display='none';
+var fu=$('fups');if(fu&&fu.parentNode)fu.parentNode.insertBefore(home,fu);
+var car=document.createElement('div');car.id='liCar';car.style.display='none';
+var ch=$('a-career');if(ch)ch.insertBefore(car,ch.firstChild);
+function norm(s){return String(s||'').replace(/\r\n/g,'\n');}
+function notes(){return ((li.d&&li.d.notes)||[]).filter(function(n){return n&&!li.done[n.id];});}
+function apps(){return ((li.d&&li.d.apply)||[]).filter(function(a){return a&&!li.done['a:'+(a.id||a.url)];});}
+function html(){var N=notes(),A=apps(),W=(li.d&&li.d.weekend)||0;if(!N.length&&!A.length&&!W)return '';
+var h='';
+if(N.length){h+='<div class="blk li-blk"><div class="k">LinkedIn — tap to send<span>'+N.length+'</span></div>';
+N.forEach(function(n){h+='<div class="li-row" data-id="'+esc(n.id)+'"><div class="li-h"><span class="li-ic">in</span><div class="li-t"><b>'+esc(n.name)+'</b><small>'+esc(n.company)+(n.role?' · '+esc(n.role):'')+'</small></div></div>'+
+'<div class="li-note">'+esc(clamp(norm(n.note).replace(/\s+/g,' '),150))+'</div>'+
+'<div class="li-b"><button class="li-go" data-a="go">Copy note & open LinkedIn</button><button data-a="sent">Sent ✓</button><button data-a="skip">Skip</button></div>'+
+(n.job?'<a class="li-job" href="'+esc(n.job)+'" target="_blank" rel="noopener">The role ↗</a>':'')+'</div>';});
+h+='<p class="li-tip">The blue button copies the note and opens '+(N.length===1?'their':'each person\'s')+' LinkedIn profile. Tap Message, paste, send — then Sent ✓.</p></div>';}
+if(A.length){h+='<div class="blk li-blk"><div class="k">Apply from your phone<span>'+A.length+'</span></div>';
+A.forEach(function(a){var aid='a:'+(a.id||a.url);h+='<div class="li-row" data-aid="'+esc(aid)+'"><div class="li-h"><span class="li-ic ap">↗</span><div class="li-t"><b>'+esc(a.company||'')+'</b><small>'+esc(a.role||'')+(a.site?' · '+esc(a.site):'')+(a.fit?' · fit '+esc(a.fit):'')+'</small></div></div>'+
+(a.why?'<div class="li-note">'+esc(clamp(a.why,140))+'</div>':'')+
+'<div class="li-b"><button class="li-go" data-a="open">Open & apply</button><button data-a="applied">Applied ✓</button><button data-a="askip">Skip</button></div>'+
+(a.cv?'<a class="li-job" href="'+esc(door(a.cv))+'" target="_blank" rel="noopener">Your CV for this role ↗</a>':'')+'</div>';});
+h+='</div>';}
+if(W)h+='<p class="li-tip">'+W+' role'+(W===1?' needs':'s need')+' a portal or a long form — kept for the Saturday/Sunday sitting (say "Envoy, sit").</p>';
+return h;}
+function render(){var h=html();[home,car].forEach(function(el){if(!el)return;el.innerHTML=h;el.style.display=h?'block':'none';});}
+function fetchLi(force){if(!live()||li.busy)return;if(!force&&Date.now()-li.at<120000)return;li.busy=1;
+ringOnce(wireUrl(),'&op=linkedin',40000).then(function(j){li.busy=0;if(j&&j.ok){li.d=j;li.at=Date.now();LSset('br_li',j);render();}}).catch(function(){li.busy=0;});}
+function mark(id,a,who){li.done[id]={a:a,t:Date.now()};var ks=Object.keys(li.done);if(ks.length>150)ks.sort(function(x,y){return li.done[x].t-li.done[y].t;}).slice(0,ks.length-150).forEach(function(k){delete li.done[k];});LSset('br_li_done',li.done);render();
+if(live())ringOnce(wireUrl(),'&op=lidone&id='+encodeURIComponent(id)+'&a='+a+'&who='+encodeURIComponent(who||''),30000).catch(function(){});}
+function find(id){return ((li.d&&li.d.notes)||[]).filter(function(n){return n.id===id;})[0];}
+function findA(aid){return ((li.d&&li.d.apply)||[]).filter(function(a){return 'a:'+(a.id||a.url)===aid;})[0];}
+function openUrl(u){try{var w=window.open(u,'_blank','noopener');if(!w)location.href=u;}catch(e){location.href=u;}}
+function showNote(n){var m=$('mLiNote');
+if(!m){m=document.createElement('div');m.className='modal';m.id='mLiNote';m.innerHTML='<div class="sheet"><h3 id="liNoteH"></h3><p class="note">Press and hold in the box → Select all → Copy. Then open LinkedIn, tap Message and paste.</p><textarea id="liNoteT" rows="10" readonly></textarea><a class="b2 send" id="liNoteGo" target="_blank" rel="noopener">Open LinkedIn</a><button class="b2 ghost" id="liNoteX">Close</button></div>';document.body.appendChild(m);
+m.addEventListener('click',function(e){if(e.target===m||e.target.id==='liNoteX')m.classList.remove('on');});}
+$('liNoteH').textContent='Note to '+n.name;$('liNoteT').value=norm(n.note);$('liNoteGo').href=n.profile||n.search;m.classList.add('on');setTimeout(function(){try{$('liNoteT').select();}catch(e){}},60);}
+function onClick(e){var b=e.target.closest('button[data-a]');if(!b)return;var row=b.closest('.li-row');if(!row)return;var a=b.getAttribute('data-a');
+if(row.hasAttribute('data-id')){var id=row.getAttribute('data-id'),n=find(id);if(!n)return;
+if(a==='go'){var url=n.profile||n.search,txt=norm(n.note);vib(8);
+if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){toast('Note copied — tap Message, then paste.');openUrl(url);},function(){showNote(n);});}else showNote(n);return;}
+if(a==='sent'){mark(id,'sent',n.name+' ('+n.company+')');toast('✓ Marked sent — '+n.name);vib(10);return;}
+if(a==='skip'){mark(id,'skip',n.name);toast('Skipped — '+n.name);return;}}
+if(row.hasAttribute('data-aid')){var aid=row.getAttribute('data-aid'),r=findA(aid);if(!r)return;
+if(a==='open'){openUrl(r.url);return;}
+if(a==='applied'){mark(aid,'applied',(r.company||'')+' — '+(r.role||''));toast('✓ Marked applied — '+(r.company||''));vib(10);return;}
+if(a==='askip'){mark(aid,'skip',r.company||'');return;}}}
+[home,car].forEach(function(el){if(el)el.addEventListener('click',onClick);});
+var _rh2=renderHome;renderHome=function(){_rh2.apply(this,arguments);try{render();fetchLi(false);}catch(e){}};
+var _rc2=renderCareer;renderCareer=function(){_rc2.apply(this,arguments);try{render();fetchLi(false);}catch(e){}};
+render();setTimeout(function(){fetchLi(true);},900);
 })();
 
 render();if(live()){fetchState();fetchThread();fetchKitchen();fetchVoice();fetchEvents();fetchGems();}renderPotd();
